@@ -25,7 +25,7 @@ function getLevel(xp, settings) {
     let lvl = 0
     let previousLevel = 0
     let xpRequired = 0                
-    while (xp >= xpRequired && lvl <= settings.maxLevel) {  // cubic formula my ass, here's a while loop
+    while (xp >= xpRequired && lvl <= settings.maxLevel) { 
         lvl++
         previousLevel = xpRequired
         xpRequired = this.xpForLevel(lvl, settings)
@@ -50,23 +50,23 @@ this.getMultiplier = function(roles=[], settings, roleList) {
         if (foundXPBan) foundBoosts = foundXPBan
 
         else switch (settings.multipliers.rolePriority) {
-            case "smallest": // lowest boost
+            case "smallest": 
                 foundBoosts = roleBoosts.sort((a, b) => a.boost - b.boost)[0]; break;
-            case "highest": // highest role
+            case "highest": 
                 let foundTopBoost = roleList.find(x => roleBoosts.find(y => y.id == x.id))
                 foundBoosts = roleBoosts.find(x => x.id == foundTopBoost.id); break;
-            case "combine": // multiply all, holy shit
+            case "combine": 
                 foundBoosts = roleBoosts; break;
-            case "add": // add (n-1) from each
+            case "add": 
                 foundBoosts = roleBoosts.filter(x => x.boost != 1); break;
-            default: // largest boost 
+            default: 
                 foundBoosts = roleBoosts.sort((a, b) => b.boost - a.boost)[0]; break;
         }
         if (!Array.isArray(foundBoosts)) foundBoosts = [foundBoosts]
 
         if (settings.multipliers.rolePriority == "combine") {
             let combined = foundBoosts.map(x => x.boost).reduce((a, b) => a * b, 1).toFixed(4) 
-            combined = Math.min(+combined, 1000000) // 1 million max
+            combined = Math.min(+combined, 1000000) 
             return { roles: foundBoosts, boost: Number(combined.toFixed(4)) }
         }
 
@@ -88,8 +88,8 @@ function roleCol(col, defaultCol="white") {
 Fetch(`/api/leaderboard/${guildID}`).then(data => {
 
     console.log(data)
-    document.title = `Leaderboard for ${data.guild.name}`
-    $('#serverName').text(`Leaderboard for ${data.guild.name}`)
+    document.title = window.i18n.leaderboardFor + data.guild.name
+    $('#serverName').text(window.i18n.leaderboardFor + data.guild.name)
     updateRankedCount(data)
 
     pageCache[data.pageInfo.page] = data
@@ -128,10 +128,10 @@ Fetch(`/api/leaderboard/${guildID}`).then(data => {
     let userMultiplier = getMultiplier(data.user.roles, data.settings, data.roles)
 
     function updateRankedCount(dat) {
-        $('#serverMembers').html(`${commafy(dat.guild.members)} member${dat.guild.members == 1 ? "" : "s"} &nbsp; • &nbsp; ${commafy(dat.guild.totalRanked)}${dat.guild.totalPartial ? "+" : ""} ranked`)
+        let memberText = dat.guild.members == 1 ? window.i18n.member : window.i18n.members
+        $('#serverMembers').html(`${commafy(dat.guild.members)} ${memberText} &nbsp; • &nbsp; ${commafy(dat.guild.totalRanked)}${dat.guild.totalPartial ? "+" : ""} ${window.i18n.ranked}`)
     }
 
-    // leaderboard, function so that this supports multiple pages
     function appendLeaderboard(leaderboard) {
         $('#leaderboard').html("")
         leaderboard.forEach(x => {
@@ -151,10 +151,10 @@ Fetch(`/api/leaderboard/${guildID}`).then(data => {
             if (x.id == data.user.id) userSlot.addClass('isSelf')
             userSlot.find("[lb=rank]").text("#" + commafy(x.rank)).css("font-size", x.rank > 999 ? "18px" : x.rank > 99 ? "20px" : "22px")
             userSlot.find("[lb=name]").text(x.nickname || x.displayName || `<@${x.id}>`).attr("title", x.missing ? "Not in server!" : `${x.displayName} (@${x.username})`)
-            userSlot.find("[lb=level]").text(`Level ${commafy(userXP.level)}`)
+            userSlot.find("[lb=level]").text(`${window.i18n.level} ${commafy(userXP.level)}`)
             userSlot.find("[lb=pfp]").attr("src", x.avatar || "/assets/avatar.png")
             userSlot.find("[lb=progress]").css("background-color", x.missing ? "rgba(118, 126, 137, 0.5)" : roleCol(x.color || "white")).css("width", userXP.percentage + "%")
-            userSlot.find("[lb=xp]").html(`${commafy(x.xp)} / ${commafy(userXP.xpRequired)} XP${data.settings.rankCard.relativeLevel ? ` &nbsp • &nbsp; ${commafy(x.xp - userXP.previousLevel)} / ${commafy(userXP.xpRequired - userXP.previousLevel)}` : ""}`)
+            userSlot.find("[lb=xp]").html(`${commafy(x.xp)} / ${commafy(userXP.xpRequired)} ${window.i18n.xp}${data.settings.rankCard.relativeLevel ? ` &nbsp • &nbsp; ${commafy(x.xp - userXP.previousLevel)} / ${commafy(userXP.xpRequired - userXP.previousLevel)}` : ""}`)
             userSlot.find("[lb=percent]").text(`(${+userXP.percentage.toFixed(2)}%)`)
 
             if (multiplier.roles.length) {
@@ -167,11 +167,11 @@ Fetch(`/api/leaderboard/${guildID}`).then(data => {
                     if (foundRole.color != "#000000") mult.css("color", foundRole.color)
                 }
 
-                else { // multiple roles
-                    multText = `${multiplier.roles.length} roles`
+                else { 
+                    multText = `${multiplier.roles.length} ${window.i18n.roles}`
                 }
 
-                mult.text(`${multText} - ${multiplier.boost}x XP`)
+                mult.text(`${multText} - ${multiplier.boost}x ${window.i18n.xp}`)
             }
 
             $('#leaderboard').append(userSlot)
@@ -194,7 +194,7 @@ Fetch(`/api/leaderboard/${guildID}`).then(data => {
         else {
             $('#leaderboard').remove();
             $('#noXPYet').show()
-            if (data.settings.leaderboard.minLevel > 0) $('#noXPYet').html(`Nobody in this server is on the leaderboard yet!<br><span style="opacity: 66%; font-size: 18px; line-height: 46px">(level ${commafy(data.settings.leaderboard.minLevel)} required)</span>`)
+            if (data.settings.leaderboard.minLevel > 0) $('#noXPYet').html(`${window.i18n.nobodyMinLevel}<br><span style="opacity: 66%; font-size: 18px; line-height: 46px">(${window.i18n.level} ${commafy(data.settings.leaderboard.minLevel)} ${window.i18n.levelRequired})</span>`)
         }
     }
     appendLeaderboard(data.leaderboard)
@@ -209,8 +209,8 @@ Fetch(`/api/leaderboard/${guildID}`).then(data => {
         let reachedRole = roleProgress >= 100
         let hasRole = loggedIn && data.user.id && data.user.roles.includes(r.id)
         rSlot.find("[lb=role]").text(role.name).css("color", roleColor)
-        rSlot.find("[lb=level]").text("Level " + commafy(r.level)).css("color", reachedRole ? roleColor : "#bbbbbb")
-        rSlot.find("[lb=percent]").text(!loggedIn ? `${commafy(roleXP)} XP` : reachedRole ? (hasRole ? "Obtained!" : "Reached!") : `${+roleProgress.toFixed(2)}% reached (${commafy(data.user.xp || 0)} / ${commafy(roleXP)} XP)`)
+        rSlot.find("[lb=level]").text(`${window.i18n.level} ` + commafy(r.level)).css("color", reachedRole ? roleColor : "#bbbbbb")
+        rSlot.find("[lb=percent]").text(!loggedIn ? `${commafy(roleXP)} ${window.i18n.xp}` : reachedRole ? (hasRole ? window.i18n.obtained : window.i18n.reached) : `${+roleProgress.toFixed(2)}% ${window.i18n.reachedLower} (${commafy(data.user.xp || 0)} / ${commafy(roleXP)} ${window.i18n.xp})`)
         rSlot.find("[lb=progress]").css("width", Math.min(roleProgress, 100) + "%").css("background-color", roleColor)
         $('#roleList').append(rSlot)
     })
@@ -218,7 +218,7 @@ Fetch(`/api/leaderboard/${guildID}`).then(data => {
     else {
         $('#roleList').remove()
         if (data.settings.leaderboard.hideRoles) {
-            $('#noRewardRoles').text("Reward roles are hidden for this server!")
+            $('#noRewardRoles').text(window.i18n.hiddenRoles)
             $('#lbButtons').find("button[box='roles']").hide()
         }
     }
@@ -231,13 +231,13 @@ Fetch(`/api/leaderboard/${guildID}`).then(data => {
         let lvlHue = i * 360 / 100
 
         if (i == userLevel.level + 1) lvlSlot.addClass('highlightedSlot')
-        lvlSlot.find("[lb=level]").text("Level " + commafy(i)).css("color", userLevel.level >= i ? `hsl(${lvlHue}, 90%, 70%)` : `hsl(${lvlHue}, 70%, 90%)`)
-        lvlSlot.find("[lb=xp]").text(commafy(lvlXP) + " XP").css("color", userLevel.level >= i ? `hsl(${lvlHue}, 90%, 70%)` : `hsl(${lvlHue}, 70%, 90%)`)
-        lvlSlot.find("[lb=percent]").text(`${Number(Math.min(100, lvlProgress).toFixed(2))}% reached${lvlProgress >= 100.5 ? ` (${commafy(Math.round(lvlProgress))}%)` : ""}`)
+        lvlSlot.find("[lb=level]").text(`${window.i18n.level} ` + commafy(i)).css("color", userLevel.level >= i ? `hsl(${lvlHue}, 90%, 70%)` : `hsl(${lvlHue}, 70%, 90%)`)
+        lvlSlot.find("[lb=xp]").text(commafy(lvlXP) + ` ${window.i18n.xp}`).css("color", userLevel.level >= i ? `hsl(${lvlHue}, 90%, 70%)` : `hsl(${lvlHue}, 70%, 90%)`)
+        lvlSlot.find("[lb=percent]").text(`${Number(Math.min(100, lvlProgress).toFixed(2))}% ${window.i18n.reachedLower}${lvlProgress >= 100.5 ? ` (${commafy(Math.round(lvlProgress))}%)` : ""}`)
         lvlSlot.find("[lb=progress]").css("background-color", `hsl(${lvlHue}, 100%, 50%)`).css("width", Math.min(lvlProgress, 100) + "%")
         $('#progress').append(lvlSlot)
 
-        if (i % 50 == 0 && lvlProgress < 1 && i > 50) break; // stop loop if less than 1% and level is multiple of 50
+        if (i % 50 == 0 && lvlProgress < 1 && i > 50) break; 
     }
 
     if (loggedIn && data.user.xp) {
@@ -251,14 +251,14 @@ Fetch(`/api/leaderboard/${guildID}`).then(data => {
         // account info
         $('#accountInfo [lb=pfp]').attr('src', data.user.avatar)
         $('#accountInfo [lb=name]').text(data.user.nickname || data.user.displayName).css("color", userColor)
-        $('#accountInfo [lb=level]').text(`Level ${commafy(userLevel.level)}`).css("color", userColor)
+        $('#accountInfo [lb=level]').text(`${window.i18n.level} ${commafy(userLevel.level)}`).css("color", userColor)
         $('#accountInfo [lb=progress]').css('background-color', userColor).css('width', userLevel.percentage + "%")
-        $('#accountInfo [lb=xp]').text(`${commafy(data.user.xp)} / ${commafy(userLevel.xpRequired)} XP`).css("color", userColor)
+        $('#accountInfo [lb=xp]').text(`${commafy(data.user.xp)} / ${commafy(userLevel.xpRequired)} ${window.i18n.xp}`).css("color", userColor)
         $('#accountInfo [lb=percent]').text(`(${+userLevel.percentage.toFixed(2)}%)`).css("color", userColor)
-        $('#accountInfo [lb=ranking]').text(data.user.hidden ? `Hidden from server leaderboard. Gain XP to be automatically unhidden!` : `Ranked #${data.user.rank} in ${data.guild.name}`)
-        $('#accountInfo [lb=prev]').text(commafy(userLevel.previousLevel) + " XP")
-        $('#accountInfo [lb=sinceprev]').text(commafy(data.user.xp - userLevel.previousLevel) + " XP")
-        $('#accountInfo [lb=tonext]').text(userLevel.level >= data.settings.maxLevel ? "Max level! 🎉" : commafy(Math.max(0, userLevel.xpRequired - data.user.xp)) + " XP")
+        $('#accountInfo [lb=ranking]').text(data.user.hidden ? window.i18n.hiddenFromLb : `${window.i18n.rankedNum}${data.user.rank}${window.i18n.inStr}${data.guild.name}`)
+        $('#accountInfo [lb=prev]').text(commafy(userLevel.previousLevel) + ` ${window.i18n.xp}`)
+        $('#accountInfo [lb=sinceprev]').text(commafy(data.user.xp - userLevel.previousLevel) + ` ${window.i18n.xp}`)
+        $('#accountInfo [lb=tonext]').text(userLevel.level >= data.settings.maxLevel ? window.i18n.maxLevel : commafy(Math.max(0, userLevel.xpRequired - data.user.xp)) + ` ${window.i18n.xp}`)
 
         let obtainedRoles = data.settings.rewards.filter(x => x.level <= userLevel.level).sort((a, b) => b.level - a.level)
         let topRole = obtainedRoles[0] ? data.roles.find(x => x.id == obtainedRoles[0].id) : null
@@ -266,37 +266,36 @@ Fetch(`/api/leaderboard/${guildID}`).then(data => {
         let minXP = Math.round(data.settings.gain.min * userMultiplier.boost)
         let maxXP = Math.round(data.settings.gain.max * userMultiplier.boost)
 
-        $('#accountInfo [lb=toprole]').text(topRole ? topRole.name : "(none)").css("color", roleCol((topRole || {}).color))
+        $('#accountInfo [lb=toprole]').text(topRole ? topRole.name : window.i18n.none).css("color", roleCol((topRole || {}).color))
         $('#accountInfo [lb=totalroles]').text(`${commafy(obtainedRoles.length)} / ${commafy(data.settings.rewards.length)}`).css("color", roleCol((topRole || {}).color))
         $('#accountInfo [lb=xppermessage]').text((minXP == maxXP ? commafy(minXP) : `${commafy(minXP)} - ${commafy(maxXP)}`) + (data.settings.hideMultipliers ? "?" : ""))
         $('#accountInfo [lb=cooldown]').text(timeStr(data.settings.gain.time * 1000, 1))
 
         let estimatedMin = Math.ceil((userLevel.xpRequired - data.user.xp) / (data.settings.gain.min * userMultiplier.boost))
         let estimatedMax = Math.ceil((userLevel.xpRequired - data.user.xp) / (data.settings.gain.max * userMultiplier.boost))
-        let estimatedRange = estimatedMin < 0 ? "N/A" : (estimatedMax == estimatedMin) ? `${commafy(estimatedMax)}` : `${commafy(estimatedMax)} - ${commafy(estimatedMin)} (avg. ${commafy(Math.round((estimatedMax + estimatedMin) / 2))})`
+        let estimatedRange = estimatedMin < 0 ? "N/A" : (estimatedMax == estimatedMin) ? `${commafy(estimatedMax)}` : `${commafy(estimatedMax)} - ${commafy(estimatedMin)} (${window.i18n.avg} ${commafy(Math.round((estimatedMax + estimatedMin) / 2))})`
         $('#accountInfo [lb=messages]').text(estimatedRange)
 
         if (userMultiplier.roles.length) {
             if (userMultiplier.roles.length == 1) {
                 let foundMultiplier = data.roles.find(x => x.id == userMultiplier.roles[0].id)
-                $('#accountInfo [lb=multiplier]').text(`${foundMultiplier.name} (${userMultiplier.boost}x XP)`).css("color", roleCol(foundMultiplier.color))
+                $('#accountInfo [lb=multiplier]').text(`${foundMultiplier.name} (${userMultiplier.boost}x ${window.i18n.xp})`).css("color", roleCol(foundMultiplier.color))
             }
-            else $('#accountInfo [lb=multiplier]').text(`${userMultiplier.roles.length} roles (${userMultiplier.boost}x XP)`)
+            else $('#accountInfo [lb=multiplier]').text(`${userMultiplier.roles.length} ${window.i18n.roles} (${userMultiplier.boost}x ${window.i18n.xp})`)
         }
-        else $('#accountInfo [lb=multiplier]').text(data.settings.hideMultipliers ? "Hidden" : "None (1x XP)")
+        else $('#accountInfo [lb=multiplier]').text(data.settings.hideMultipliers ? window.i18n.hidden : window.i18n.none1x)
     }
     else if (loggedIn && !data.user.xp) {
         $('#accountInfo').remove()
     }
 
-    // hehe global function hack
     let loadingPage = false
     setPage = async function(pg, force) {
         if (!force && loadingPage) return
         loadingPage = true
         let oldPage = page
         let savedScroll = 0
-        if (page == pg && $('#leaderboard').is(":visible")) savedScroll = $('html').scrollTop()   // keep scroll
+        if (page == pg && $('#leaderboard').is(":visible")) savedScroll = $('html').scrollTop()   
         page = (pg || 1)
         if (page > totalPages) page = totalPages
         else if (page < 1) page = 1
@@ -330,14 +329,14 @@ Fetch(`/api/leaderboard/${guildID}`).then(data => {
         let newLevel = getLevel(foundUser.xp + defaultAdd, data.settings)
         let newXP = foundUser.xp + defaultAdd
 
-        $('#selecteduser').text(foundUser.missing ? "Missing user" : `${foundUser.displayName}`)
+        $('#selecteduser').text(foundUser.missing ? window.i18n.missingUser : `${foundUser.displayName}`)
         $('#selectedusername').text(`@${foundUser.username}`)
-        $('#selectedid').text(`(ID: ${foundUser.id})`)
+        $('#selectedid').text(`(${window.i18n.id}: ${foundUser.id})`)
         $('#addtype').val("addxp")
         $('#addamount').val(defaultAdd)
 
-        $('#oldxp').text(`${commafy(foundUser.xp)} (Level ${commafy(oldLevel.level)})`)
-        $('#newxp').text(`${commafy(newXP)} (Level ${commafy(newLevel.level)})`)
+        $('#oldxp').text(`${commafy(foundUser.xp)} (${window.i18n.level} ${commafy(oldLevel.level)})`)
+        $('#newxp').text(`${commafy(newXP)} (${window.i18n.level} ${commafy(newLevel.level)})`)
 
         $('#addxp').show()
 
@@ -363,7 +362,7 @@ Fetch(`/api/leaderboard/${guildID}`).then(data => {
             if (newXP > 1e12) newXP = (1e12 - 1)
 
             let newNewLevel = getLevel(newXP, data.settings)
-            $('#newxp').text(`${commafy(newXP)} (Level ${commafy(newNewLevel.level)})`)
+            $('#newxp').text(`${commafy(newXP)} (${window.i18n.level} ${commafy(newNewLevel.level)})`)
         })
 
         $('#addtype').off("change")
@@ -390,7 +389,7 @@ Fetch(`/api/leaderboard/${guildID}`).then(data => {
                 headers: { 'Content-Type': 'application/json'}
             })
             .done(function(res) {
-                if (foundUser.id == data.user.id) return window.location.reload() // i am lazy
+                if (foundUser.id == data.user.id) return window.location.reload() 
                 pageCache = {}
                 setPage(page, true)
                 $('.popup').hide()
@@ -478,8 +477,8 @@ Fetch(`/api/leaderboard/${guildID}`).then(data => {
 
             dat.hiddenMembers.forEach(x => {
                 let hidSlot = hiddenSlot.clone()
-                hidSlot.find("[lb=id]").text(`ID: ${x.id}`)
-                hidSlot.find("[lb=xp]").html(`Level ${commafy(getLevel(x.xp, dat.settings).level)} &nbsp; • &nbsp; ${commafy(x.xp)} XP`)
+                hidSlot.find("[lb=id]").text(`${window.i18n.id}: ${x.id}`)
+                hidSlot.find("[lb=xp]").html(`${window.i18n.level} ${commafy(getLevel(x.xp, dat.settings).level)} &nbsp; • &nbsp; ${commafy(x.xp)} ${window.i18n.xp}`)
                 hidSlot.find("[lb=unhide]").attr("userID", x.id)
                 $('#hiddenMemberList').append(hidSlot)
             })
@@ -495,24 +494,24 @@ Fetch(`/api/leaderboard/${guildID}`).then(data => {
     console.error(e)
     if (e.apiError) switch (e.code) {
         case "invalidServer":
-            $('#errorheader').text("No leaderboard!")
-            $('#errorfooter').text("This server does not have a leaderboard... are you sure it exists?")
+            $('#errorheader').text(window.i18n.errors.no_lb_title)
+            $('#errorfooter').text(window.i18n.errors.no_lb_desc)
             break;
 
         case "privateLeaderboard":
-            $('#errorheader').text("Private leaderboard!")
-            $('#errorfooter').text("This leaderboard is private, and is only viewable to members of the server.")
+            $('#errorheader').text(window.i18n.errors.private_lb_title)
+            $('#errorfooter').text(window.i18n.errors.private_lb_desc)
             $('#loginbutton').show()
             break;
 
         case "xpDisabled":
-            $('#errorheader').text("XP disabled!")
-            $('#errorfooter').text("This server currently has XP disabled.")
+            $('#errorheader').text(window.i18n.errors.xp_disabled_title)
+            $('#errorfooter').text(window.i18n.errors.xp_disabled_desc)
             break;
 
         case "leaderboardDisabled":
-            $('#errorheader').text("Leaderboard disabled!")
-            $('#errorfooter').text("This server has disabled the leaderboard.")
+            $('#errorheader').text(window.i18n.errors.lb_disabled_title)
+            $('#errorfooter').text(window.i18n.errors.lb_disabled_desc)
             break;
 
         default:

@@ -179,6 +179,18 @@
       "noMembersPage": "¡No hay miembros en esta página!"
     }
   },
+  "global_js": {
+      "forever": "Para siempre",
+      "sec": "seg",
+      "second": "segundo",
+      "min": "min",
+      "minute": "minuto",
+      "hour": "hora",
+      "day": "día",
+      "year": "año",
+      "error_title": "Error :(",
+      "log_in": "Iniciar sesión"
+    },
   "dashboard": {
         "404_title": "Ninguna parte",
         "404_heading": "¡Ooops! ¡Esta página no existe!",
@@ -461,5 +473,107 @@
       "manage_servers": "Administrar servidores",
       "credits": "Creado originalmente por",
       "log_in": "Iniciar sesión"
+    },
+  "leaderboard_page": {
+      "title": "Tabla de Clasificación",
+      "loading": "Cargando...",
+      "not_in_server_warning": "¡No estás en este servidor!",
+      "login_personal_stats": "¡Inicia sesión para ver tus estadísticas personales!",
+      "tabs": {
+        "leaderboard": "Clasificación",
+        "your_rank": "Tu Rango",
+        "reward_roles": "Roles de Recompensa",
+        "all_levels": "Todos los Niveles",
+        "hidden_members": "Miembros Ocultos"
+      },
+      "empty_states": {
+        "no_xp_yet": "¡Nadie en este servidor tiene XP todavía!",
+        "no_reward_roles": "¡Este servidor no tiene roles de recompensa!",
+        "no_rank_info": "¡Aún no tienes XP!",
+        "error_fetching": "¡Hubo un error al obtener la información de tu servidor!",
+        "error_roles": "No se pudo obtener la información sobre los roles."
+      },
+      "login_prompts": {
+        "roles": "¡Inicia sesión para ver tu progreso hacia los roles de recompensa!",
+        "levels": "¡Inicia sesión para ver tu progreso hacia cada nivel!",
+        "rank": "¡Inicia sesión para ver tu información detallada de rango!"
+      },
+      "pagination": {
+        "page": "Página",
+        "of": "de"
+      },
+      "hidden_info": {
+        "title": "Miembros Ocultos",
+        "desc_1": "Los miembros listados aquí están ocultos de la tabla de clasificación y son omitidos al calcular los rangos.",
+        "desc_2": "En la mayoría de los casos, estos son miembros que abandonaron el servidor o están inactivos.",
+        "desc_3": "Se volverán a mostrar automáticamente al ganar XP."
+      },
+      "stats": {
+        "prev_level": "Nivel anterior:",
+        "xp_since_prev": "XP desde el anterior:",
+        "xp_to_next": "XP para subir de nivel:",
+        "top_role": "Rol de recompensa más alto:",
+        "roles_reached": "Roles de recompensa alcanzados:",
+        "multiplier": "Multiplicador:",
+        "xp_per_msg": "XP por mensaje:",
+        "cooldown": "Tiempo de espera:",
+        "msgs_to_level": "Mensajes para subir de nivel:"
+      },
+      "slots": {
+        "not_in_server": "¡No está en el servidor!",
+        "hide_member": "Ocultar miembro",
+        "unhide": "Mostrar"
+      },
+      "mod_popup": {
+        "add_xp": "Añadir XP",
+        "set_xp": "Establecer XP a",
+        "add_levels": "Añadir niveles",
+        "set_level": "Establecer nivel a",
+        "old_xp": "XP Anterior:",
+        "new_xp": "Nueva XP:",
+        "btn_cancel": "Cancelar",
+        "btn_save": "Guardar"
+      },
+      "hide_popup": {
+        "title": "¿Ocultar de la Clasificación?",
+        "desc": "Este miembro será eliminado de la tabla de clasificación y omitido al calcular los rangos. <b>Su XP no se restablecerá y volverá a ser visible automáticamente al ganar XP.</b>",
+        "shift_tip": "(mantén presionado shift para omitir esta ventana)",
+        "btn_confirm": "Confirmar"
+      },
+      "js": {
+        "leaderboard_for": "Clasificación de ",
+        "member": "miembro",
+        "members": "miembros",
+        "ranked": "clasificados",
+        "level": "Nivel",
+        "roles": "roles",
+        "xp": "XP",
+        "nobody_min_level": "¡Nadie en este servidor está en la clasificación aún!",
+        "level_required": "requerido",
+        "obtained": "¡Obtenido!",
+        "reached": "¡Alcanzado!",
+        "reached_lower": "alcanzado",
+        "hidden_roles": "¡Los roles de recompensa están ocultos para este servidor!",
+        "hidden_from_lb": "Oculto de la clasificación. ¡Gana XP para volver a ser visible automáticamente!",
+        "ranked_num": "Clasificado #",
+        "in": " en ",
+        "max_level": "¡Nivel máximo! 🎉",
+        "none": "(ninguno)",
+        "hidden": "Oculto",
+        "none_1x": "Ninguno (1x XP)",
+        "missing_user": "Usuario no encontrado",
+        "id": "ID",
+        "avg": "prom.",
+        "errors": {
+          "no_lb_title": "¡Sin clasificación!",
+          "no_lb_desc": "Este servidor no tiene una tabla de clasificación... ¿estás seguro de que existe?",
+          "private_lb_title": "¡Clasificación privada!",
+          "private_lb_desc": "Esta clasificación es privada y solo visible para los miembros del servidor.",
+          "xp_disabled_title": "¡XP deshabilitada!",
+          "xp_disabled_desc": "Este servidor tiene actualmente la XP desactivada.",
+          "lb_disabled_title": "¡Clasificación deshabilitada!",
+          "lb_disabled_desc": "Este servidor ha deshabilitado la tabla de clasificación."
+        }
+      }
     }
 }

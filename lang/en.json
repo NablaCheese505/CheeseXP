@@ -179,6 +179,18 @@
       "noMembersPage": "There are no members on this page!"
     }
   },
+  "global_js": {
+      "forever": "Forever",
+      "sec": "sec",
+      "second": "second",
+      "min": "min",
+      "minute": "minute",
+      "hour": "hour",
+      "day": "day",
+      "year": "year",
+      "error_title": "Error :(",
+      "log_in": "Log in"
+    },
   "dashboard": {
         "404_title": "Nowhere",
         "404_heading": "Ooops! This page doesn't exist!",
@@ -461,5 +473,107 @@
       "manage_servers": "Manage servers",
       "credits": "Originally created by",
       "log_in": "Log in"
+    },
+  "leaderboard_page": {
+      "title": "Leaderboard",
+      "loading": "Loading...",
+      "not_in_server_warning": "You're not in this server!",
+      "login_personal_stats": "Log in to view personal stats!",
+      "tabs": {
+        "leaderboard": "Leaderboard",
+        "your_rank": "Your Rank",
+        "reward_roles": "Reward Roles",
+        "all_levels": "All Levels",
+        "hidden_members": "Hidden Members"
+      },
+      "empty_states": {
+        "no_xp_yet": "Nobody in this server has any XP yet!",
+        "no_reward_roles": "This server doesn't have any reward roles!",
+        "no_rank_info": "You don't have any XP yet!",
+        "error_fetching": "There was an error fetching your server info!",
+        "error_roles": "Information about roles could not be obtained."
+      },
+      "login_prompts": {
+        "roles": "Log in to view your progress towards reward roles!",
+        "levels": "Log in to view your progress towards each level!",
+        "rank": "Log in to view your detailed rank info!"
+      },
+      "pagination": {
+        "page": "Page",
+        "of": "of"
+      },
+      "hidden_info": {
+        "title": "Hidden Members",
+        "desc_1": "Members listed here are hidden from the leaderboard and skipped over when calculating ranks.",
+        "desc_2": "In most cases, these are members who left the server or are inactive.",
+        "desc_3": "They will be automatically unhidden upon gaining XP."
+      },
+      "stats": {
+        "prev_level": "Previous level:",
+        "xp_since_prev": "XP since previous:",
+        "xp_to_next": "XP to level up:",
+        "top_role": "Top reward role:",
+        "roles_reached": "Reward roles reached:",
+        "multiplier": "Multiplier:",
+        "xp_per_msg": "XP per message:",
+        "cooldown": "Cooldown:",
+        "msgs_to_level": "Messages to level up:"
+      },
+      "slots": {
+        "not_in_server": "Not in server!",
+        "hide_member": "Hide member",
+        "unhide": "Unhide"
+      },
+      "mod_popup": {
+        "add_xp": "Add XP",
+        "set_xp": "Set XP to",
+        "add_levels": "Add levels",
+        "set_level": "Set level to",
+        "old_xp": "Old XP:",
+        "new_xp": "New XP:",
+        "btn_cancel": "Cancel",
+        "btn_save": "Save"
+      },
+      "hide_popup": {
+        "title": "Hide from Leaderboard?",
+        "desc": "This member will be removed from the leaderboard, and skipped over when calculating rankings. <b>Their XP will not be reset, and they will be automatically unhidden upon gaining XP.</b>",
+        "shift_tip": "(hold shift to skip this popup)",
+        "btn_confirm": "Confirm"
+      },
+      "js": {
+        "leaderboard_for": "Leaderboard for ",
+        "member": "member",
+        "members": "members",
+        "ranked": "ranked",
+        "level": "Level",
+        "roles": "roles",
+        "xp": "XP",
+        "nobody_min_level": "Nobody in this server is on the leaderboard yet!",
+        "level_required": "required",
+        "obtained": "Obtained!",
+        "reached": "Reached!",
+        "reached_lower": "reached",
+        "hidden_roles": "Reward roles are hidden for this server!",
+        "hidden_from_lb": "Hidden from server leaderboard. Gain XP to be automatically unhidden!",
+        "ranked_num": "Ranked #",
+        "in": " in ",
+        "max_level": "Max level! 🎉",
+        "none": "(none)",
+        "hidden": "Hidden",
+        "none_1x": "None (1x XP)",
+        "missing_user": "Missing user",
+        "id": "ID",
+        "avg": "avg.",
+        "errors": {
+          "no_lb_title": "No leaderboard!",
+          "no_lb_desc": "This server does not have a leaderboard... are you sure it exists?",
+          "private_lb_title": "Private leaderboard!",
+          "private_lb_desc": "This leaderboard is private, and is only viewable to members of the server.",
+          "xp_disabled_title": "XP disabled!",
+          "xp_disabled_desc": "This server currently has XP disabled.",
+          "lb_disabled_title": "Leaderboard disabled!",
+          "lb_disabled_desc": "This server has disabled the leaderboard."
+        }
+      }
     }
 }

@@ -15,12 +15,15 @@ const Model = require("./classes/DatabaseModel.js");
 const LevelUpEmbed = require('./classes/LevelUpEmbed.js')
 const LevelUpMessage = require("./classes/LevelUpMessage.js")
 const auth = require('./config.json')
+const { t } = require('./utils/i18n.js');
 const curvePresets = require('./json/curve_presets.json')
 const schemaData = require("./database_schema.js")
 
 module.exports = (client) => {
 
 const app = express();
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'app/html'));
 const tools = Tools.global
 
 app.use(cookieParser());
@@ -55,7 +58,7 @@ let schema = new mongoose.Schema({
 let authDB = new Model("auth", schema)
 
 function sendPage(res, name) {
-    return res.sendFile(path.join(__dirname + `/app/html/${name}.html`))
+    return res.render(name, { t: t });
 }
 
 function sendRedirect(res, name) {

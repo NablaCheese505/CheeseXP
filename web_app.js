@@ -92,6 +92,7 @@ function clearDeletedData(settings, roles, channels) {
 app.use("/assets", express.static(__dirname + '/app/assets'));
 app.use("/css", express.static(__dirname + '/app/css'));
 app.use("/polaris.js", express.static(__dirname + '/app/js/extras.js'));
+app.use("/js", express.static(__dirname + '/app/js'));
 
 app.use(function(req, res, next) {
     res.apiError = function(message, code) {

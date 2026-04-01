@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-    /* 🎨 NUEVA PALETA DE ALTO CONTRASTE */
     --bg: #121822;              /* Fondo de página SUPER oscuro (casi negro) */
     --fg: #0d131f;              /* Menú lateral y cabecera */
     --lighterfg: #151e2f;       /* Fondo de las tarjetas (destaca sobre el bg) */
@@ -9,9 +8,8 @@
     --lightestfg: #334155;      /* Inputs y líneas separadoras */
     
     --polarisgreen: #43dada;    /* Mantenemos tu verde neón característico */
-    --colon: #30a596;           /* Un acento rosa neón para contrastar */
+    --colon: #30a596;           /* Un acento */
     
-    /* 🔴 Emojis heredados (Los modernizamos para que encajen con la paleta) */
     --emojigreen: #10b981;      /* Verde más suave para botones de éxito */
     --emojired: #ef4444;        /* Rojo moderno para borrar/alertas */
     --emojiblue: #3b82f6;       /* Azul vibrante para información */
@@ -31,9 +29,7 @@ body {
     background-color: var(--bg);
     color: white;
     margin: 0px;
-    /* ✨ LA NUEVA FUENTE SANS-SERIF MODERNA */
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    /* Mejoramos el renderizado de la fuente para que se vea premium */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -113,13 +109,12 @@ select option {
 }
 
 button {
-    font-family: 'Inter', sans-serif !important; /* Forzamos tu nueva tipografía */
-    font-size: 16px !important; /* Matamos ese 24px gigante */
+    font-family: 'Inter', sans-serif !important; 
+    font-size: 16px !important; 
     font-weight: 600 !important;
     color: white;
     background-color: var(--emojiblue);
     
-    /* Matamos el tamaño fijo cuadrado */
     height: auto !important; 
     width: auto !important; 
     min-width: 140px;
@@ -130,25 +125,23 @@ button {
     border-radius: 8px !important; 
     cursor: pointer;
     
-    /* Alineación perfecta y evitamos que el texto se parta en dos líneas */
     display: inline-flex;
     justify-content: center;
     align-items: center;
     white-space: nowrap; 
     
-    /* Animación fluida */
     transition: all 0.2s ease;
 }
 
 button:hover, button:focus-visible { 
-    transform: translateY(-2px); /* Se levanta al pasar el ratón */
+    transform: translateY(-2px); 
     filter: brightness(115%);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25); /* Proyecta sombra */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25); 
     outline: none;
 }
 
 button:active { 
-    transform: translateY(0px); /* Efecto de "clic" real */
+    transform: translateY(0px); 
     filter: brightness(125%);
 }
 
@@ -156,7 +149,7 @@ button:disabled {
     cursor: not-allowed;
     opacity: 50%;
     filter: saturate(50%);
-    transform: none; /* Quitamos animación si está desactivado */
+    transform: none;
     box-shadow: none;
 }
 
@@ -332,15 +325,13 @@ input:checked + .sliderspan:before {
 }
 
 .settingBox, .sideoption {
-    /* Ocupa el 100% del espacio, apilándose una sobre otra */
     width: calc(100% - 30px) !important; 
-    max-width: 1000px !important; /* Un tamaño máximo elegante */
+    max-width: 1000px !important;
     height: auto !important; 
-    margin-left: auto !important; /* Centrado perfecto */
+    margin-left: auto !important;
     margin-right: auto !important;
 }
 
-/* Mantenemos esta para que los textos no choquen */
 .box p, .box span, .multiplierDescription {
     height: auto !important;
     min-height: 0 !important;
@@ -371,13 +362,11 @@ input:checked + .sliderspan:before {
 }
 
 .categoryBox:hover, .categoryBox:focus-visible {
-    /* Al pasar el cursor, aclaramos el interior de la tarjeta */
     background-image: linear-gradient(var(--lightererfg), var(--lightererfg)), 
                       linear-gradient(135deg, var(--polarisgreen), var(--colon));
     
-    transform: translateY(-4px); /* Se levanta la tarjeta */
+    transform: translateY(-4px); 
     
-    /* Le sumamos un brillo verde neón a la sombra negra */
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 255, 128, 0.15); 
 }
 
@@ -387,11 +376,11 @@ input:checked + .sliderspan:before {
 
 .categoryBox {
     cursor: pointer;
-    width: calc(50% - 30px); /* El 50% del espacio MENOS los 15px de margen izquierdo y 15px del derecho */
-    min-width: 400px; /* Para que no se aplasten demasiado en pantallas medianas */
+    width: calc(50% - 30px);
+    min-width: 400px;
     height: 150px;
     padding: 10px 20px;
-    transition-duration: 0.2s; /* Para que tu animación de hover sea fluida */
+    transition-duration: 0.2s;
 }
 
 .fulllength {
@@ -454,8 +443,10 @@ input:checked + .sliderspan:before {
 .multiplierDescription {
     opacity: 100%;
     margin-top: 10px;
-    height: 42px;
-    width: 420px;
+    height: auto !important; 
+    width: 100% !important; 
+    max-width: 100%; 
+    line-height: 1.5;
 }
 
 #header {
@@ -515,11 +506,10 @@ input:checked + .sliderspan:before {
     position: fixed;
     display: flex;
     flex-direction: column;
-    /* CAMBIO: Aumentamos el ancho de 225px a 265px */
     width: 265px; 
     height: 100%;
     background-color: var(--fg);
-    border-right: 1px solid var(--lightestfg); /* Borde más sutil */
+    border-right: 1px solid var(--lightestfg);
     overflow: hidden;
     white-space: nowrap;
     z-index: 10;
@@ -533,10 +523,13 @@ input:checked + .sliderspan:before {
     justify-content: flex-start;
     padding-left: 15px;
     cursor: pointer;
+    color: var(--defaultrolecol); /* Color gris apagado por defecto */
+    border-left: 4px solid transparent; /* Preparamos el borde */
+    transition: all 0.2s ease;
 }
 
-#sidebar div:focus-visible  {
-    background: rgba(255, 255, 255, 0.05);
+#sidebar div:focus-visible, #sidebar div:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
 }
 
 #sidebar div:hover {
@@ -553,7 +546,19 @@ input:checked + .sliderspan:before {
     width: 32px;
     height: 32px;
     margin-right: 16px;
+    color: var(--defaultrolecol); /* Icono apagado por defecto */
+    transition: all 0.2s ease;
+}
+
+#sidebar div.current {
     color: var(--polarisgreen);
+    font-weight: bold;
+    background-color: rgba(67, 218, 218, 0.1) !important; /* Fondo verde sutil */
+    border-left: 4px solid var(--polarisgreen); /* Línea indicadora a la izquierda */
+}
+
+#sidebar div.current svg {
+    color: var(--polarisgreen); /* Encendemos el icono */
 }
 
 #unsavedWarning {
@@ -598,7 +603,6 @@ input:checked + .sliderspan:before {
     justify-content: flex-start;
     align-items: flex-start;
     padding-bottom: 20px;
-    /* CAMBIO: Aumentamos el margen para que respete la nueva sidebar (265px + 15px de respiro) */
     margin-left: 280px; 
     max-width: 1260px;
 }
@@ -618,8 +622,8 @@ input:checked + .sliderspan:before {
 
 .desmos {
     width: 100%; 
-    max-width: 1000px; /* Le damos permiso de ser mucho más ancha */
-    height: 400px; /* La hacemos un poco más bajita (rectangular) */
+    max-width: 1000px;
+    height: 500px;
     border-radius: 8px; 
     border: 1px solid var(--lightestfg); 
     overflow: hidden;
@@ -1066,15 +1070,122 @@ input:checked + .sliderspan:before {
     }
 
     /* 6. TABLAS (.flexTable) */
-    /* Permitimos que las tablas hagan scroll horizontal interno si son muy anchas */
     .flexTable {
         width: 100% !important;
-        overflow-x: auto;
-        display: block; /* Necesario para que el overflow horizontal funcione bien en tablas falsas */
+        overflow-x: auto !important;
+        display: flex !important; 
+        
+        /* ⬇️ LA MAGIA QUE VENCE AL SIMPLEFLEX ⬇️ */
+        flex-direction: row !important; 
+        flex-wrap: nowrap !important; 
+        
+        -webkit-overflow-scrolling: touch; 
+        padding-bottom: 15px; 
+    }
+
+    /* Evita que Flexbox aplaste las columnas para intentar meterlas en la pantalla */
+    .flexTable > div {
+        flex-shrink: 0 !important; 
     }
 
     /* 7. POPUPS */
     .popupbox .box {
         width: 90%; /* Popups más estrechos en móvil */
+    }
+    /* ========================================= */
+    /* 8. CABECERA DEL SERVIDOR (Página Inicio)  */
+    /* ========================================= */
+    
+    #serverInfo .fulllength:first-child {
+        display: flex;
+        flex-direction: column; /* Apila el contenido verticalmente */
+        align-items: center;
+        text-align: center;
+        padding-top: 25px !important;
+    }
+
+    /* Centramos el icono y el texto del servidor */
+    #serverInfo .fulllength:first-child .centerflex {
+        flex-direction: column; 
+        margin-bottom: 20px;
+    }
+
+    #serverInfo .fulllength:first-child .centerflex div {
+        margin-left: 0 !important; /* Quitamos el margen lateral del texto */
+        margin-top: 10px;
+    }
+
+    /* Domamos el contenedor de los botones (matamos el absolute) */
+    #serverInfo .fulllength:first-child .middleflex {
+        position: relative !important; 
+        top: auto !important;
+        right: auto !important;
+        height: auto !important;
+        flex-direction: column; /* Botones uno debajo del otro */
+        gap: 15px; /* Separación elegante entre botones */
+        width: 100%;
+    }
+
+    /* Hacemos que los botones ocupen todo el ancho para que sean fáciles de tocar */
+    #serverInfo .fulllength:first-child .middleflex a {
+        width: 100%;
+    }
+
+    #serverInfo .fulllength:first-child .middleflex button {
+        margin-right: 0 !important; 
+        width: 100% !important; 
+    }
+    /* ========================================= */
+    /* 9. FÓRMULA DE LA CURVA (Excepción)        */
+    /* ========================================= */
+    
+    .curvefield {
+        display: flex !important;
+        flex-direction: row !important; /* Mantenemos todo en línea horizontal */
+        flex-wrap: wrap !important; /* Permitimos que baje de línea si la pantalla es enana */
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        gap: 5px; /* Separación inteligente */
+    }
+
+    /* Salvamos a los inputs de la curva del 100% de ancho */
+    .curvefield input {
+        width: 55px !important; /* Cajitas más pequeñas para móvil */
+        height: 35px !important;
+        font-size: 14px !important; /* Letra más pequeña */
+        padding: 0px 5px !important;
+        text-align: center;
+    }
+
+    /* Ajustamos los textos de x³, x², etc. */
+    .curvefield p {
+        font-size: 14px !important; 
+        margin: 0px !important; /* Matamos los márgenes gigantes originales */
+    }
+    /* ========================================= */
+    /* 10. PESTAÑA ACTIVA EN MÓVIL (UX)          */
+    /* ========================================= */
+    
+    #sidebar div.current {
+        border-left: none !important; /* Quitamos la línea lateral */
+        border-top: 3px solid var(--polarisgreen) !important; /* Ponemos la línea arriba */
+    }
+    /* ========================================= */
+    /* 11. DOMAR CONTENEDORES CON ANCHO FIJO     */
+    /* ========================================= */
+    
+    /* Obliga a cualquier caja dentro de un flexbox a respetar la pantalla, 
+       matando los width: 750px o 600px quemados en el HTML */
+    .simpleflex > div, .spacedflex > div {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Nos aseguramos de que el texto largo se rompa y baje de línea */
+    .curveInfo p, #presetDesc {
+        white-space: normal !important;
+        word-wrap: break-word !important;
     }
 }

@@ -451,5 +451,15 @@
         "advanced": "Avanzado",
         "advanced_desc": "Algunas configuraciones extra avanzadas/experimentales para mayor personalización."
       }
+    },
+  "home_page": {
+      "title": "Cheese XP",
+      "description": "Un bot de niveles de código abierto",
+      "heading": "Cheese XP",
+      "subheading": "Un bot de niveles totalmente personalizable y sin tonterías.",
+      "add_to_discord": "Añadir a Discord",
+      "manage_servers": "Administrar servidores",
+      "credits": "Creado originalmente por",
+      "log_in": "Iniciar sesión"
     }
 }

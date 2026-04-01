@@ -451,5 +451,15 @@
         "advanced": "Advanced",
         "advanced_desc": "Some extra advanced/experimental settings for finer customization."
       }
+    },
+  "home_page": {
+      "title": "Cheese XP",
+      "description": "An open-source XP bot",
+      "heading": "Cheese XP",
+      "subheading": "A fully customizable, bullshit-free levelling bot.",
+      "add_to_discord": "Add to Discord",
+      "manage_servers": "Manage servers",
+      "credits": "Originally created by",
+      "log_in": "Log in"
     }
 }

@@ -178,5 +178,9 @@
       "btnOnline": "Tabla Online",
       "noMembersPage": "¡No hay miembros en esta página!"
     }
-  }
+  },
+  "dashboard": {
+      "404_title": "Ninguna parte",
+      "404_heading": "¡Ooops! ¡Esta página no existe!"
+    }
 }

@@ -178,5 +178,9 @@
       "btnOnline": "Online Leaderboard",
       "noMembersPage": "There are no members on this page!"
     }
-  }
+  },
+  "dashboard": {
+      "404_title": "Nowhere",
+      "404_heading": "Ooops! This page doesn't exist!"
+    }
 }

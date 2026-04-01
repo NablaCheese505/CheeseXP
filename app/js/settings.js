@@ -1,4 +1,5 @@
 addUhOh()
+    let i18n = window.i18nConfig || {}; // Fallback
 
     let guildID = window.location.pathname.split("/").pop().split("-")[0]
     let serverName = guildID
@@ -6,19 +7,19 @@ addUhOh()
 
     const multiplierDescriptions = {
         role: {
-            largest: "If you have 0.5x and 2.0x role multipliers, 2.0x will be picked.",
-            smallest: "If you have 0.5x and 2.0x role multipliers, 0.5x will be picked.",
-            highest: "If you have multiple role multipliers, the highest listed role will be picked.",
-            add: "If you have 1.5x, 2.0x, and 0.75x role multipliers, they will be summed together as to 2.25x. (add n-1 from each)",
-            combine: "If you have 2.0x and 3.0x role multipliers, they will be multiplied to 6.0x. Scales absurdly fast."
+            largest: i18n.mult_role_largest,
+            smallest: i18n.mult_role_smallest,
+            highest: i18n.mult_role_highest,
+            add: i18n.mult_role_add,
+            combine: i18n.mult_role_combine
         },
 
         channel: {
-            multiply: "If your role is 2.0x and the channel is 3.0x, final multiplier is 6.0x.",
-            add: "If your role is 2.0x and the channel is 1.5x, they will be summed together to 2.5x. (add n-1 from each)",
-            largest: "If your role is 2.0x and the channel is 1.5x, 2.0x will be picked because it's higher.",
-            channel: "If the channel has any multiplier (including 1.0x), always use it instead of the role.",
-            role: "If you have any role multiplier (including 1.0x), always use it instead of the channel."
+            multiply: i18n.mult_chan_multiply,
+            add: i18n.mult_chan_add,
+            largest: i18n.mult_chan_largest,
+            channel: i18n.mult_chan_channel,
+            role: i18n.mult_chan_role
         }
     }
 
@@ -28,7 +29,7 @@ addUhOh()
 
         let db = data.settings
         serverName = data.guild.name
-        document.title = "Settings for " + serverName
+        document.title = i18n.settings_for + serverName
         lastUpdated = data.guild.lastUpdate || 0
 
         // curve graph ft. desmos
@@ -38,8 +39,8 @@ addUhOh()
             invertedColors: true,
             advancedStyling: true,
             restrictGridToFirstQuadrant: true,
-            xAxisLabel: "Level",
-            yAxisLabel: "XP Required",
+            xAxisLabel: i18n.axis_level,
+            yAxisLabel: i18n.axis_xp,
             backgroundColor: "#202020",
         }
 
@@ -56,10 +57,10 @@ addUhOh()
             desmosGraph.setMathBounds(desmosBounds)
             desmosGraph.setDefaultState(desmosGraph.getState())
         }
-        else $('#desmosJumpscare').removeAttr("style").text("Looks like Desmos failed to load ¯\\_(ツ)_/¯")
+        else $('#desmosJumpscare').removeAttr("style").text(i18n.desmos_fail)
 
         $('.serverName').text(data.guild.name)
-        $('.serverMembers').text(commafy(data.guild.members || "?") + " member" + (data.guild.members == 1 ? "" : "s"))
+        $('.serverMembers').text(commafy(data.guild.members || "?") + " " + (data.guild.members == 1 ? i18n.member : i18n.members))
         $('.serverIcon').attr('src', data.guild.icon || "/assets/avatar.png")
         $('#otherServers').append(data.ownedServers.map(x => `<option value="${x.id}">${x.name}</option>`))
         
@@ -113,7 +114,7 @@ addUhOh()
         let presets = data.curvePresets.presets
         presets.unshift({
             "name": data.guild.name,
-            "desc": "The custom settings that your server currently uses.",
+            "desc": i18n.custom_settings_desc,
             "curve": db.curve,
             "round": db.rounding,
             "bestRange": [db.gain.min, db.gain.max]
@@ -183,13 +184,13 @@ addUhOh()
             }
 
             let columns = [
-                {name: "Level", id: "level"},
-                {name: "XP", id: "xp", extra: true},
-                {name: "Messages", id: "msgs", extra: true},
-                {name: "Cooldown Time", id: "time", extra: true},
-                {name: "Total XP", id: "cum_xp"},
-                {name: "Total Messages", id: "cum_msgs"},
-                {name: "Total Cooldown", id: "cum_time"}
+                {name: i18n.table_level, id: "level"},
+                {name: i18n.table_xp, id: "xp", extra: true},
+                {name: i18n.table_msgs, id: "msgs", extra: true},
+                {name: i18n.table_time, id: "time", extra: true},
+                {name: i18n.table_total_xp, id: "cum_xp"},
+                {name: i18n.table_total_msgs, id: "cum_msgs"},
+                {name: i18n.table_total_time, id: "cum_time"}
             ]
 
             if (!extra) columns = columns.filter(x => !x.extra)
@@ -230,7 +231,6 @@ addUhOh()
 
             if (desmosGraph) {
                 desmosGraph.setExpression({ id: 'xp', color: "#0080FF", latex: `y = ${curve[3]}x^3 + ${curve[2]}x^2 + ${curve[1]}x \\{x>=0\\}` })
-                // desmosGraph.setExpression({ id: 'required', color: "#FF0080", latex: `y = ${curve[3] * 3}x^2 + ${curve[2] * 2}x + ${curve[1]} \\{x>=0\\}` })
             }
 
             let curveDiff = getCurveDifficulty(curve)
@@ -270,13 +270,13 @@ addUhOh()
 
         // extra info on home
         updateHomeInfo = function(data) {
-            $('p[cat="extra"][category="xp"]').text(data.enabled ? `Enabled! ${commafy(data["gain.min"])}${data["gain.min"] == data["gain.max"] ? "" : `-${commafy(data["gain.max"])}`} XP every ${commafy(data["gain.time"])}s` : "XP disabled!").css("color", data.enabled ? "var(--polarisgreen)" : "#ff6666")
-            $('p[cat="extra"][category="rewardroles"]').text(data.rewards.length ? addS(data.rewards.length, "reward role") : "No reward roles")
-            $('p[cat="extra"][category="levelup"]').text(data["levelUp.enabled"] && data["levelUp.message"] ? `Enabled!${data["levelUp.embed"] ? " (embedded)" : ""}` : "Disabled")
-            $('p[cat="extra"][category="multipliers"]').text(`${addS(data["multipliers.roles"].length, "role")}, ${addS(data["multipliers.channels"].length, "channel")}`)
-            $('p[cat="extra"][category="rankcard"]').text(`${data["rankCard.disabled"] ? "Disabled" : data["rankCard.ephemeral"] ? "Invisible" : "Enabled!"}`)
-            $('p[cat="extra"][category="leaderboard"]').text(`${data["leaderboard.disabled"] ? "Disabled" : data["leaderboard.private"] ? "Private" : "Enabled!"}${data["leaderboard.maxEntries"] ? ` (max ${commafy(data["leaderboard.maxEntries"])})` : ""}`)
-            $('p[cat="extra"][category="data"]').text(`Last saved: ${lastUpdated ? `${new Date(lastUpdated).toLocaleString([], {year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'})}` : "Never"}`)
+            $('p[cat="extra"][category="xp"]').text(data.enabled ? `${i18n.enabled} ${commafy(data["gain.min"])}${data["gain.min"] == data["gain.max"] ? "" : `-${commafy(data["gain.max"])}`} ${i18n.xp_every} ${commafy(data["gain.time"])}s` : i18n.xp_disabled).css("color", data.enabled ? "var(--polarisgreen)" : "#ff6666")
+            $('p[cat="extra"][category="rewardroles"]').text(data.rewards.length ? addS(data.rewards.length, i18n.reward_role) : i18n.no_reward_roles)
+            $('p[cat="extra"][category="levelup"]').text(data["levelUp.enabled"] && data["levelUp.message"] ? `${i18n.enabled}${data["levelUp.embed"] ? " " + i18n.embedded : ""}` : i18n.disabled)
+            $('p[cat="extra"][category="multipliers"]').text(`${addS(data["multipliers.roles"].length, i18n.role)}, ${addS(data["multipliers.channels"].length, i18n.channel)}`)
+            $('p[cat="extra"][category="rankcard"]').text(`${data["rankCard.disabled"] ? i18n.disabled : data["rankCard.ephemeral"] ? i18n.invisible : i18n.enabled}`)
+            $('p[cat="extra"][category="leaderboard"]').text(`${data["leaderboard.disabled"] ? i18n.disabled : data["leaderboard.private"] ? i18n.private : i18n.enabled}${data["leaderboard.maxEntries"] ? ` (${i18n.max} ${commafy(data["leaderboard.maxEntries"])})` : ""}`)
+            $('p[cat="extra"][category="data"]').text(`${i18n.last_saved} ${lastUpdated ? `${new Date(lastUpdated).toLocaleString([], {year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'})}` : i18n.never}`)
             $('#mainlbbutton').toggle(!data['leaderboard.disabled'])
         }
 
@@ -292,11 +292,11 @@ addUhOh()
             let excludeEnabled = $('#excludeRewardToggle').prop('checked')
             rewards = rewards.sort((a, b) => a.level - b.level)
             $('#rewards').html(`
-                <div col="lvl" style="width: 100px"><p><b>Level</b></p></div>
-                <div col="role" style="width: 400px"><p><b>Role</b></p></div>
-                <div col="keep" style="width: 100px"><p><b>Keep</b></p></div>
-                <div col="exclude" style="width: 100px${!excludeEnabled ? "; display: none" : ""}"><p><b>Sync</b></p></div>
-                <div col="delete" style="width: 80px"><p><b>Delete</b></p></div>
+                <div col="lvl" style="width: 100px"><p><b>${i18n.table_level}</b></p></div>
+                <div col="role" style="width: 400px"><p><b>${i18n.table_role}</b></p></div>
+                <div col="keep" style="width: 100px"><p><b>${i18n.table_keep}</b></p></div>
+                <div col="exclude" style="width: 100px${!excludeEnabled ? "; display: none" : ""}"><p><b>${i18n.table_sync}</b></p></div>
+                <div col="delete" style="width: 80px"><p><b>${i18n.table_delete}</b></p></div>
             `)
 
             rewards.forEach(reward => {
@@ -306,8 +306,8 @@ addUhOh()
 
                 $('#rewards div[col="lvl"]').append(`<p class="rewardLevel numberinput" tabindex="-1" roleID="${reward.id}" min="1" max="1000" default="10" contenteditable>${reward.level}</p>`)
                 $('#rewards div[col="role"]').append(`<p class="longname" style="color: ${foundRole.color == "#000000" ? "var(--defaultrolecol)" : foundRole.color}">${foundRole.name}</p>`)
-                $('#rewards div[col="keep"]').append(`<p class="toggleRow" tr="keep" tabindex="0" roleID="${reward.id}" style="color: ${reward.keep ? "lime" : "nah"}">${reward.keep ? "Yes" : "No"}${reward.noSync && !excludeEnabled ? "*" : ""}</p>`)
-                $('#rewards div[col="exclude"]').append(`<p class="toggleRow" tr="noSync" tabindex="0" roleID="${reward.id}" style="color: ${reward.noSync ? "red" : "lime"}">${reward.noSync ? "No" : "Yes"}</p>`)
+                $('#rewards div[col="keep"]').append(`<p class="toggleRow" tr="keep" tabindex="0" roleID="${reward.id}" style="color: ${reward.keep ? "lime" : "nah"}">${reward.keep ? i18n.yes : i18n.no}${reward.noSync && !excludeEnabled ? "*" : ""}</p>`)
+                $('#rewards div[col="exclude"]').append(`<p class="toggleRow" tr="noSync" tabindex="0" roleID="${reward.id}" style="color: ${reward.noSync ? "red" : "lime"}">${reward.noSync ? i18n.no : i18n.yes}</p>`)
                 $('#rewards div[col="delete"]').append(`<p class="deleteRow deleteReward" tabindex="0" roleID="${reward.id}">🗑️</p>`)
             })
             $('#rewardCount').html(rewards.length)
@@ -319,13 +319,13 @@ addUhOh()
             let option = roleOption.clone()
             let roleSelect = $(element)
             if (hideCondition) option.prop("hidden", true)
-            if (!roleSelect.children().length) roleSelect.append("<option value='none' selected disabled>(role)</option>")
+            if (!roleSelect.children().length) roleSelect.append(`<option value='none' selected disabled>${i18n.opt_role}</option>`)
 
             if (onlyGrantable && !role.grantable) {
                 if (option.val() == data.guild.id) return
                 option.css("color", "")
                 option.prop("disabled", true)
-                option.html(option.html() + " -- too high to grant!")
+                option.html(option.html() + i18n.too_high)
             }
 
             return roleSelect.append(option)
@@ -342,7 +342,7 @@ addUhOh()
 
         let channelPrefixes = { channel: "#", category: "&gt; ", vc: "🔊 ", thread: "└─ ", forum: "💬 "}
         let chMultiplierChannels = data.channels.map(x => `<option ${x.type == "category" ? `style="font-weight: bold"` : ""} value="${x.id}">${channelPrefixes[x.type] || "* "}${x.name}</option>`)
-        $('#channelMultiplierSelect').append("<option value='none' selected disabled>(channel)</option>").append(chMultiplierChannels)
+        $('#channelMultiplierSelect').append(`<option value='none' selected disabled>${i18n.opt_channel}</option>`).append(chMultiplierChannels)
 
 
         // add new reward role
@@ -416,9 +416,9 @@ addUhOh()
         function buildRoleMultiplerTable() {
             roleMultipliers = roleMultipliers.sort((a, b) => a.boost - b.boost)
             $('#roleMultipliers').html(`
-                <div col="boost" style="width: 140px"><p><b>Multiplier</b></p></div>
-                <div col="role" style="width: 380px"><p><b>Role</b></p></div>
-                <div col="delete" style="width: 80px"><p><b>Delete</b></p></div>
+                <div col="boost" style="width: 140px"><p><b>${i18n.table_multiplier}</b></p></div>
+                <div col="role" style="width: 380px"><p><b>${i18n.table_role}</b></p></div>
+                <div col="delete" style="width: 80px"><p><b>${i18n.table_delete}</b></p></div>
             `)
 
             roleMultipliers.forEach(boost => {
@@ -468,16 +468,15 @@ addUhOh()
         })
 
 
-        // welcome to downtown copypasteville
         // multiplier channel table
         function buildChannelMultiplierTable() {
             channelMultipliers = channelMultipliers.filter(x => data.channels.some(c => c.id == x.id))
             .sort((a, b) => data.channels.findIndex(c => c.id == a.id) - data.channels.findIndex(c => c.id == b.id))
 
             $('#channelMultipliers').html(`
-                <div col="boost" style="width: 140px"><p><b>Multiplier</b></p></div>
-                <div col="channel" style="width: 380px"><p><b>Channel</b></p></div>
-                <div col="delete" style="width: 80px"><p><b>Delete</b></p></div>
+                <div col="boost" style="width: 140px"><p><b>${i18n.table_multiplier}</b></p></div>
+                <div col="channel" style="width: 380px"><p><b>${i18n.table_channel}</b></p></div>
+                <div col="delete" style="width: 80px"><p><b>${i18n.table_delete}</b></p></div>
             `)
 
             channelMultipliers.forEach(boost => {
@@ -663,13 +662,13 @@ addUhOh()
         $('#errorheader').css('margin-top', '70px')
         if (e.apiError) switch (e.code) {
             case "noPerms":
-                $('#errorheader').text("No permission!")
-                $('#errorfooter').text("You don't have permission to manage this server.")
+                $('#errorheader').text(i18n.err_no_perms_title)
+                $('#errorfooter').text(i18n.err_no_perms_desc)
                 break;
 
             case "login":
-                $('#errorheader').text("Not logged in!")
-                $('#errorfooter').text("Please log in to manage this server.")
+                $('#errorheader').text(i18n.err_login_title)
+                $('#errorfooter').text(i18n.err_login_desc)
                 $('#loginbutton').show()
                 break;
 
@@ -796,9 +795,9 @@ addUhOh()
     $('#saveChanges').click(function() {
         if (requestInProgress || $('#unsavedWarning.activeWarning').length < 1) return
         let lvlEmbedEnabled = $('#toggleLvlUpEmbed').prop('checked')
-        if (lvlEmbedEnabled && !validateEmbedJSON()) return alert("Invalid level up embed data! Please fix it or remove it before saving.")
+        if (lvlEmbedEnabled && !validateEmbedJSON()) return alert(i18n.alert_invalid_embed)
         else requestInProgress = true
-        $('#saveChanges').html("...")
+        $('#saveChanges').html(i18n.btn_saving)
         let savejson = compareSaveJSON()
         if (savejson["levelUp.message"] && !savejson["levelUp.embed"]) savejson["levelUp.embed"] = lvlEmbedEnabled
         $.ajax({
@@ -808,7 +807,7 @@ addUhOh()
         })
         .done(function(res) {
             requestInProgress = false
-            $('#saveChanges').html("Save")
+            $('#saveChanges').html(i18n.btn_save)
             let newSave = generateSaveJSON()
             lastUpdated = Date.now()
             updateHomeInfo(newSave)
@@ -817,15 +816,15 @@ addUhOh()
         })
         .fail(function (e) {
             requestInProgress = false
-            $('#saveChanges').html("Save")
-            alert(`Error! ${e.responseText}`);
+            $('#saveChanges').html(i18n.btn_save)
+            alert(`${i18n.alert_error} ${e.responseText}`);
             console.error(e)
         })
     })
 
     $('#resetSettings').click(function() {
         if (requestInProgress) return
-        else if (!confirm("Last chance! Are you sure you want to reset all settings?")) return
+        else if (!confirm(i18n.confirm_reset_settings)) return
         requestInProgress = true
         $.ajax({
             url: "/api/settings", type: "post",
@@ -838,14 +837,14 @@ addUhOh()
         })
         .fail(function (e) {
             requestInProgress = false
-            alert(`Error! ${e.responseText}`);
+            alert(`${i18n.alert_error} ${e.responseText}`);
             console.error(e)
         })
     })
 
     $('#resetXP').click(function() {
         if (requestInProgress) return
-        else if (!confirm("This is seriously your last chance!!! Reset everyone's XP?")) return
+        else if (!confirm(i18n.confirm_reset_xp)) return
         requestInProgress = true
         $.ajax({
             url: "/api/settings", type: "post",
@@ -854,13 +853,13 @@ addUhOh()
         })
         .done(function(res) {
             requestInProgress = false
-            alert("All XP has been reset!")
+            alert(i18n.alert_xp_reset)
             $('.confirmReset').hide()
             $('.confirmConfirmReset').hide()
         })
         .fail(function (e) {
             requestInProgress = false
-            alert(`Error! ${e.responseText}`);
+            alert(`${i18n.alert_error} ${e.responseText}`);
             console.error(e)
         })
     })
@@ -873,7 +872,7 @@ addUhOh()
         fetch(`/api/xp/${guildID}?format=${format}`).then(res => {
             if (!res.ok) {
                 requestInProgress = false
-                return res.json().then(e => { alert(`Error! ${e.message}`); }).catch(() => { alert("Error!") })
+                return res.json().then(e => { alert(`${i18n.alert_error} ${e.message}`); }).catch(() => { alert(i18n.alert_error) })
             }
             requestInProgress = false
             res.blob().then(blob => {
@@ -886,7 +885,7 @@ addUhOh()
             })
         }).catch((e) => {
             requestInProgress = false
-            alert(`Error! ${e.responseText}`);
+            alert(`${i18n.alert_error} ${e.responseText}`);
             console.error(e)
         })
     })
@@ -897,7 +896,7 @@ addUhOh()
         let exampleLevel = Number($('#exampleLevel').val())
         let saveData = generateSaveJSON()
         let embedMode = saveData['levelUp.embed']
-        if (embedMode && !validateEmbedJSON()) return alert("Invalid level up embed data! Please fix it or remove it before testing.")
+        if (embedMode && !validateEmbedJSON()) return alert(i18n.alert_invalid_embed_test)
         else if (!saveData['levelUp.message']) return
         else requestInProgress = true
         
@@ -943,9 +942,9 @@ addUhOh()
             requestInProgress = false
             setTimeout(() => { $('#confirmPrune').prop('disabled', false) }, 1000);
 
-            if (res.matches < 1) return alert(`Nobody in your server has less than ${amt} XP!`)
+            if (res.matches < 1) return alert(`${i18n.alert_prune_nobody} ${amt} ${i18n.alert_prune_xp}`)
 
-            if (confirm(`Are you sure you want to prune? This will wipe ${commafy(res.matches)} user${res.matches == 1 ? "" : "s"}, leaving ${commafy(res.total - res.matches)} left.`)) {
+            if (confirm(`${i18n.confirm_prune_1} ${commafy(res.matches)} ${i18n.confirm_prune_2}${res.matches == 1 ? "" : "s"}, ${i18n.confirm_prune_3} ${commafy(res.total - res.matches)} ${i18n.confirm_prune_4}`)) {
                 
                 requestInProgress = true
 
@@ -960,7 +959,7 @@ addUhOh()
                 })
                 .fail(function (e) {
                     requestInProgress = false
-                    alert("Something went wrong while trying to prune!\n" + e.message)
+                    alert(i18n.alert_prune_fail + e.message)
                     console.error(e)
                 })
 
@@ -969,7 +968,7 @@ addUhOh()
         .fail(function (e) {
             requestInProgress = false
             setTimeout(() => { $('#confirmPrune').prop('disabled', false) }, 1000);
-            alert("Something went wrong checking the prune count!\n" + e.message)
+            alert(i18n.alert_prune_count_fail + e.message)
             console.error(e)
         })
     })
@@ -993,7 +992,7 @@ addUhOh()
     $('#confirmBotImport').click(async function() {
         if (requestInProgress) return
 
-        if (hasUnsavedChanges()) return alert("Please save your unsaved changes first!")
+        if (hasUnsavedChanges()) return alert(i18n.alert_unsaved)
 
         let botName = $('#importfrom').find(":selected").text().split("(")[0].trim()
         let importBot = $('#importfrom').val()
@@ -1002,21 +1001,21 @@ addUhOh()
         let jsonData;
         if (importBot == "json") {
             let jsonfile = $('#importJSONFile').prop('files')[0]
-            if (!jsonfile) return alert("No .json file has been uploaded!")
+            if (!jsonfile) return alert(i18n.alert_no_json)
             jsonData = await readJSONFile(jsonfile).catch(() => null)
-            if (!jsonData) return alert("Could not parse that file! Are you sure it's a valid .json file?")
-            if (Array.isArray(jsonData) && jsonData[0] && jsonData[0].xp && !confirm("This .json file only contains XP data - no settings will be modified. Are you cool with that?")) return
+            if (!jsonData) return alert(i18n.alert_parse_fail)
+            if (Array.isArray(jsonData) && jsonData[0] && jsonData[0].xp && !confirm(i18n.confirm_json_xp_only)) return
         }
 
-        if (!importGroup.length) return alert("Invalid bot??!")
-        if (failedImports.includes(importBot)) return alert(`You already tried to import from ${botName}, and it failed! Please wait 30 seconds since the last attempt before trying again.`)
+        if (!importGroup.length) return alert(i18n.alert_invalid_bot)
+        if (failedImports.includes(importBot)) return alert(`${i18n.alert_import_cooldown} ${botName}${i18n.alert_import_cooldown_2}`)
 
         let importSettings = { bot: importBot }
         importGroup.find('.importSetting').each(function() {
             importSettings[$(this).attr("option")] = $(this).attr("type") == "checkbox" ? $(this).prop("checked") : $(this).val()
         })
 
-        if (!importSettings.xp && (!importSettings.settings && !importSettings.rewardroles)) return alert("Please import either XP or settings!")
+        if (!importSettings.xp && (!importSettings.settings && !importSettings.rewardroles)) return alert(i18n.alert_import_select)
 
         requestInProgress = true
         $('#botimporting').hide()
@@ -1041,8 +1040,8 @@ addUhOh()
             requestInProgress = false
             if (e.responseJSON && e.responseJSON.apiError) {
                 let isJSON = (importBot == "json")
-                if (e.responseJSON.code == "noData") alert(isJSON ? "No server or XP data was found!" : "This server doesn't have any data!")
-                else alert("Error while trying to import data!\n" + e.responseJSON.message)  
+                if (e.responseJSON.code == "noData") alert(isJSON ? i18n.alert_import_nodata_json : i18n.alert_import_nodata)
+                else alert(i18n.alert_import_fail + e.responseJSON.message)  
                 if (e.responseJSON.code != "importCooldown" && e.responseJSON.code != "invalidImport") {
                     if (!isJSON) failedImports.push(importBot)
                     setTimeout(() => {
@@ -1051,7 +1050,7 @@ addUhOh()
                 }
             }
             else {
-                alert("Error while trying to import data!\n" + e.message)  
+                alert(i18n.alert_import_fail + e.message)  
             }
             console.error(e)
         })

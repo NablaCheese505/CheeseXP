@@ -228,13 +228,18 @@ Fetch(`/api/leaderboard/${guildID}`).then(data => {
         let lvlSlot = progressSlot.clone()
         let lvlXP = xpForLevel(i, data.settings)
         let lvlProgress = !loggedIn ? 0 : data.user.xp ? data.user.xp / lvlXP * 100 : 0
-        let lvlHue = i * 360 / 100
+        let isLevelReached = userLevel.level >= i;
+        let colorText = isLevelReached ? 'var(--polarisgreen)' : 'var(--defaultrolecol)';
+        let colorBar = isLevelReached ? 'var(--polarisgreen)' : 'var(--colon)';
 
         if (i == userLevel.level + 1) lvlSlot.addClass('highlightedSlot')
-        lvlSlot.find("[lb=level]").text(`${window.i18n.level} ` + commafy(i)).css("color", userLevel.level >= i ? `hsl(${lvlHue}, 90%, 70%)` : `hsl(${lvlHue}, 70%, 90%)`)
-        lvlSlot.find("[lb=xp]").text(commafy(lvlXP) + ` ${window.i18n.xp}`).css("color", userLevel.level >= i ? `hsl(${lvlHue}, 90%, 70%)` : `hsl(${lvlHue}, 70%, 90%)`)
+        lvlSlot.find("[lb=level]").text(`${window.i18n.level} ` + commafy(i)).css("color", colorText)
+        lvlSlot.find("[lb=xp]").text(commafy(lvlXP) + ` ${window.i18n.xp}`).css("color", colorText)
+        
         lvlSlot.find("[lb=percent]").text(`${Number(Math.min(100, lvlProgress).toFixed(2))}% ${window.i18n.reachedLower}${lvlProgress >= 100.5 ? ` (${commafy(Math.round(lvlProgress))}%)` : ""}`)
-        lvlSlot.find("[lb=progress]").css("background-color", `hsl(${lvlHue}, 100%, 50%)`).css("width", Math.min(lvlProgress, 100) + "%")
+        
+        lvlSlot.find("[lb=progress]").css("background-color", colorBar).css("width", Math.min(lvlProgress, 100) + "%")
+        
         $('#progress').append(lvlSlot)
 
         if (i % 50 == 0 && lvlProgress < 1 && i > 50) break; 

@@ -11,7 +11,7 @@
     --colon: #30a596;           /* Un acento */
     
     --emojigreen: #10b981;      /* Verde más suave para botones de éxito */
-    --emojired: #ef4444;        /* Rojo moderno para borrar/alertas */
+    --emojired: #ff6b6b;        /* Rojo moderno para borrar/alertas */
     --emojiblue: #3b82f6;       /* Azul vibrante para información */
     --emojipurple: #8b5cf6;     /* Púrpura eléctrico para acciones especiales */
 
@@ -991,7 +991,7 @@ input:checked + .sliderspan:before {
     opacity: 75%;
 }
 
-.red { color: red }
+.red { color: #fca5a5 !important;}
 
 /* 1. Domamos el contenedor para que no aplaste el texto */
 .serverOption .serverIcons {
@@ -1319,57 +1319,185 @@ input:checked + .sliderspan:before {
         padding: 5px;
     }
     /* ========================================= */
-    /* 14. TABLA DE CLASIFICACIÓN (Móvil)        */
+    /* 14. TABLA DE CLASIFICACIÓN (MÓVIL)        */
     /* ========================================= */
-    
+
     .leaderboardBox {
         padding: 0 10px !important; 
     }
 
-    /* 1. Apilamos las dos mitades verticalmente */
+    /* Contenedor principal de CADA tarjeta (Líderes, Roles, Progreso) */
     .leaderboardSlot {
+        position: relative !important;
         height: auto !important; 
-        padding: 15px 5px !important; 
-        flex-direction: column !important; 
-        gap: 15px; 
+        padding: 15px !important; /* Padding uniforme */
+        margin-bottom: 15px !important; 
+        display: flex !important;
+        flex-direction: column !important; /* Apilamos INFO arriba, BARRA abajo */
+        align-items: flex-start !important; /* Todo forzado a la izquierda */
+        justify-content: flex-start !important;
+        gap: 15px !important; 
+        box-sizing: border-box !important;
+        overflow: hidden !important; 
     }
-    
+
+    /* Excepción: Solo la tarjeta del Top necesita más padding arriba por la insignia */
+    .leaderboardSlot[slot="leaderboard"] {
+        padding-top: 35px !important;
+    }
+
+    /* La insignia de rango (#1, #2...) flotante */
+    .leaderboardSlot h2[lb="rank"] {
+        position: absolute !important;
+        top: 10px !important;
+        left: 10px !important;
+        font-size: 16px !important;
+        background-color: var(--emojipurple) !important;
+        padding: 4px 10px !important;
+        border-radius: 8px !important;
+        width: auto !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+        color: white !important;
+        z-index: 2 !important;
+    }
+
+    /* MATAMOS los márgenes (margin-right: 20px) y anchos forzados en el HTML */
     .leaderboardSlot > div {
         width: 100% !important;
-        margin-right: 0 !important;
+        max-width: 100% !important;
+        margin: 0 !important; 
+        padding: 0 !important;
+        box-sizing: border-box !important;
     }
 
-    /* 3. Ajustes cosméticos para la foto y el texto */
-    .leaderboardSlot h2[lb=rank] {
-        font-size: 24px !important;
-        width: 40px !important;
+    /* Mitad superior: Textos e imagen */
+    .leaderboardSlot .mainInfo {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: flex-start !important; /* Alineado arriba */
+        justify-content: flex-start !important;
     }
 
-    /* Seleccionamos el contenedor de la foto */
-    .leaderboardSlot .mainInfo > div:nth-child(2) {
-        height: 50px !important;
-        width: 50px !important;
-        margin-right: 15px !important;
+    /* Contenedor del Avatar (Lo cazamos por su border-radius único en línea) */
+    .leaderboardSlot .mainInfo > div[style*="420px"] {
+        width: 55px !important;
+        height: 55px !important;
+        min-width: 55px !important;
+        margin-left: 0 !important;
+        margin-right: 15px !important; 
+        flex-shrink: 0 !important; /* Evita que la foto se aplaste */
     }
 
-    /* Evitamos que el nombre se corte feo */
-    .leaderboardSlot p[lb=name] {
-        white-space: nowrap !important;
-        overflow: hidden;
-        text-overflow: ellipsis; 
-    }
-    
-    /* 4. Dejamos la física de la barra intacta, solo la hacemos más delgada para móvil */
-    .progressBar {
-        height: 40px !important; 
+    /* Contenedor de Textos */
+    .leaderboardSlot .generalInfo {
+        width: calc(100% - 70px) !important; 
+        display: flex !important;
+        flex-direction: column !important; /* Todo en columna vertical */
     }
 
-    .progressBar .xpOverlay p {
+    /* Nombre / ID (Más pequeño y con salto forzado) */
+    .leaderboardSlot .generalInfo p[lb="name"] {
+        font-size: 13px !important; 
+        word-break: break-all !important; /* Obliga a romper los números largos a la fuerza */
+        white-space: normal !important;
+        line-height: 1.2 !important;
+        margin: 0 0 4px 0 !important;
+    }
+
+    /* Contenedor de Nivel y Advertencias Rojas */
+    .leaderboardSlot .generalInfo > div {
+        display: flex !important;
+        flex-direction: column !important; 
+        align-items: flex-start !important;
+        width: 100% !important;
+    }
+
+    .leaderboardSlot .generalInfo p[lb="level"] {
+        margin: 0 !important;
+    }
+
+    /* Textos rojos de advertencia (Apilados debajo del nivel) */
+    .leaderboardSlot .generalInfo p[lb="warning"],
+    .leaderboardSlot .generalInfo p[lb="hideUser"] {
+        margin-left: 0 !important;
+        margin-top: 6px !important;
+        white-space: normal !important;
         font-size: 14px !important;
-        white-space: normal !important; /* Deja que el texto baje de línea si es necesario */
+        width: 100% !important;
+        display: block !important;
     }
 
-    /* 5. Botones de pestañas */
+
+    /* ========================================= */
+    /* 15. LA BARRA DE PROGRESO INQUEBRANTABLE   */
+    /* ========================================= */
+
+    /* Forzamos al contenedor de la barra a ser un bloque completo */
+    .leaderboardSlot > div:last-child {
+        display: block !important; 
+    }
+
+    /* La pista gris */
+    .progressBar {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 35px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-radius: 20px !important;
+        position: relative !important;
+        background-color: rgba(0, 0, 0, 0.33) !important;
+        overflow: hidden !important; /* Corta cualquier excedente */
+        box-sizing: border-box !important;
+    }
+
+    /* El relleno de color/blanco */
+    .progressBar .progress {
+        display: block !important;
+        height: 100% !important;
+        position: absolute !important; 
+        top: 0 !important;
+        left: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-radius: 20px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Contenedor de texto de XP */
+    .progressBar .xpOverlay {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        margin: 0 !important;
+        padding: 0 10px !important;
+        display: flex !important;
+        flex-direction: row !important; 
+        justify-content: center !important; 
+        align-items: center !important; 
+        box-sizing: border-box !important;
+    }
+
+    /* Texto XP */
+    .progressBar .xpOverlay p {
+        font-size: 13px !important;
+        text-align: center !important;
+        white-space: nowrap !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        text-shadow: 1px 1px 2px black, -1px -1px 2px black !important;
+        position: static !important;
+        width: auto !important;
+        min-width: 0 !important;
+    }
+
+    /* Botones de pestañas del Leaderboard */
     #lbButtons {
         display: flex;
         flex-direction: column;
@@ -1379,5 +1507,35 @@ input:checked + .sliderspan:before {
     #lbButtons button {
         width: 100% !important;
         margin: 0 !important;
+    }
+    /* ========================================= */
+    /* 16. CENTRAR PAGINACIÓN                    */
+    /* ========================================= */
+
+    #pageInfo {
+        display: flex !important;
+        flex-direction: row !important; 
+        justify-content: center !important; 
+        align-items: center !important; 
+        width: 100% !important;
+        margin: 20px 0 !important;
+    }
+
+    #pageInfo p {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 0 !important;
+        text-align: center !important;
+        gap: 6px !important; /* <--- LA MAGIA: Añade 6px de espacio uniforme entre todo */
+    }
+
+    #pageInfo button {
+        margin: 0 15px !important; 
+    }
+
+    /* Refuerzo por si el número está en un <span> separado */
+    #totalPages {
+        margin-left: 2px !important;
     }
 }

@@ -1318,4 +1318,67 @@ input:checked + .sliderspan:before {
     .serverOption .serverIcons a {
         padding: 5px;
     }
+    /* ========================================= */
+    /* 14. TABLA DE CLASIFICACIÓN (Móvil)        */
+    /* ========================================= */
+    
+    .leaderboardBox {
+        padding: 0 10px !important; 
+    }
+
+    /* 1. Apilamos las dos mitades verticalmente */
+    .leaderboardSlot {
+        height: auto !important; 
+        padding: 15px 5px !important; 
+        flex-direction: column !important; 
+        gap: 15px; 
+    }
+
+    /* 2. EL FIX MAESTRO: Obligamos a las dos mitades (que tienen width: 50% en el HTML) a ocupar el 100% */
+    .leaderboardSlot > div {
+        width: 100% !important;
+        margin-right: 0 !important;
+    }
+
+    /* 3. Ajustes cosméticos para la foto y el texto */
+    .leaderboardSlot h2[lb=rank] {
+        font-size: 24px !important;
+        width: 40px !important;
+    }
+
+    /* Seleccionamos el contenedor de la foto */
+    .leaderboardSlot .mainInfo > div:nth-child(2) {
+        height: 50px !important;
+        width: 50px !important;
+        margin-right: 15px !important;
+    }
+
+    /* Evitamos que el nombre se corte feo */
+    .leaderboardSlot p[lb=name] {
+        white-space: nowrap !important;
+        overflow: hidden;
+        text-overflow: ellipsis; 
+    }
+    
+    /* 4. Dejamos la física de la barra intacta, solo la hacemos más delgada para móvil */
+    .progressBar {
+        height: 40px !important; 
+    }
+
+    .progressBar .xpOverlay p {
+        font-size: 14px !important;
+        white-space: normal !important; /* Deja que el texto baje de línea si es necesario */
+    }
+
+    /* 5. Botones de pestañas */
+    #lbButtons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    #lbButtons button {
+        width: 100% !important;
+        margin: 0 !important;
+    }
 }

@@ -1333,8 +1333,7 @@ input:checked + .sliderspan:before {
         flex-direction: column !important; 
         gap: 15px; 
     }
-
-    /* 2. EL FIX MAESTRO: Obligamos a las dos mitades (que tienen width: 50% en el HTML) a ocupar el 100% */
+    
     .leaderboardSlot > div {
         width: 100% !important;
         margin-right: 0 !important;

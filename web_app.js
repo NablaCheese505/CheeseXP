@@ -1,5 +1,3 @@
-// this code is real messy forgive me
-
 const express = require('express')
 const cookieParser = require('cookie-parser')
 const timeout = require('connect-timeout')
@@ -106,6 +104,16 @@ app.use(function(req, res, next) {
     next()
 })
 
+const rateLimit = require('express-rate-limit');
+
+const apiLimiter = rateLimit({
+    windowMs: 5 * 60 * 1000,
+    max: 150,
+    message: { apiError: true, message: "Demasiadas peticiones. Por favor, intenta de nuevo en 5 minutos." }
+});
+
+
+app.use("/api/", apiLimiter);
 app.get("/servers", (req, res) => sendPage(res, "servers"))
 app.get("/settings/:id", (req, res) => sendPage(res, "config"))
 app.get("/leaderboard/:id", (req, res) => sendPage(res, "leaderboard"))
@@ -295,7 +303,6 @@ app.post("/api/settings", async function(req, res) {
     if (typeof req.body != "object") return res.apiError("Invalid save data!");
     let guildID = req.body.guildID
     if (!guildID) return res.apiError("No guild ID!");
-
     let [user, guilds] = await getDiscordInfo(req)
     if (!user || !guilds) return res.apiError("Not logged in!")
 
@@ -712,6 +719,10 @@ app.post("/api/editXP", async function(req, res) {
     let guildID = req.body.guildID
     if (!guildID) return res.apiError("No guild ID!");
 
+    if (!req.body.user || !/^\d{17,20}$/.test(req.body.user)) {
+        return res.apiError("ID de usuario inválido o malicioso!");
+    }
+
     let [user, guilds] = await getDiscordInfo(req)
     if (!user || !guilds) return res.apiError("Not logged in!")
 
@@ -737,6 +748,10 @@ app.post("/api/leaderboardHide", async function(req, res) {
 
     let guildID = req.body.guildID
     if (!guildID) return res.apiError("No guild ID!");
+
+    if (!req.body.user || !/^\d{17,20}$/.test(req.body.user)) {
+        return res.apiError("ID de usuario inválido o malicioso!");
+    }
 
     let [user, guilds] = await getDiscordInfo(req)
     if (!user || !guilds) return res.apiError("Not logged in!")
@@ -847,7 +862,12 @@ function storeAuthToken(res, tokens) {
     let expiration = Date.now() + (1000 * tokens.expires_in) // when the token expires (one week)
     authDB.delete({ expires: { $lt: Date.now() } }).then(() => {}) // clear expired tokens
     authDB.create({ _id: randomID, access_token: tokens.access_token, refresh_token: tokens.refresh_token, expires: expiration }).then((data) => {
-        res.cookie("polaris", randomID, { "expires": new Date(expiration) });
+        res.cookie("polaris", randomID, { 
+            expires: new Date(expiration),
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax'
+        });
         sendRedirect(res, "/?authorized") // sweet, back to the homepage
     }).catch((e) => { console.error(e); sendRedirect(res, "/") })
 }

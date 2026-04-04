@@ -80,7 +80,13 @@ class LevelUpMessage {
 
         else this.msg =  { content: this.subVariables(this.msg) }
 
-        if (this.msg) this.msg.reply = { messageReference: message.id }
+        if (this.msg) {
+            let isSameChannel = (settings.levelUp.channel === "current") || (settings.levelUp.channel === message.channel.id);
+
+            if (isSameChannel) {
+                this.msg.reply = { messageReference: message.id }
+            }
+        }
     }
 
     subVariables(msg) {

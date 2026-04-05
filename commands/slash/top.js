@@ -1,4 +1,5 @@
 const { t } = require('../../utils/i18n.js');
+const config = require('../../config.json');
 const PageEmbed = require("../../classes/PageEmbed.js")
 
 module.exports = {
@@ -14,12 +15,14 @@ metadata: {
 
 async run(client, int, tools) {
 
+    let db = await tools.fetchAll(int.guild.id) 
+    let serverLang = db?.settings?.lang || config.defaultLanguage || 'es';
+
     let lbLink = `${tools.WEBSITE}/leaderboard/${int.guild.id}`
 
-    let db = await tools.fetchAll()
-    if (!db || !db.users || !Object.keys(db.users).length) return tools.warn(t('commands.top.nobodyRanked'));
+    if (!db || !db.users || !Object.keys(db.users).length) return tools.warn(t('commands.top.nobodyRanked', {}, serverLang));
     else if (!db.settings.enabled) return tools.warn("*xpDisabled")
-    else if (db.settings.leaderboard.disabled) return tools.warn(t('commands.top.disabled') + (tools.canManageServer(int.member) ? t('commands.top.modView', { link: lbLink }) : ""))
+    else if (db.settings.leaderboard.disabled) return tools.warn(t('commands.top.disabled', {}, serverLang) + (tools.canManageServer(int.member) ? t('commands.top.modView', { link: lbLink }, serverLang) : ""))
 
     let pageNumber = int.options.get("page")?.value || 1
     let pageSize = 10
@@ -30,13 +33,13 @@ async run(client, int, tools) {
 
     if (db.settings.leaderboard.maxEntries > 0) rankings = rankings.slice(0, db.settings.leaderboard.maxEntries)
 
-    if (!rankings.length) return tools.warn(t('commands.top.nobodyOnLB'))
+    if (!rankings.length) return tools.warn(t('commands.top.nobodyOnLB', {}, serverLang))
 
     let highlight = null
     let userSearch = int.options.get("user") || int.options.get("member") 
     if (userSearch) {
         let foundRanking = rankings.findIndex(x => x.id == userSearch.user.id)
-        if (isNaN(foundRanking) || foundRanking < 0) return tools.warn(int.user.id == userSearch.user.id ? t('commands.top.youNotOnLB') : t('commands.top.memberNotOnLB'))
+        if (isNaN(foundRanking) || foundRanking < 0) return tools.warn(int.user.id == userSearch.user.id ? t('commands.top.youNotOnLB', {}, serverLang) : t('commands.top.memberNotOnLB', {}, serverLang))
         else pageNumber = Math.floor(foundRanking / pageSize) + 1
         highlight = userSearch.user.id
     }
@@ -46,17 +49,17 @@ async run(client, int, tools) {
 
     let embed = tools.createEmbed({
         color: listCol || tools.COLOR,
-        author: {name: t('commands.top.embedTitle', { guild: int.guild.name }), iconURL: int.guild.iconURL()}
+        author: {name: t('commands.top.embedTitle', { guild: int.guild.name }, serverLang), iconURL: int.guild.iconURL()}
     })
 
     let isHidden = db.settings.leaderboard.ephemeral || !!int.options.get("hidden")?.value
 
     let xpEmbed = new PageEmbed(embed, rankings, {
         page: pageNumber, size: pageSize, owner: int.user.id,  ephemeral: isHidden,
-        mapFunction: (x, y, p) => t('commands.top.listItem', { p: p, highlight1: x.id == highlight ? "**" : "", level: tools.getLevel(x.xp, db.settings), id: x.id, xp: tools.commafy(x.xp), highlight2: x.id == highlight ? "**" : "" }),
-        extraButtons: [ tools.button({style: "Link", label: t('commands.top.btnOnline'), url: lbLink}) ]
+        mapFunction: (x, y, p) => t('commands.top.listItem', { p: p, highlight1: x.id == highlight ? "**" : "", level: tools.getLevel(x.xp, db.settings), id: x.id, xp: tools.commafy(x.xp), highlight2: x.id == highlight ? "**" : "" }, serverLang),
+        extraButtons: [ tools.button({style: "Link", label: t('commands.top.btnOnline', {}, serverLang), url: lbLink}) ]
     })
-    if (!xpEmbed.data.length) return tools.warn(t('commands.top.noMembersPage'))
+    if (!xpEmbed.data.length) return tools.warn(t('commands.top.noMembersPage', {}, serverLang))
 
     xpEmbed.post(int)
 

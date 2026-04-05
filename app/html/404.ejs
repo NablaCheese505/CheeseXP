@@ -1,10 +1,24 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<%= lang %>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title><%= t('dashboard.404_title') %></title>
+    <title><%= t('dashboard.404_title', {}, lang) %></title>
+    
+    <meta name="description" content="<%= t('dashboard.404_heading', {}, lang) %>">
     <meta name="theme-color" content="#00ff80">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<%= siteURL %>/404">
+    <meta property="og:title" content="<%= t('dashboard.404_title', {}, lang) %>">
+    <meta property="og:description" content="<%= t('dashboard.404_heading', {}, lang) %>">
+    <meta property="og:image" content="<%= siteURL %>/assets/cheese.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%= t('dashboard.404_title', {}, lang) %>">
+    <meta name="twitter:description" content="<%= t('dashboard.404_heading', {}, lang) %>">
+    <meta name="twitter:image" content="<%= siteURL %>/assets/cheese.png">
+
     <link href="/css/polaris.css" type="text/css" rel="stylesheet">
     <link rel="icon" href="/assets/polaris.svg">
     
@@ -44,7 +58,7 @@
   
         #noThoughts {
            width: fit-content;
-           margin: 60px auto; /* Reemplaza los inline margins */
+           margin: 60px auto; 
            cursor: pointer;
            transform: scale(0.94);
         }
@@ -95,7 +109,7 @@
     <div class="headEmpty" id="right"></div>
 
     <div class="middleflex main-container">
-        <h1><%= t('dashboard.404_heading') %></h1>
+        <h1><%= t('dashboard.404_heading', {}, lang) %></h1>
         
         <div id="noThoughts">
             <img id="fumo" src="/assets/nabla.svg" alt="Nabla Mascot">
@@ -110,7 +124,6 @@
             $('#left').hover(function() { $('#fumo').removeClass("mirror"); $('#left').hide(); $('#right').show(); });
             $('#right').hover(function() { $('#fumo').addClass("mirror");   $('#left').show(); $('#right').hide(); });
             
-            // Asumiendo que 'mobile' es una variable global definida en polaris.js
             if (typeof mobile !== 'undefined' && mobile) { 
                 $('#fumo').click(function() { $('#fumo').toggleClass("hell"); }); 
             }

@@ -1,63 +1,72 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<%= lang %>">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    
+    <title><%= t('config_page.global.page_title', {}, lang) %></title>
+    <meta name="robots" content="noindex"> 
+    <meta name="theme-color" content="#00ff80">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<%= siteURL %>/settings">
+    <meta property="og:title" content="<%= t('config_page.global.page_title', {}, lang) %>">
+    <meta property="og:description" content="<%= t('home_page.description', {}, lang) %>">
+    <meta property="og:image" content="<%= siteURL %>/assets/cheese.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%= t('config_page.global.page_title', {}, lang) %>">
+    <meta name="twitter:description" content="<%= t('home_page.description', {}, lang) %>">
+    <meta name="twitter:image" content="<%= siteURL %>/assets/cheese.png">
+
     <link href="/css/polaris.css?v=3" rel="stylesheet" type="text/css"/>
     <link href="/assets/polaris.svg" rel="icon"/>
-    <title><%= t('config_page.global.page_title') %></title>
-    <meta content="Polaris" property="og:title"/>
-    <meta content="An open-source XP bot" property="og:description"/>
-    <meta content="website" property="og:type"/>
-    <meta content="#00ff80" name="theme-color"/>
-    <meta content="summary" name="twitter:card"/>
-    <meta content="noindex" name="robots"/>
 </head>
 <body>
-    <h2 class="middleflex" id="loading" style="margin-top: 75px; width: 100%; position: absolute;"><%= t('config_page.global.loading') %></h2>
+    <h2 class="middleflex" id="loading" style="margin-top: 75px; width: 100%; position: absolute;"><%= t('config_page.global.loading', {}, lang) %></h2>
     <div id="everything" style="display: none;">
         <div id="sidebar">
-            <div tabindex="0" category="server" class="category" title="<%= t('config_page.sidebar.home_desc') %>">
-                <img class="serverIcon" style="border-radius: 420px"> <p><%= t('config_page.sidebar.home') %></p>
+            <div tabindex="0" category="server" class="category" title="<%= t('config_page.sidebar.home_desc', {}, lang) %>">
+                <img class="serverIcon" style="border-radius: 420px"> <p><%= t('config_page.sidebar.home', {}, lang) %></p>
             </div>
-            <div tabindex="0" category="xp" class="category" title="<%= t('config_page.sidebar.xp_desc') %>">
+            <div tabindex="0" category="xp" class="category" title="<%= t('config_page.sidebar.xp_desc', {}, lang) %>">
                 <i data-lucide="sparkles"></i>
-                <p><%= t('config_page.sidebar.xp') %></p>
+                <p><%= t('config_page.sidebar.xp', {}, lang) %></p>
             </div>
-            <div tabindex="0" category="rewardroles" class="category" title="<%= t('config_page.sidebar.rewards_desc') %>">
+            <div tabindex="0" category="rewardroles" class="category" title="<%= t('config_page.sidebar.rewards_desc', {}, lang) %>">
                 <i data-lucide="gift"></i>
-                <p><%= t('config_page.sidebar.rewards') %></p>
+                <p><%= t('config_page.sidebar.rewards', {}, lang) %></p>
             </div>
-            <div tabindex="0" category="levelup" class="category" title="<%= t('config_page.sidebar.levelup_desc') %>">
+            <div tabindex="0" category="levelup" class="category" title="<%= t('config_page.sidebar.levelup_desc', {}, lang) %>">
                 <i data-lucide="message-square-plus"></i>
-                <p><%= t('config_page.sidebar.levelup') %></p>
+                <p><%= t('config_page.sidebar.levelup', {}, lang) %></p>
             </div>
-            <div tabindex="0" category="multipliers" class="category" title="<%= t('config_page.sidebar.multipliers_desc') %>">
+            <div tabindex="0" category="multipliers" class="category" title="<%= t('config_page.sidebar.multipliers_desc', {}, lang) %>">
                 <i data-lucide="zap"></i>
-                <p><%= t('config_page.sidebar.multipliers') %></p>
+                <p><%= t('config_page.sidebar.multipliers', {}, lang) %></p>
             </div>
-            <div tabindex="0" category="rankcard" class="category" title="<%= t('config_page.sidebar.rankcard_desc') %>">
+            <div tabindex="0" category="rankcard" class="category" title="<%= t('config_page.sidebar.rankcard_desc', {}, lang) %>">
                 <i data-lucide="id-card"></i>
-                <p><%= t('config_page.sidebar.rankcard') %></p>
+                <p><%= t('config_page.sidebar.rankcard', {}, lang) %></p>
             </div>
-            <div tabindex="0" category="leaderboard" class="category" title="<%= t('config_page.sidebar.leaderboard_desc') %>">
+            <div tabindex="0" category="leaderboard" class="category" title="<%= t('config_page.sidebar.leaderboard_desc', {}, lang) %>">
                 <i data-lucide="bar-chart-2"></i>
-                <p><%= t('config_page.sidebar.leaderboard') %></p>
+                <p><%= t('config_page.sidebar.leaderboard', {}, lang) %></p>
             </div>
-            <div tabindex="0" category="data" class="category" title="<%= t('config_page.sidebar.data_desc') %>">
+            <div tabindex="0" category="data" class="category" title="<%= t('config_page.sidebar.data_desc', {}, lang) %>">
                 <i data-lucide="database"></i>
-                <p><%= t('config_page.sidebar.data') %></p>
+                <p><%= t('config_page.sidebar.data', {}, lang) %></p>
             </div>
-            <div tabindex="0" category="advanced" class="category" title="<%= t('config_page.sidebar.advanced_desc') %>">
+            <div tabindex="0" category="advanced" class="category" title="<%= t('config_page.sidebar.advanced_desc', {}, lang) %>">
                 <i data-lucide="settings"></i>
-                <p><%= t('config_page.sidebar.advanced') %></p>
+                <p><%= t('config_page.sidebar.advanced', {}, lang) %></p>
             </div>
         </div>
         
         <div id="unsavedWarning">
             <div class="unsavedBox">
-                <p><%= t('config_page.global.unsaved_text') %></p>
-                <button id="saveChanges" style="background-color: var(--emojigreen)"><%= t('config_page.global.btn_save') %></button>
+                <p><%= t('config_page.global.unsaved_text', {}, lang) %></p>
+                <button id="saveChanges" style="background-color: var(--emojigreen)"><%= t('config_page.global.btn_save', {}, lang) %></button>
             </div>
         </div>
 
@@ -72,10 +81,10 @@
                 </div>
                 <div class="middleflex" style="position: absolute; top: 0px; right: 30px; height: 100%">
                     <a href="/servers" tabindex="-1">
-                        <button style="font-size: 24px; height: 50px; width: 200px; margin-right: 25px; background-color: var(--emojiblue)"><%= t('dashboard.ChangeServer') %></button>
+                        <button style="font-size: 24px; height: 50px; width: 200px; margin-right: 25px; background-color: var(--emojiblue)"><%= t('dashboard.ChangeServer', {}, lang) %></button>
                     </a>
                     <a class="leaderboardLink" id="mainlbbutton" tabindex="-1" target="_blank">
-                        <button style="font-size: 24px; height: 50px; width: 200px; background-color: var(--emojipurple)"><%= t('dashboard.Leaderboard') %></button>
+                        <button style="font-size: 24px; height: 50px; width: 200px; background-color: var(--emojipurple)"><%= t('dashboard.Leaderboard', {}, lang) %></button>
                     </a>
                 </div>
             </div>
@@ -93,38 +102,38 @@
 
         <div class="configboxes" style="display: none" tab="xp">
             <div class="settingBox box fulllength">
-                <h1><%= t('dashboard.XPGain') %></h1>
-                <p><%= t('dashboard.WheneveramembersendsamessagetheygainarandomamountofXPexperiencepointsandtriggerashortcooldownWhenthecooldownfinishestheycangainmoreXPCongratulationsYoujustlearnedhowXPbotswork') %></p>
-                <h2><%= t('dashboard.EnableXP') %></h2>
-                <p class="details"><%= t('dashboard.WhenenabledmemberswillbeabletogainXPThisisthewholepointofthebot') %></p>
+                <h1><%= t('dashboard.XPGain', {}, lang) %></h1>
+                <p><%= t('dashboard.WheneveramembersendsamessagetheygainarandomamountofXPexperiencepointsandtriggerashortcooldownWhenthecooldownfinishestheycangainmoreXPCongratulationsYoujustlearnedhowXPbotswork', {}, lang) %></p>
+                <h2><%= t('dashboard.EnableXP', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.WhenenabledmemberswillbeabletogainXPThisisthewholepointofthebot', {}, lang) %></p>
                 <label class="slider" style="margin-top: 5px">
                     <input db="enabled" id="enableLevelUp" savename="db" type="checkbox"/>
                     <span class="sliderspan"></span>
                 </label>
             </div>
             <div class="settingBox box fulllength">
-                <h1><%= t('dashboard.BasicSettings') %></h1>
-                <p><%= t('dashboard.CustomizetheamountofXPearnedaswellashowoftenitcanbegainedEasyenough') %></p>
+                <h1><%= t('dashboard.BasicSettings', {}, lang) %></h1>
+                <p><%= t('dashboard.CustomizetheamountofXPearnedaswellashowoftenitcanbegainedEasyenough', {}, lang) %></p>
                 <div class="simpleflex">
                     <div class="sideoption">
-                        <h2><%= t('dashboard.XPpermessage') %></h2>
-                        <p class="details"><%= t('dashboard.Amountisrandomlypickedbetweentheminandmaxvalue') %></p>
+                        <h2><%= t('dashboard.XPpermessage', {}, lang) %></h2>
+                        <p class="details"><%= t('dashboard.Amountisrandomlypickedbetweentheminandmaxvalue', {}, lang) %></p>
                         <div class="field">
                             <div class="centerflex spacedflex">
-                                <p><%= t('dashboard.Between') %></p>
+                                <p><%= t('dashboard.Between', {}, lang) %></p>
                                 <input db="gain.min" default="50" id="num_min" max="5000" min="0" savename="db" style="width: 75px" type="number" updatecurve="true"/>
-                                <p><%= t('dashboard.and') %></p>
+                                <p><%= t('dashboard.and', {}, lang) %></p>
                                 <input db="gain.max" default="50" id="num_max" max="5000" min="0" savename="db" style="width: 75px" type="number" updatecurve="true"/>
                             </div>
                         </div>
                     </div>
                     <div class="sideoptions">
-                        <h2><%= t('dashboard.Cooldown') %></h2>
-                        <p class="details"><%= t('dashboard.MembersmustwaitthismanysecondsbeforetheycangainXPagain') %></p>
+                        <h2><%= t('dashboard.Cooldown', {}, lang) %></h2>
+                        <p class="details"><%= t('dashboard.MembersmustwaitthismanysecondsbeforetheycangainXPagain', {}, lang) %></p>
                         <div class="field">
                             <div class="centerflex spacedflex">
                                 <input db="gain.time" decimals="4" default="60" id="num_time" max="31536000" min="0" savename="db" style="width: 100px" type="number" updatecurve="true"/>
-                                <p><%= t('dashboard.seconds') %></p>
+                                <p><%= t('dashboard.seconds', {}, lang) %></p>
                                 <p id="cooldownunit" style="opacity: 70%; display: none"></p>
                             </div>
                         </div>
@@ -132,13 +141,13 @@
                 </div>
             </div>
             <div class="settingBox box fulllength">
-                <h1><%= t('dashboard.LevelScaling') %></h1>
-                <p><%= t('dashboard.BygainingenoughXPmemberscanlevelupandearnspecialrolesorbraggingrightsTheamountofXPrequiredscaleswitheachlevelearlylevelsonlyneedacouplethousandpointsbutlaterlevelsneedmillions') %></p>
-                <p><%= t('dashboard.YoucanadjustthelevelscalingtochangehowmanymorepointsarerequiredwitheachlevelAsmallercurvemakesiteasiertolevelupandalargercurvemakesitmuchmoredifficult') %></p>
+                <h1><%= t('dashboard.LevelScaling', {}, lang) %></h1>
+                <p><%= t('dashboard.BygainingenoughXPmemberscanlevelupandearnspecialrolesorbraggingrightsTheamountofXPrequiredscaleswitheachlevelearlylevelsonlyneedacouplethousandpointsbutlaterlevelsneedmillions', {}, lang) %></p>
+                <p><%= t('dashboard.YoucanadjustthelevelscalingtochangehowmanymorepointsarerequiredwitheachlevelAsmallercurvemakesiteasiertolevelupandalargercurvemakesitmuchmoredifficult', {}, lang) %></p>
                 <div class="simpleflex">
                     <div class="sideoption">
-                        <h2 id="curveStuff"><%= t('dashboard.Curveformula') %></h2>
-                        <p class="details"><%= t('dashboard.CubicfunctionthatdetermineshowmuchXPisneededforeachlevel') %></p>
+                        <h2 id="curveStuff"><%= t('dashboard.Curveformula', {}, lang) %></h2>
+                        <p class="details"><%= t('dashboard.CubicfunctionthatdetermineshowmuchXPisneededforeachlevel', {}, lang) %></p>
                         <div class="field">
                             <div class="centerflex curvefield">
                                 <input db="curve.3" decimals="10" default="0" id="num_curve3" max="100" min="0" savename="db" style="width: 65px" type="number" updatecurve="true"/>
@@ -149,50 +158,50 @@
                                 <p>x</p>
                             </div>
                         </div>
-                        <p><%= t('dashboard.Difficultyrating') %><b id="scaleDifficulty" style="color: aqua"></b></p>
+                        <p><%= t('dashboard.Difficultyrating', {}, lang) %><b id="scaleDifficulty" style="color: aqua"></b></p>
                     </div>
                     <div class="sideoption">
-                        <h2><%= t('dashboard.Rounding') %></h2>
-                        <p class="details"><%= t('dashboard.RoundstherequiredXPtoanicernumbereg791XP800XP') %></p>
+                        <h2><%= t('dashboard.Rounding', {}, lang) %></h2>
+                        <p class="details"><%= t('dashboard.RoundstherequiredXPtoanicernumbereg791XP800XP', {}, lang) %></p>
                         <div class="centerflex spacedflex">
-                            <p><%= t('dashboard.Roundtonearest') %></p>
+                            <p><%= t('dashboard.Roundtonearest', {}, lang) %></p>
                             <input db="rounding" default="1" id="num_round" max="1000" min="1" savename="db" style="width: 80px" type="number" updatecurve="true"/>
                         </div>
                     </div>
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 30px; width: 100%;">
                     <div>
-                        <h2 style="margin-bottom: 12px"><%= t('dashboard.Preview') %></h2>
+                        <h2 style="margin-bottom: 12px"><%= t('dashboard.Preview', {}, lang) %></h2>
                         <div class="simpleflex flexTable" id="curvePreview"></div>
-                        <button id="showMoreCurveInfo" style="margin-top: 16px; width: 140px"><%= t('dashboard.Moreinfo') %></button>
+                        <button id="showMoreCurveInfo" style="margin-top: 16px; width: 140px"><%= t('dashboard.Moreinfo', {}, lang) %></button>
                     </div>
                     <div>
                     <div class="desmos" id="xpGraph"></div>
-                        <p class="details" id="desmosJumpscare" style="font-size: 10px; opacity: 25%"><%= t('dashboard.desmosjumpscare') %></p>
+                        <p class="details" id="desmosJumpscare" style="font-size: 10px; opacity: 25%"><%= t('dashboard.desmosjumpscare', {}, lang) %></p>
                     </div>
                 </div>
                 <div id="fullPreviewSection" style="display: none">
-                    <h2 style="margin-bottom: 12px"><%= t('dashboard.FullTable') %></h2>
+                    <h2 style="margin-bottom: 12px"><%= t('dashboard.FullTable', {}, lang) %></h2>
                     <div class="simpleflex flexTable" id="fullCurvePreview"></div>
-                    <button onclick="$('#fullPreviewSection').hide()" style="margin-top: 16px; width: 140px; background-color: var(--emojipurple)"><%= t('dashboard.Hide') %></button>
+                    <button onclick="$('#fullPreviewSection').hide()" style="margin-top: 16px; width: 140px; background-color: var(--emojipurple)"><%= t('dashboard.Hide', {}, lang) %></button>
                 </div>
             </div>
             <div class="settingBox box fulllength">
-                <h1><%= t('dashboard.Presets') %></h1>
-                <p><%= t('dashboard.BalancingishardHeressomepresetstopickfrom') %></p>
+                <h1><%= t('dashboard.Presets', {}, lang) %></h1>
+                <p><%= t('dashboard.BalancingishardHeressomepresetstopickfrom', {}, lang) %></p>
                 <div class="simpleflex">
                     <div style="width: 750px">
-                        <h2><%= t('dashboard.Viewpreset') %></h2>
-                        <p class="details"><%= t('dashboard.Nosettingswillbechangeduntilyouclickapply') %></p>
+                        <h2><%= t('dashboard.Viewpreset', {}, lang) %></h2>
+                        <p class="details"><%= t('dashboard.Nosettingswillbechangeduntilyouclickapply', {}, lang) %></p>
                         <select id="curvePresets"></select>
-                        <p id="presetDesc" style="margin-bottom: 8px; font-style: italic;"><%= t('dashboard.Curvedescription') %></p>
+                        <p id="presetDesc" style="margin-bottom: 8px; font-style: italic;"><%= t('dashboard.Curvedescription', {}, lang) %></p>
                         <div class="curveInfo">
-                            <p>- <b><%= t('dashboard.Curve') %></b> <span id="presetCurve"></span></p>
-                            <p>- <b><%= t('dashboard.Difficulty') %></b> <span id="presetDifficulty"></span></p>
-                            <p>- <b><%= t('dashboard.Rounding') %></b> <span id="presetRound"></span></p>
-                            <p>- <b><%= t('dashboard.XPpermessage') %></b> <span id="presetXP"></span></p>
+                            <p>- <b><%= t('dashboard.Curve', {}, lang) %></b> <span id="presetCurve"></span></p>
+                            <p>- <b><%= t('dashboard.Difficulty', {}, lang) %></b> <span id="presetDifficulty"></span></p>
+                            <p>- <b><%= t('dashboard.Rounding', {}, lang) %></b> <span id="presetRound"></span></p>
+                            <p>- <b><%= t('dashboard.XPpermessage', {}, lang) %></b> <span id="presetXP"></span></p>
                         </div>
-                        <button id="applyPreset" style="margin-top: 12px;"><%= t('dashboard.ApplyPreset') %></button>
+                        <button id="applyPreset" style="margin-top: 12px;"><%= t('dashboard.ApplyPreset', {}, lang) %></button>
                     </div>
                 </div>
             </div>
@@ -200,50 +209,50 @@
 
         <div class="configboxes" style="display: none" tab="rewardroles">
             <div class="settingBox box fulllength">
-                <h1><%= t('dashboard.RewardRoles') %></h1>
-                <p style="margin-bottom: 3px"><%= t('dashboard.AutomaticallygiverolestomemberswhentheyreachcertainlevelsForfree') %></p>
-                <p class="details"><%= t('dashboard.ImagineifItriedtocapitalizeoffacoupleextralinesofcodehahathatwouldbeabsolutelycrazy') %></p>
-                <h2><%= t('dashboard.Addrole') %></h2>
+                <h1><%= t('dashboard.RewardRoles', {}, lang) %></h1>
+                <p style="margin-bottom: 3px"><%= t('dashboard.AutomaticallygiverolestomemberswhentheyreachcertainlevelsForfree', {}, lang) %></p>
+                <p class="details"><%= t('dashboard.ImagineifItriedtocapitalizeoffacoupleextralinesofcodehahathatwouldbeabsolutelycrazy', {}, lang) %></p>
+                <h2><%= t('dashboard.Addrole', {}, lang) %></h2>
                 <div class="centerflex spacedflex" style="margin-top:10px">
-                    <p><%= t('dashboard.Reward') %></p>
+                    <p><%= t('dashboard.Reward', {}, lang) %></p>
                     <select id="rewardRoleSelect"></select>
-                    <p><%= t('dashboard.atlevel') %></p>
+                    <p><%= t('dashboard.atlevel', {}, lang) %></p>
                     <input id="rewardLevel" max="1000" min="1" style="width: 90px" type="number"/>
                 </div>
                 <div class="centerflex spacedflex">
-                    <p><%= t('dashboard.Removethisrolewhenahigherroleisobtained') %></p>
+                    <p><%= t('dashboard.Removethisrolewhenahigherroleisobtained', {}, lang) %></p>
                     <label class="slider" style="margin-top: 5px">
                         <input checked="" id="rewardKeep" type="checkbox"/>
                         <span class="sliderspan"></span>
                     </label>
                 </div>
                 <div class="centerflex spacedflex excludeMode">
-                    <p><%= t('dashboard.AdvancedExcludethisrolewhensyncingroles') %></p>
+                    <p><%= t('dashboard.AdvancedExcludethisrolewhensyncingroles', {}, lang) %></p>
                     <label class="slider" style="margin-top: 5px">
                         <input id="rewardExclude" type="checkbox"/>
                         <span class="sliderspan"></span>
                     </label>
                 </div>
-                <button id="addRewardRole" style="margin-top: 10px"><%= t('dashboard.Add') %></button>
-                <h2 style="margin-top: 50px; margin-bottom: 15px"><%= t('dashboard.Currentrewards') %><span id="rewardCount">0</span>)</h2>
+                <button id="addRewardRole" style="margin-top: 10px"><%= t('dashboard.Add', {}, lang) %></button>
+                <h2 style="margin-top: 50px; margin-bottom: 15px"><%= t('dashboard.Currentrewards', {}, lang) %><span id="rewardCount">0</span>)</h2>
                 <div class="simpleflex flexTable" id="rewards"></div>
             </div>
             <div class="settingBox box fulllength">
-                <h1><%= t('dashboard.RewardSyncing') %></h1>
-                <p><%= t('dashboard.BydefaultthebotwillautomaticallysynclevelrolesbyaddingmissingonesandremovingincorrectonesFeelfreetotweakthisbehaviouralittle') %></p>
+                <h1><%= t('dashboard.RewardSyncing', {}, lang) %></h1>
+                <p><%= t('dashboard.BydefaultthebotwillautomaticallysynclevelrolesbyaddingmissingonesandremovingincorrectonesFeelfreetotweakthisbehaviouralittle', {}, lang) %></p>
                 <div class="simpleflex">
                     <div class="sideoption">
-                        <h2><%= t('dashboard.Automaticsyncing') %></h2>
-                        <p class="details"><%= t('dashboard.Choosewhenthebotshouldautomaticallysynclevelroles') %></p>
+                        <h2><%= t('dashboard.Automaticsyncing', {}, lang) %></h2>
+                        <p class="details"><%= t('dashboard.Choosewhenthebotshouldautomaticallysynclevelroles', {}, lang) %></p>
                         <select db="rewardSyncing.sync" savename="db">
-                            <option value="level"><%= t('dashboard.Onlevelup') %></option>
-                            <option value="xp"><%= t('dashboard.OnXPgainslower') %></option>
-                            <option value="never"><%= t('dashboard.Never') %></option>
+                            <option value="level"><%= t('dashboard.Onlevelup', {}, lang) %></option>
+                            <option value="xp"><%= t('dashboard.OnXPgainslower', {}, lang) %></option>
+                            <option value="never"><%= t('dashboard.Never', {}, lang) %></option>
                         </select>
                     </div>
                     <div class="sideoptions">
-                        <h2><%= t('dashboard.Manualsyncing') %></h2>
-                        <p class="details"><%= t('dashboard.Ifmembersshouldbeabletomanuallysynctheirroleswhenevertheywant') %></p>
+                        <h2><%= t('dashboard.Manualsyncing', {}, lang) %></h2>
+                        <p class="details"><%= t('dashboard.Ifmembersshouldbeabletomanuallysynctheirroleswhenevertheywant', {}, lang) %></p>
                         <label class="slider" style="margin-top: 5px">
                             <input db="rewardSyncing.noManual" invert="true" savename="db" tabindex="0" type="checkbox"/>
                             <span class="sliderspan"></span>
@@ -252,16 +261,16 @@
                 </div>
                 <div class="simpleflex" style="margin-top: 40px">
                     <div class="sideoption">
-                        <h2><%= t('dashboard.Showsyncwarning') %></h2>
-                        <p class="details"><%= t('dashboard.Displaysawarningmessageinrankifamembersrolesarentsyncedproperly') %></p>
+                        <h2><%= t('dashboard.Showsyncwarning', {}, lang) %></h2>
+                        <p class="details"><%= t('dashboard.Displaysawarningmessageinrankifamembersrolesarentsyncedproperly', {}, lang) %></p>
                         <label class="slider" style="margin-top: 5px">
                             <input db="rewardSyncing.noWarning" invert="true" savename="db" tabindex="0" type="checkbox"/>
                             <span class="sliderspan"></span>
                         </label>
                     </div>
                     <div class="sideoptions">
-                        <h2><%= t('dashboard.AdvancedExcluderoles') %></h2>
-                        <p class="details"><%= t('dashboard.Preventcertainrolesfrombeingreaddedorremovedwhensyncing') %></p>
+                        <h2><%= t('dashboard.AdvancedExcluderoles', {}, lang) %></h2>
+                        <p class="details"><%= t('dashboard.Preventcertainrolesfrombeingreaddedorremovedwhensyncing', {}, lang) %></p>
                         <label class="slider" style="margin-top: 5px">
                             <input id="excludeRewardToggle" tabindex="0" type="checkbox"/>
                             <span class="sliderspan"></span>
@@ -273,10 +282,10 @@
 
         <div class="configboxes" style="display: none" tab="levelup">
             <div class="settingBox box fulllength">
-                <h1><%= t('dashboard.Levelupmessage') %></h1>
-                <p><%= t('dashboard.SendanautomaticmessageinthechatwhenamemberlevelsupHowfun') %></p>
-                <h2><%= t('dashboard.Enablemessage') %></h2>
-                <p class="details"><%= t('dashboard.WhenenabledamessageorDMwillbesentwheneveranyonelevelsup') %></p>
+                <h1><%= t('dashboard.Levelupmessage', {}, lang) %></h1>
+                <p><%= t('dashboard.SendanautomaticmessageinthechatwhenamemberlevelsupHowfun', {}, lang) %></p>
+                <h2><%= t('dashboard.Enablemessage', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.WhenenabledamessageorDMwillbesentwheneveranyonelevelsup', {}, lang) %></p>
                 <label class="slider" style="margin-top: 5px">
                     <input db="levelUp.enabled" onchange="$('.ifmessageenabled').toggle($(this).prop('checked'))" savename="db" type="checkbox"/>
                     <span class="sliderspan"></span>
@@ -285,93 +294,93 @@
             <div class="settingBreak"></div>
             <div class="settingBox box fulllength ifmessageenabled">
                 <div id="regularMessage">
-                    <h1><%= t('dashboard.Message') %></h1>
-                    <p><%= t('dashboard.Themessagetosenduponlevellingup') %></p>
+                    <h1><%= t('dashboard.Message', {}, lang) %></h1>
+                    <p><%= t('dashboard.Themessagetosenduponlevellingup', {}, lang) %></p>
                     <textarea class="lvlTextbox" id="lvlUpMessage" placeholder="(no message)" savename="levelUp.message" style="width: 800px"></textarea>
                 </div>
                 <div id="embedMessage">
-                    <h1><%= t('dashboard.Embed') %></h1>
-                    <p><%= t('dashboard.Theembeddedmessagetosenduponlevellingup') %></p>
-                    <p><b><%= t('dashboard.Step1') %></b> <a href="https://discohook.org/?data=eyJtZXNzYWdlcyI6W3siZGF0YSI6eyJjb250ZW50IjpudWxsLCJlbWJlZHMiOlt7InRpdGxlIjoi4pyoIExldmVsIHVwISIsImRlc2NyaXB0aW9uIjoiKipbW1VTRVJOQU1FXV0qKiBoYXMgcmVhY2hlZCBsZXZlbCAqKltbTEVWRUxdXSoqISBDb25ncmF0dWxhdGlvbnMhIiwiY29sb3IiOjE2NzQ0NDQ4LCJmb290ZXIiOnsidGV4dCI6IlRoZXkgbm93IGhhdmUgW1tYUF1dIFhQIn19XSwiYXR0YWNobWVudHMiOltdfX1dfQ" target="_blank"><%= t('dashboard.Generateanembedhere') %></a></p>
-                    <p><b><%= t('dashboard.Step2') %></b><%= t('dashboard.OpentheJSONdatabypressingJSONDataEditoratthebottomofthesite') %></p>
-                    <p><b><%= t('dashboard.Step3') %></b><%= t('dashboard.Copythetextandpasteitintheboxbelow') %></p>
-                    <p class="details" style="margin-bottom: 15px"><%= t('dashboard.AllvariablesegUSERNAMEstillworkinembeds') %></p>
+                    <h1><%= t('dashboard.Embed', {}, lang) %></h1>
+                    <p><%= t('dashboard.Theembeddedmessagetosenduponlevellingup', {}, lang) %></p>
+                    <p><b><%= t('dashboard.Step1', {}, lang) %></b> <a href="https://discohook.org/?data=eyJtZXNzYWdlcyI6W3siZGF0YSI6eyJjb250ZW50IjpudWxsLCJlbWJlZHMiOlt7InRpdGxlIjoi4pyoIExldmVsIHVwISIsImRlc2NyaXB0aW9uIjoiKipbW1VTRVJOQU1FXV0qKiBoYXMgcmVhY2hlZCBsZXZlbCAqKltbTEVWRUxdXSoqISBDb25ncmF0dWxhdGlvbnMhIiwiY29sb3IiOjE2NzQ0NDQ4LCJmb290ZXIiOnsidGV4dCI6IlRoZXkgbm93IGhhdmUgW1tYUF1dIFhQIn19XSwiYXR0YWNobWVudHMiOltdfX1dfQ" target="_blank"><%= t('dashboard.Generateanembedhere', {}, lang) %></a></p>
+                    <p><b><%= t('dashboard.Step2', {}, lang) %></b><%= t('dashboard.OpentheJSONdatabypressingJSONDataEditoratthebottomofthesite', {}, lang) %></p>
+                    <p><b><%= t('dashboard.Step3', {}, lang) %></b><%= t('dashboard.Copythetextandpasteitintheboxbelow', {}, lang) %></p>
+                    <p class="details" style="margin-bottom: 15px"><%= t('dashboard.AllvariablesegUSERNAMEstillworkinembeds', {}, lang) %></p>
                     <textarea class="lvlTextbox codeArea" id="lvlUpEmbed" placeholder="(no embed)" savename="levelUp.message" style="width: 800px"></textarea>
-                    <p class="red" id="invalidLevelUpEmbed" style="display: none"><b><%= t('dashboard.Warning') %></b><%= t('dashboard.InvalidembedJSONdataThisembedwillnotwork') %></p>
+                    <p class="red" id="invalidLevelUpEmbed" style="display: none"><b><%= t('dashboard.Warning', {}, lang) %></b><%= t('dashboard.InvalidembedJSONdataThisembedwillnotwork', {}, lang) %></p>
                 </div>
                 <div class="simpleflex">
                     <div class="sideoption">
-                        <h2><%= t('dashboard.Variables') %></h2>
-                        <p class="details"><%= t('dashboard.Spiceupyourmessagewithdynamicvariables') %></p>
+                        <h2><%= t('dashboard.Variables', {}, lang) %></h2>
+                        <p class="details"><%= t('dashboard.Spiceupyourmessagewithdynamicvariables', {}, lang) %></p>
                         <div class="varList" id="lvlUpMessageVariables">
                             <select>
-                                <option disabled="" selected="" value="x"><%= t('dashboard.XP') %></option>
-                                <option value="[[LEVEL]]"><%= t('dashboard.Leveleg10') %></option>
-                                <option value="[[OLD_LEVEL]]"><%= t('dashboard.Previousleveleg9') %></option>
-                                <option value="[[XP]]"><%= t('dashboard.XPeg10000') %></option>
-                                <option value="[[NEXT_LEVEL]]"><%= t('dashboard.Nextleveleg11') %></option>
-                                <option value="[[NEXT_XP]]"><%= t('dashboard.XPtonextleveleg1000') %></option>
+                                <option disabled="" selected="" value="x"><%= t('dashboard.XP', {}, lang) %></option>
+                                <option value="[[LEVEL]]"><%= t('dashboard.Leveleg10', {}, lang) %></option>
+                                <option value="[[OLD_LEVEL]]"><%= t('dashboard.Previousleveleg9', {}, lang) %></option>
+                                <option value="[[XP]]"><%= t('dashboard.XPeg10000', {}, lang) %></option>
+                                <option value="[[NEXT_LEVEL]]"><%= t('dashboard.Nextleveleg11', {}, lang) %></option>
+                                <option value="[[NEXT_XP]]"><%= t('dashboard.XPtonextleveleg1000', {}, lang) %></option>
                             </select>
                             <select>
-                                <option disabled="" selected="" value="x"><%= t('dashboard.Member') %></option>
-                                <option value="[[@]]"><%= t('dashboard.mentionegPolaris') %></option>
-                                <option value="[[DISPLAYNAME]]"><%= t('dashboard.DisplayNameegPolaris') %></option>
-                                <option value="[[USERNAME]]"><%= t('dashboard.Usernameegpolaris') %></option>
-                                <option value="[[ID]]"><%= t('dashboard.IDeg98341916') %></option>
-                                <option value="[[NICKNAME]]"><%= t('dashboard.Nickname') %></option>
-                                <option value="[[AVATAR]]"><%= t('dashboard.AvatarURL') %></option>
+                                <option disabled="" selected="" value="x"><%= t('dashboard.Member', {}, lang) %></option>
+                                <option value="[[@]]"><%= t('dashboard.mentionegPolaris', {}, lang) %></option>
+                                <option value="[[DISPLAYNAME]]"><%= t('dashboard.DisplayNameegPolaris', {}, lang) %></option>
+                                <option value="[[USERNAME]]"><%= t('dashboard.Usernameegpolaris', {}, lang) %></option>
+                                <option value="[[ID]]"><%= t('dashboard.IDeg98341916', {}, lang) %></option>
+                                <option value="[[NICKNAME]]"><%= t('dashboard.Nickname', {}, lang) %></option>
+                                <option value="[[AVATAR]]"><%= t('dashboard.AvatarURL', {}, lang) %></option>
                             </select>
                             <select>
-                                <option disabled="" selected="" value="x"><%= t('dashboard.Server') %></option>
-                                <option value="[[SERVER]]"><%= t('dashboard.Servername') %></option>
-                                <option value="[[SERVER_ICON]]"><%= t('dashboard.ServericonURL') %></option>
-                                <option value="[[SERVER_ID]]"><%= t('dashboard.ServerID') %></option>
-                                <option value="[[CHANNEL]]"><%= t('dashboard.Channeltagegchannel') %></option>
-                                <option value="[[CHANNEL_NAME]]"><%= t('dashboard.Channelnameegchannel') %></option>
-                                <option value="[[CHANNEL_ID]]"><%= t('dashboard.ChannelID') %></option>
+                                <option disabled="" selected="" value="x"><%= t('dashboard.Server', {}, lang) %></option>
+                                <option value="[[SERVER]]"><%= t('dashboard.Servername', {}, lang) %></option>
+                                <option value="[[SERVER_ICON]]"><%= t('dashboard.ServericonURL', {}, lang) %></option>
+                                <option value="[[SERVER_ID]]"><%= t('dashboard.ServerID', {}, lang) %></option>
+                                <option value="[[CHANNEL]]"><%= t('dashboard.Channeltagegchannel', {}, lang) %></option>
+                                <option value="[[CHANNEL_NAME]]"><%= t('dashboard.Channelnameegchannel', {}, lang) %></option>
+                                <option value="[[CHANNEL_ID]]"><%= t('dashboard.ChannelID', {}, lang) %></option>
                             </select>
                             <select>
-                                <option disabled="" selected="" value="x"><%= t('dashboard.Advanced') %></option>
-                                <%= t('dashboard.optionvalueDISCRIMAccountDiscriminatoreg6880option') %>
-                                <option value="[[LEVEL]][[NTH]]"><%= t('dashboard.Nth1st2nd3rdetc') %></option>
-                                <option value="&lt;t:[[TIMESTAMP]]&gt;"><%= t('dashboard.Timestamp') %></option>
-                                <option value="[[EMBEDTIMESTAMP]]"><%= t('dashboard.EmbedTimestamp') %></option>
-                                <option value="[[CHOOSE | Message 1 | Message 2 | Message 3... ]]"><%= t('dashboard.Randompick') %></option>
-                                <option value="[[CHOOSE | Normal message | &lt;2&gt; 2x as likely to appear | &lt;0.5&gt; 0.5x as likely to appear... ]]"><%= t('dashboard.Randompickweighted') %></option>
-                                <option value="[[IFLEVEL = 10 | Only appears on level 10 (can also use &gt;, &gt;=, &lt;, &lt;=, !=, or /) ]]"><%= t('dashboard.Levelcondition') %></option>
-                                <option value="[[IFROLE | Only appears upon gaining a role. You now have [[ROLE]] / [[ROLE_NAME]]! ]]"><%= t('dashboard.Rewardrolecondition') %></option>
+                                <option disabled="" selected="" value="x"><%= t('dashboard.Advanced', {}, lang) %></option>
+                                <%= t('dashboard.optionvalueDISCRIMAccountDiscriminatoreg6880option', {}, lang) %>
+                                <option value="[[LEVEL]][[NTH]]"><%= t('dashboard.Nth1st2nd3rdetc', {}, lang) %></option>
+                                <option value="&lt;t:[[TIMESTAMP]]&gt;"><%= t('dashboard.Timestamp', {}, lang) %></option>
+                                <option value="[[EMBEDTIMESTAMP]]"><%= t('dashboard.EmbedTimestamp', {}, lang) %></option>
+                                <option value="[[CHOOSE | Message 1 | Message 2 | Message 3... ]]"><%= t('dashboard.Randompick', {}, lang) %></option>
+                                <option value="[[CHOOSE | Normal message | &lt;2&gt; 2x as likely to appear | &lt;0.5&gt; 0.5x as likely to appear... ]]"><%= t('dashboard.Randompickweighted', {}, lang) %></option>
+                                <option value="[[IFLEVEL = 10 | Only appears on level 10 (can also use &gt;, &gt;=, &lt;, &lt;=, !=, or /) ]]"><%= t('dashboard.Levelcondition', {}, lang) %></option>
+                                <option value="[[IFROLE | Only appears upon gaining a role. You now have [[ROLE]] / [[ROLE_NAME]]! ]]"><%= t('dashboard.Rewardrolecondition', {}, lang) %></option>
                             </select>
                             <select id="roleVariables" style="margin-top: 7px; display: none">
-                                <option disabled="" selected="" value="x"><%= t('dashboard.Role') %></option>
-                                <option value="[[ROLE]]"><%= t('dashboard.RewardroleegLegendary') %></option>
-                                <option value="[[ROLE_NAME]]"><%= t('dashboard.RewardrolenameegLegendary') %></option>
+                                <option disabled="" selected="" value="x"><%= t('dashboard.Role', {}, lang) %></option>
+                                <option value="[[ROLE]]"><%= t('dashboard.RewardroleegLegendary', {}, lang) %></option>
+                                <option value="[[ROLE_NAME]]"><%= t('dashboard.RewardrolenameegLegendary', {}, lang) %></option>
                             </select>
                         </div>
                     </div>
                     <div class="sideoption">
-                        <h2><%= t('dashboard.Example') %></h2>
-                        <p class="exampleP details" id="exampleInfo"><%= t('dashboard.Sendatestmessagetoseeifeverythingisworkingcorrectly') %></p>
-                        <p class="details" id="sendingExample" style="display: none"><%= t('dashboard.Sending') %></p>
-                        <p class="exampleP details" id="exampleSent" style="opacity: 100%; display: none; color: lime"><%= t('dashboard.ExamplesentCheckyourDMs') %></p>
-                        <p class="exampleP details" id="exampleError" style="opacity: 100%; display: none; color: red"><%= t('dashboard.ErrorsendingexampleAreyourDMsenabled') %></p>
+                        <h2><%= t('dashboard.Example', {}, lang) %></h2>
+                        <p class="exampleP details" id="exampleInfo"><%= t('dashboard.Sendatestmessagetoseeifeverythingisworkingcorrectly', {}, lang) %></p>
+                        <p class="details" id="sendingExample" style="display: none"><%= t('dashboard.Sending', {}, lang) %></p>
+                        <p class="exampleP details" id="exampleSent" style="opacity: 100%; display: none; color: lime"><%= t('dashboard.ExamplesentCheckyourDMs', {}, lang) %></p>
+                        <p class="exampleP details" id="exampleError" style="opacity: 100%; display: none; color: red"><%= t('dashboard.ErrorsendingexampleAreyourDMsenabled', {}, lang) %></p>
                         <div class="spacedflex" style="display: flex">
-                            <button id="sendExample" style="background-color: var(--emojipurple)"><%= t('dashboard.SendexampleinDMs') %></button>
+                            <button id="sendExample" style="background-color: var(--emojipurple)"><%= t('dashboard.SendexampleinDMs', {}, lang) %></button>
                             <input id="exampleLevel" max="1000" min="1" placeholder="Level" style="height: 37px; width: 90px" type="number"/>
                         </div>
                     </div>
                 </div>
                 <div class="simpleflex" style="margin-top: 15px">
                     <div class="sideoption">
-                        <h2><%= t('dashboard.Channel') %></h2>
-                        <p class="details"><%= t('dashboard.Whichchannelshouldthemessagebesentin') %></p>
+                        <h2><%= t('dashboard.Channel', {}, lang) %></h2>
+                        <p class="details"><%= t('dashboard.Whichchannelshouldthemessagebesentin', {}, lang) %></p>
                         <select id="lvlMessageSelect" savename="levelUp.channel">
-                            <option value="current"><%= t('dashboard.Currentchannel') %></option>
-                            <option value="dm"><%= t('dashboard.SendinDMs') %></option>
+                            <option value="current"><%= t('dashboard.Currentchannel', {}, lang) %></option>
+                            <option value="dm"><%= t('dashboard.SendinDMs', {}, lang) %></option>
                         </select>
                     </div>
                     <div class="sideoption">
-                        <h2><%= t('dashboard.Embedmode') %></h2>
-                        <p class="details"><%= t('dashboard.Sendafancyembedinsteadofanormalmessageadvanced') %></p>
+                        <h2><%= t('dashboard.Embedmode', {}, lang) %></h2>
+                        <p class="details"><%= t('dashboard.Sendafancyembedinsteadofanormalmessageadvanced', {}, lang) %></p>
                         <label class="slider" style="margin-top: 5px">
                             <input db="levelUp.embed" id="toggleLvlUpEmbed" savename="db" tabindex="0" type="checkbox"/>
                             <span class="sliderspan"></span>
@@ -381,34 +390,34 @@
             </div>
             <div class="settingBreak"></div>
             <div class="settingBox box fulllength ifmessageenabled">
-                <h1><%= t('dashboard.Interval') %></h1>
-                <p class=""><%= t('dashboard.Howoftenthemessageshouldbesentegevery3rdlevel') %></p>
+                <h1><%= t('dashboard.Interval', {}, lang) %></h1>
+                <p class=""><%= t('dashboard.Howoftenthemessageshouldbesentegevery3rdlevel', {}, lang) %></p>
                 <div class="simpleflex" style="margin-bottom: 25px">
                     <div class="sideoption">
-                        <h2><%= t('dashboard.Multiple') %></h2>
-                        <p class="details"><%= t('dashboard.Levelupmessageswillonlysendwhenreachingamultipleofthisnumber') %><br/><%= t('dashboard.egamultipleof5willsendonlevels510152025') %></p>
+                        <h2><%= t('dashboard.Multiple', {}, lang) %></h2>
+                        <p class="details"><%= t('dashboard.Levelupmessageswillonlysendwhenreachingamultipleofthisnumber', {}, lang) %><br/><%= t('dashboard.egamultipleof5willsendonlevels510152025', {}, lang) %></p>
                         <div class="field">
                             <div class="centerflex spacedflex">
-                                <p><%= t('dashboard.Every') %></p>
+                                <p><%= t('dashboard.Every', {}, lang) %></p>
                                 <input db="levelUp.multiple" default="1" id="num_levelinterval" max="1000" min="1" savename="db" style="width: 100px" type="number"/>
-                                <p><%= t('dashboard.levels') %></p>
+                                <p><%= t('dashboard.levels', {}, lang) %></p>
                             </div>
                         </div>
                     </div>
                     <div class="sideoptions" style="width: 600px">
-                        <h2><%= t('dashboard.Usemultipleuntil') %></h2>
-                        <p class="details"><%= t('dashboard.Onceamemberreachesthislevelthemultipleisnolongerusedandalevelupmessagewillbepostedforeverylevelsetto0todisable') %></p>
+                        <h2><%= t('dashboard.Usemultipleuntil', {}, lang) %></h2>
+                        <p class="details"><%= t('dashboard.Onceamemberreachesthislevelthemultipleisnolongerusedandalevelupmessagewillbepostedforeverylevelsetto0todisable', {}, lang) %></p>
                         <div class="field">
                             <div class="centerflex spacedflex">
-                                <p><%= t('dashboard.Level') %></p>
+                                <p><%= t('dashboard.Level', {}, lang) %></p>
                                 <input db="levelUp.multipleUntil" default="0" id="num_levelinterval" max="1000" min="0" savename="db" style="width: 100px" type="number"/>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="sideoption">
-                    <h2><%= t('dashboard.Rewardrolesonly') %></h2>
-                    <p class="details"><%= t('dashboard.Onlysendthelevelupmessagewhenobtaininganewrewardrole') %></p>
+                    <h2><%= t('dashboard.Rewardrolesonly', {}, lang) %></h2>
+                    <p class="details"><%= t('dashboard.Onlysendthelevelupmessagewhenobtaininganewrewardrole', {}, lang) %></p>
                     <label class="slider" style="margin-top: 5px">
                         <input db="levelUp.rewardRolesOnly" onchange="$('#roleVariables').toggle($(this).prop('checked'))" savename="db" tabindex="0" type="checkbox"/>
                         <span class="sliderspan"></span>
@@ -419,66 +428,66 @@
 
         <div class="configboxes" style="display: none" tab="multipliers">
             <div class="settingBox box fulllength" style="padding-bottom: 15px">
-                <h1><%= t('dashboard.Multipliers') %></h1>
-                <p style="margin-bottom: 3px"><%= t('dashboard.MakecertainroleschannelsgrantextraXPornoneatall') %></p>
-                <p class="details"><%= t('dashboard.2xmultipliergrantsdoubleXP0xmultiplierdisablesXPgainetc') %></p>
+                <h1><%= t('dashboard.Multipliers', {}, lang) %></h1>
+                <p style="margin-bottom: 3px"><%= t('dashboard.MakecertainroleschannelsgrantextraXPornoneatall', {}, lang) %></p>
+                <p class="details"><%= t('dashboard.2xmultipliergrantsdoubleXP0xmultiplierdisablesXPgainetc', {}, lang) %></p>
             </div>
             <div class="settingBreak"></div>
             <div class="settingBox box">
-                <h2><%= t('dashboard.Addarolemultiplier') %></h2>
-                <p class="details" style="padding-right: 30px"><%= t('dashboard.MemberswithamultiplierrolewillhavetheirXPgainfrommessagesmultipliedbythevaluesetbelow') %></p>
+                <h2><%= t('dashboard.Addarolemultiplier', {}, lang) %></h2>
+                <p class="details" style="padding-right: 30px"><%= t('dashboard.MemberswithamultiplierrolewillhavetheirXPgainfrommessagesmultipliedbythevaluesetbelow', {}, lang) %></p>
                 <div class="centerflex spacedflex" style="margin-top:10px">
                     <select id="roleMultiplierSelect"></select>
-                    <p><%= t('dashboard.grants') %></p>
+                    <p><%= t('dashboard.grants', {}, lang) %></p>
                     <input decimals="4" id="roleMultiplierAmount" max="100" min="0" style="width: 90px; margin-right: 2px" type="number"/>
-                    <p><%= t('dashboard.XP') %></p>
+                    <p><%= t('dashboard.XP', {}, lang) %></p>
                 </div>
-                <button id="addRoleMultiplier" style="margin-top: 10px"><%= t('dashboard.Add') %></button>
-                <h2 style="margin-top: 50px; margin-bottom: 15px"><%= t('dashboard.Rolemultipliers') %><span id="roleMultiplierCount">0</span>)</h2>
+                <button id="addRoleMultiplier" style="margin-top: 10px"><%= t('dashboard.Add', {}, lang) %></button>
+                <h2 style="margin-top: 50px; margin-bottom: 15px"><%= t('dashboard.Rolemultipliers', {}, lang) %><span id="roleMultiplierCount">0</span>)</h2>
                 <div class="simpleflex flexTable" id="roleMultipliers"></div>
-                <h2 style="margin-top: 40px"><%= t('dashboard.Rolepriority') %></h2>
-                <p class="details"><%= t('dashboard.Ifamemberhasmultipleroleswhichoneshouldtakepriority') %><br/><%= t('dashboard.0xmultiplierswillalwaysprioritizedregardlessofthissetting') %></p>
+                <h2 style="margin-top: 40px"><%= t('dashboard.Rolepriority', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.Ifamemberhasmultipleroleswhichoneshouldtakepriority', {}, lang) %><br/><%= t('dashboard.0xmultiplierswillalwaysprioritizedregardlessofthissetting', {}, lang) %></p>
                 <select class="multiplierSelect" db="multipliers.rolePriority" desc="role" id="rolePriority" savename="db">
-                    <option value="largest"><%= t('dashboard.Largestmultiplier') %></option>
-                    <option value="smallest"><%= t('dashboard.Smallestmultiplier') %></option>
-                    <option value="highest"><%= t('dashboard.Highestrole') %></option>
-                    <option value="add"><%= t('dashboard.Addthemtogether') %></option>
-                    <option value="combine"><%= t('dashboard.COMBINETHEMALLbadidea') %></option>
+                    <option value="largest"><%= t('dashboard.Largestmultiplier', {}, lang) %></option>
+                    <option value="smallest"><%= t('dashboard.Smallestmultiplier', {}, lang) %></option>
+                    <option value="highest"><%= t('dashboard.Highestrole', {}, lang) %></option>
+                    <option value="add"><%= t('dashboard.Addthemtogether', {}, lang) %></option>
+                    <option value="combine"><%= t('dashboard.COMBINETHEMALLbadidea', {}, lang) %></option>
                 </select>
-                <p class="details multiplierDescription" id="roleMultiplierDescription"><%= t('dashboard.Ifyouhave20xand30xrolemultiplierstheywillbemultipliedto60xScalesabsurdlyfast') %></p>
+                <p class="details multiplierDescription" id="roleMultiplierDescription"><%= t('dashboard.Ifyouhave20xand30xrolemultiplierstheywillbemultipliedto60xScalesabsurdlyfast', {}, lang) %></p>
             </div>
             <div class="settingBox box">
-                <h2><%= t('dashboard.Addachannelmultiplier') %></h2>
-                <p class="details"><%= t('dashboard.CategorymultiplierswillonlyapplytochannelsthatdonothaveamorespecificmultipliersetThreadswithoutamultiplierwilldefaulttotheirparentchannel') %></p>
+                <h2><%= t('dashboard.Addachannelmultiplier', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.CategorymultiplierswillonlyapplytochannelsthatdonothaveamorespecificmultipliersetThreadswithoutamultiplierwilldefaulttotheirparentchannel', {}, lang) %></p>
                 <div class="centerflex spacedflex" style="margin-top:10px">
                     <select id="channelMultiplierSelect"></select>
-                    <p><%= t('dashboard.grants') %></p>
+                    <p><%= t('dashboard.grants', {}, lang) %></p>
                     <input decimals="4" id="channelMultiplierAmount" max="100" min="0" style="width: 90px; margin-right: 2px" type="number"/>
-                    <p><%= t('dashboard.XP') %></p>
+                    <p><%= t('dashboard.XP', {}, lang) %></p>
                 </div>
-                <button id="addChannelMultiplier" style="background-color: var(--emojipurple); margin-top: 10px"><%= t('dashboard.Add') %></button>
-                <h2 style="margin-top: 50px; margin-bottom: 15px"><%= t('dashboard.Channelmultipliers') %><span id="channelMultiplierCount">0</span>)</h2>
+                <button id="addChannelMultiplier" style="background-color: var(--emojipurple); margin-top: 10px"><%= t('dashboard.Add', {}, lang) %></button>
+                <h2 style="margin-top: 50px; margin-bottom: 15px"><%= t('dashboard.Channelmultipliers', {}, lang) %><span id="channelMultiplierCount">0</span>)</h2>
                 <div class="simpleflex flexTable" id="channelMultipliers"></div>
-                <h2 style="margin-top: 40px"><%= t('dashboard.Stacking') %></h2>
-                <p class="details"><%= t('dashboard.Whatshouldbedoneifamemberalsohasamultiplierrole') %><br/><%= t('dashboard.XPgainwillalwaysbeifeithermultiplieris0x') %></p>
+                <h2 style="margin-top: 40px"><%= t('dashboard.Stacking', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.Whatshouldbedoneifamemberalsohasamultiplierrole', {}, lang) %><br/><%= t('dashboard.XPgainwillalwaysbeifeithermultiplieris0x', {}, lang) %></p>
                 <select class="multiplierSelect" db="multipliers.channelStacking" desc="channel" id="channelStacking" savename="db">
-                    <option value="multiply"><%= t('dashboard.Multiplytogetherwithrole') %></option>
-                    <option value="add"><%= t('dashboard.Addtogetherwithrole') %></option>
-                    <option value="largest"><%= t('dashboard.Usethehighermultiplier') %></option>
-                    <option value="channel"><%= t('dashboard.Alwaysusethechannelmultiplier') %></option>
-                    <option value="role"><%= t('dashboard.Alwaysusetherolemultiplier') %></option>
+                    <option value="multiply"><%= t('dashboard.Multiplytogetherwithrole', {}, lang) %></option>
+                    <option value="add"><%= t('dashboard.Addtogetherwithrole', {}, lang) %></option>
+                    <option value="largest"><%= t('dashboard.Usethehighermultiplier', {}, lang) %></option>
+                    <option value="channel"><%= t('dashboard.Alwaysusethechannelmultiplier', {}, lang) %></option>
+                    <option value="role"><%= t('dashboard.Alwaysusetherolemultiplier', {}, lang) %></option>
                 </select>
-                <p class="details multiplierDescription" id="channelMultiplierDescription"><%= t('dashboard.Ifyouhave20xand30xrolemultiplierstheywillbemultipliedto60xScalesabsurdlyfast') %></p>
+                <p class="details multiplierDescription" id="channelMultiplierDescription"><%= t('dashboard.Ifyouhave20xand30xrolemultiplierstheywillbemultipliedto60xScalesabsurdlyfast', {}, lang) %></p>
             </div>
         </div>
 
         <div class="configboxes" style="display: none" tab="rankcard">
             <div class="settingBox box fulllength">
-                <h1><%= t('dashboard.RankCard') %></h1>
-                <p><%= t('dashboard.Tweakthedetailsshownonrankcards') %><br/><%= t('dashboard.Somesettingsmayalsoapplytotheonlineleaderboard') %></p>
-                <a class="leaderboardLink" tabindex="-1" target="_blank"><button style="background-color: var(--emojipurple)"><%= t('dashboard.Visitleaderboard') %></button></a>
-                <h2><%= t('dashboard.Enablerankcards') %></h2>
-                <p class="details"><%= t('dashboard.AllowsmemberstochecktheirXPwithrankDisablingthiswillalsohidemostinfoincalculate') %></p>
+                <h1><%= t('dashboard.RankCard', {}, lang) %></h1>
+                <p><%= t('dashboard.Tweakthedetailsshownonrankcards', {}, lang) %><br/><%= t('dashboard.Somesettingsmayalsoapplytotheonlineleaderboard', {}, lang) %></p>
+                <a class="leaderboardLink" tabindex="-1" target="_blank"><button style="background-color: var(--emojipurple)"><%= t('dashboard.Visitleaderboard', {}, lang) %></button></a>
+                <h2><%= t('dashboard.Enablerankcards', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.AllowsmemberstochecktheirXPwithrankDisablingthiswillalsohidemostinfoincalculate', {}, lang) %></p>
                 <label class="slider" style="margin-top: 5px">
                     <input db="rankCard.disabled" invert="true" onchange="$('.ifrankenabled').toggle($(this).prop('checked'))" savename="db" tabindex="0" type="checkbox"/>
                     <span class="sliderspan"></span>
@@ -486,50 +495,50 @@
             </div>
             <div class="settingBreak"></div>
             <div class="settingBox box ifrankenabled">
-                <h2><%= t('dashboard.Hidecooldown') %></h2>
-                <p class="details"><%= t('dashboard.PreventsmembersfromviewingtheamountoftimeuntiltheycangainXPagain') %></p>
+                <h2><%= t('dashboard.Hidecooldown', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.PreventsmembersfromviewingtheamountoftimeuntiltheycangainXPagain', {}, lang) %></p>
                 <label class="slider" style="margin-top: 5px">
                     <input db="rankCard.hideCooldown" savename="db" tabindex="0" type="checkbox"/>
                     <span class="sliderspan"></span>
                 </label>
             </div>
             <div class="settingBox box">
-                <h2><%= t('dashboard.Hidemultipliers') %></h2>
-                <p class="details"><%= t('dashboard.Preventsmembersfromviewingwhichroleshavemultipliersexcept0x') %></p>
+                <h2><%= t('dashboard.Hidemultipliers', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.Preventsmembersfromviewingwhichroleshavemultipliersexcept0x', {}, lang) %></p>
                 <label class="slider" style="margin-top: 5px">
                     <input db="hideMultipliers" savename="db" tabindex="0" type="checkbox"/>
                     <span class="sliderspan"></span>
                 </label>
             </div>
             <div class="settingBox box ifrankenabled" style="height: 171px">
-                <h2><%= t('dashboard.Forcehidden') %></h2>
-                <p class="details"><%= t('dashboard.Forcesusagesofranktoalwaysbehiddenephemeralmeaningthatonlythememberwhotypedthecommandcanseethemessage') %><br/></p>
+                <h2><%= t('dashboard.Forcehidden', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.Forcesusagesofranktoalwaysbehiddenephemeralmeaningthatonlythememberwhotypedthecommandcanseethemessage', {}, lang) %><br/></p>
                 <label class="slider" style="margin-top: 5px">
                     <input db="rankCard.ephemeral" savename="db" tabindex="0" type="checkbox"/>
                     <span class="sliderspan"></span>
                 </label>
             </div>
             <div class="settingBox box ifrankenabled" style="height: 171px">
-                <h2><%= t('dashboard.RelativeXP') %></h2>
-                <p class="details"><%= t('dashboard.Changesthenextlevelsectionofranktostartat0andonlyincludeXPfromthatlevelegIflevel10requires2000XPandlevel11requires3000itwilldisplay5001000XPuntillevel11foramemberwith2500XP') %></p>
+                <h2><%= t('dashboard.RelativeXP', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.Changesthenextlevelsectionofranktostartat0andonlyincludeXPfromthatlevelegIflevel10requires2000XPandlevel11requires3000itwilldisplay5001000XPuntillevel11foramemberwith2500XP', {}, lang) %></p>
                 <label class="slider" style="margin-top: 5px">
                     <input db="rankCard.relativeLevel" savename="db" tabindex="0" type="checkbox"/>
                     <span class="sliderspan"></span>
                 </label>
             </div>
             <div class="settingBox box ifrankenabled">
-                <h2><%= t('dashboard.Rankcardcustomization') %></h2>
-                <p class="details"><%= t('dashboard.Notmyproblemanymorelol') %></p>
+                <h2><%= t('dashboard.Rankcardcustomization', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.Notmyproblemanymorelol', {}, lang) %></p>
             </div>
         </div>
 
         <div class="configboxes" style="display: none" tab="leaderboard">
             <div class="settingBox box fulllength">
-                <h1><%= t('dashboard.Leaderboard') %></h1>
-                <p><%= t('dashboard.TweaksomeleaderboardrelatedsettingsGoodforprivacy') %></p>
-                <a class="leaderboardLink" tabindex="-1" target="_blank"><button style="background-color: var(--emojipurple)"><%= t('dashboard.Visitleaderboard') %></button></a>
-                <h2><%= t('dashboard.Enableleaderboard') %></h2>
-                <p class="details"><%= t('dashboard.Allowsmemberstoviewandcomparetheirranksonabigleaderboard') %></p>
+                <h1><%= t('dashboard.Leaderboard', {}, lang) %></h1>
+                <p><%= t('dashboard.TweaksomeleaderboardrelatedsettingsGoodforprivacy', {}, lang) %></p>
+                <a class="leaderboardLink" tabindex="-1" target="_blank"><button style="background-color: var(--emojipurple)"><%= t('dashboard.Visitleaderboard', {}, lang) %></button></a>
+                <h2><%= t('dashboard.Enableleaderboard', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.Allowsmemberstoviewandcomparetheirranksonabigleaderboard', {}, lang) %></p>
                 <label class="slider" style="margin-top: 5px">
                     <input db="leaderboard.disabled" invert="true" onchange="$('.iflbenabled').toggle($(this).prop('checked'))" savename="db" tabindex="0" type="checkbox"/>
                     <span class="sliderspan"></span>
@@ -537,38 +546,38 @@
             </div>
             <div class="settingBreak"></div>
             <div class="settingBox box ifrankenabled">
-                <h2><%= t('dashboard.Forcehidden') %></h2>
-                <p class="details"><%= t('dashboard.Forcesusagesoftoptoalwaysbehiddenephemeral') %><br/></p>
+                <h2><%= t('dashboard.Forcehidden', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.Forcesusagesoftoptoalwaysbehiddenephemeral', {}, lang) %><br/></p>
                 <label class="slider" style="margin-top: 5px">
                     <input db="leaderboard.ephemeral" savename="db" tabindex="0" type="checkbox"/>
                     <span class="sliderspan"></span>
                 </label>
             </div>
             <div class="settingBox box iflbenabled">
-                <h2><%= t('dashboard.Hiderewardroles') %></h2>
-                <p class="details"><%= t('dashboard.Disablesviewingthelistofrewardrolesthroughtheonlineleaderboard') %></p>
+                <h2><%= t('dashboard.Hiderewardroles', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.Disablesviewingthelistofrewardrolesthroughtheonlineleaderboard', {}, lang) %></p>
                 <label class="slider" style="margin-top: 5px">
                     <input db="leaderboard.hideRoles" savename="db" tabindex="0" type="checkbox"/>
                     <span class="sliderspan"></span>
                 </label>
             </div>
             <div class="settingBox box iflbenabled">
-                <h2><%= t('dashboard.Minimumlevel') %></h2>
-                <p class="details"><%= t('dashboard.RestrictstheleaderboardtomembersthathavereachedacertainlevelDisplayseveryservermemberifsetto0') %></p>
+                <h2><%= t('dashboard.Minimumlevel', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.RestrictstheleaderboardtomembersthathavereachedacertainlevelDisplayseveryservermemberifsetto0', {}, lang) %></p>
                 <div class="centerflex spacedflex">
                     <input db="leaderboard.minLevel" default="0" id="maxEntries" max="1000" min="0" placeholder="0" savename="db" style="width: 100px" type="number"/>
                 </div>
             </div>
             <div class="settingBox box iflbenabled">
-                <h2><%= t('dashboard.Maximummembers') %></h2>
-                <p class="details"><%= t('dashboard.OnlyallowviewingthetopXmembersontheleaderboardDisplayseveryservermemberifsetto0') %></p>
+                <h2><%= t('dashboard.Maximummembers', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.OnlyallowviewingthetopXmembersontheleaderboardDisplayseveryservermemberifsetto0', {}, lang) %></p>
                 <div class="centerflex spacedflex">
                     <input db="leaderboard.maxEntries" default="0" id="maxEntries" max="1000000" min="0" placeholder="0" savename="db" style="width: 100px" type="number"/>
                 </div>
             </div>
             <div class="settingBox box iflbenabled">
-                <h2><%= t('dashboard.Privateleaderboard') %></h2>
-                <p class="details"><%= t('dashboard.Restrictstheonlineleaderboardsoonlymembersoftheservercanaccessit') %><br/><%= t('dashboard.requiressigningin') %></p>
+                <h2><%= t('dashboard.Privateleaderboard', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.Restrictstheonlineleaderboardsoonlymembersoftheservercanaccessit', {}, lang) %><br/><%= t('dashboard.requiressigningin', {}, lang) %></p>
                 <label class="slider" style="margin-top: 5px">
                     <input db="leaderboard.private" savename="db" tabindex="0" type="checkbox"/>
                     <span class="sliderspan"></span>
@@ -578,55 +587,55 @@
 
         <div class="configboxes" style="display: none" tab="data">
             <div class="settingBox box fulllength" style="padding-bottom: 15px">
-                <h1><%= t('dashboard.Data') %></h1>
-                <p><%= t('dashboard.Settingsrelatedtotheserversdata') %></p>
+                <h1><%= t('dashboard.Data', {}, lang) %></h1>
+                <p><%= t('dashboard.Settingsrelatedtotheserversdata', {}, lang) %></p>
             </div>
             <div class="settingBreak"></div>
             <div class="settingBox box fulllength">
-                <h2><%= t('dashboard.DownloadXP') %></h2>
-                <p class="details" style="margin-bottom: 10px"><%= t('dashboard.ExportseveryonesXPintoasinglefileonlycontainsuserIDandXP') %><br/><b><%= t('dashboard.DownloadalldataifyouwishtoimportyoursettingsintoanopensourceforkofPolaris') %></b></p>
-                <button class="exportXP" format="everything" style="background-color: var(--emojipurple);"><%= t('dashboard.Downloadalldata') %></button>
-                <button class="exportXP" format="json" style="margin-left: 10px"><%= t('dashboard.Downloadasjson') %></button>
-                <button class="exportXP" format="csv" style="margin-left: 10px"><%= t('dashboard.Downloadascsv') %></button>
-                <button class="exportXP" format="txt" style="margin-left: 10px"><%= t('dashboard.Downloadastxt') %></button>
+                <h2><%= t('dashboard.DownloadXP', {}, lang) %></h2>
+                <p class="details" style="margin-bottom: 10px"><%= t('dashboard.ExportseveryonesXPintoasinglefileonlycontainsuserIDandXP', {}, lang) %><br/><b><%= t('dashboard.DownloadalldataifyouwishtoimportyoursettingsintoanopensourceforkofPolaris', {}, lang) %></b></p>
+                <button class="exportXP" format="everything" style="background-color: var(--emojipurple);"><%= t('dashboard.Downloadalldata', {}, lang) %></button>
+                <button class="exportXP" format="json" style="margin-left: 10px"><%= t('dashboard.Downloadasjson', {}, lang) %></button>
+                <button class="exportXP" format="csv" style="margin-left: 10px"><%= t('dashboard.Downloadascsv', {}, lang) %></button>
+                <button class="exportXP" format="txt" style="margin-left: 10px"><%= t('dashboard.Downloadastxt', {}, lang) %></button>
             </div>
             <div class="settingBreak"></div>
             <div class="settingBox box">
-                <h2><%= t('dashboard.ClearallXP') %></h2>
-                <p class="details"><%= t('dashboard.DeleteeveryonesXPandstartfreshAllXPwillberesetto0butrewardroleswillnotberemovedunlessdonemanually') %><b><%= t('dashboard.Thiscannotbeundone') %></b></p>
-                <button onclick="$('.confirmReset').toggle(); $('.confirmConfirmReset').hide()" style="background-color: var(--emojired)"><%= t('dashboard.Reset') %></button>
-                <button class="hideOnLoad confirmReset" onclick="$('.confirmConfirmReset').toggle()" style="margin-left: 10px; background-color: var(--emojiblue); display: none;"><%= t('dashboard.Areyousure') %></button>
-                <button class="hideOnLoad confirmConfirmReset" id="resetXP" style="margin-left: 10px; background-color: var(--emojipurple); display: none;"><%= t('dashboard.Positive') %></button>
+                <h2><%= t('dashboard.ClearallXP', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.DeleteeveryonesXPandstartfreshAllXPwillberesetto0butrewardroleswillnotberemovedunlessdonemanually', {}, lang) %><b><%= t('dashboard.Thiscannotbeundone', {}, lang) %></b></p>
+                <button onclick="$('.confirmReset').toggle(); $('.confirmConfirmReset').hide()" style="background-color: var(--emojired)"><%= t('dashboard.Reset', {}, lang) %></button>
+                <button class="hideOnLoad confirmReset" onclick="$('.confirmConfirmReset').toggle()" style="margin-left: 10px; background-color: var(--emojiblue); display: none;"><%= t('dashboard.Areyousure', {}, lang) %></button>
+                <button class="hideOnLoad confirmConfirmReset" id="resetXP" style="margin-left: 10px; background-color: var(--emojipurple); display: none;"><%= t('dashboard.Positive', {}, lang) %></button>
             </div>
             <div class="settingBox box">
-                <h2><%= t('dashboard.Resetsettings') %></h2>
-                <p class="details"><%= t('dashboard.RestoresthedefaultsforallconfigurablesettingssuchasthecurverewardrolesmultiplierslevelupmessageetcXPwillnotbecleared') %><b><%= t('dashboard.Thiscannotbeundone') %></b></p>
-                <button onclick="$('.confirmResetSettings').toggle()" style="background-color: var(--emojired)"><%= t('dashboard.Reset') %></button>
-                <button class="hideOnLoad confirmResetSettings" id="resetSettings" style="margin-left: 10px; background-color: var(--emojiblue); display: none;"><%= t('dashboard.Areyousure') %></button>
+                <h2><%= t('dashboard.Resetsettings', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.RestoresthedefaultsforallconfigurablesettingssuchasthecurverewardrolesmultiplierslevelupmessageetcXPwillnotbecleared', {}, lang) %><b><%= t('dashboard.Thiscannotbeundone', {}, lang) %></b></p>
+                <button onclick="$('.confirmResetSettings').toggle()" style="background-color: var(--emojired)"><%= t('dashboard.Reset', {}, lang) %></button>
+                <button class="hideOnLoad confirmResetSettings" id="resetSettings" style="margin-left: 10px; background-color: var(--emojiblue); display: none;"><%= t('dashboard.Areyousure', {}, lang) %></button>
             </div>
             <div class="settingBreak"></div>
             <div class="settingBox box">
-                <h2><%= t('dashboard.PruneMembers') %></h2>
-                <p class="details"><%= t('dashboard.DeletesthedataofeveryonewhohaslessthanacertainamountofXPMightspeeduploadtimes') %><b><%= t('dashboard.Thiscannotbeundone') %></b></p>
+                <h2><%= t('dashboard.PruneMembers', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.DeletesthedataofeveryonewhohaslessthanacertainamountofXPMightspeeduploadtimes', {}, lang) %><b><%= t('dashboard.Thiscannotbeundone', {}, lang) %></b></p>
                 <div class="centerflex spacedflex">
-                    <p><%= t('dashboard.Lessthan') %></p>
+                    <p><%= t('dashboard.Lessthan', {}, lang) %></p>
                     <input default="100" id="prune_amt" min="1" style="width: 150px" type="number" value="100"/>
-                    <button id="confirmPrune" style="background-color: var(--emojired)"><%= t('dashboard.Prune') %></button>
+                    <button id="confirmPrune" style="background-color: var(--emojired)"><%= t('dashboard.Prune', {}, lang) %></button>
                 </div>
             </div>
             <div class="settingBox box fulllength" id="importBotSection">
                 <div class="spacedflex centerflex" style="margin-top: 15px; margin-bottom: 5px">
-                    <h2 style="margin: 0px 0px"><%= t('dashboard.ImportsettingsandXPfrom') %></h2>
+                    <h2 style="margin: 0px 0px"><%= t('dashboard.ImportsettingsandXPfrom', {}, lang) %></h2>
                     <select id="importfrom" onchange="$('.importdiv').hide(); $(`.importdiv[importtype='${$(this).val()}']`).show()" style="margin-left: 8px; width: 250px; font-weight: bold;">
-                        <option value="json"><%= t('dashboard.jsonfile') %></option>
-                        <option value="polaris"><%= t('dashboard.Anotherserver') %></option>
+                        <option value="json"><%= t('dashboard.jsonfile', {}, lang) %></option>
+                        <option value="polaris"><%= t('dashboard.Anotherserver', {}, lang) %></option>
                     </select>
                 </div>
                 <div class="importdiv" importtype="json">
-                    <p class="details"><%= t('dashboard.CopiesXPandsettingsfromanotherserverusingthisbot') %><b><%= t('dashboard.Requiresserverowner') %></b></p>
-                    <p class="details"><%= t('dashboard.Theexpectedjsonformatisthesameaswhenyoupressdownloadalldataatthetopofthis') %></p>
+                    <p class="details"><%= t('dashboard.CopiesXPandsettingsfromanotherserverusingthisbot', {}, lang) %><b><%= t('dashboard.Requiresserverowner', {}, lang) %></b></p>
+                    <p class="details"><%= t('dashboard.Theexpectedjsonformatisthesameaswhenyoupressdownloadalldataatthetopofthis', {}, lang) %></p>
                     <div class="centerflex spacedflex">
-                        <p><%= t('dashboard.Importfrom') %></p>
+                        <p><%= t('dashboard.Importfrom', {}, lang) %></p>
                         <input accept="application/json" id="importJSONFile" style="padding-top: 15px; width: 500px; margin: 10px 0px" type="file"/>
                     </div>
                     <div class="centerflex spacedflex">
@@ -634,21 +643,21 @@
                             <input checked="" class="importSetting" option="xp" type="checkbox"/>
                             <span class="sliderspan"></span>
                         </label>
-                        <p><%= t('dashboard.ImportXPoverwritesexistingmembers') %></p>
+                        <p><%= t('dashboard.ImportXPoverwritesexistingmembers', {}, lang) %></p>
                     </div>
                     <div class="centerflex spacedflex">
                         <label class="slider">
                             <input class="importSetting forDevs" disabled="" option="settings" type="checkbox"/>
                             <span class="sliderspan"></span>
                         </label>
-                        <p><%= t('dashboard.Importsettingscooldowncurvelevelupmessageetc') %><b><%= t('dashboard.requiresbotownerforsecurityreasons') %></b></p>
+                        <p><%= t('dashboard.Importsettingscooldowncurvelevelupmessageetc', {}, lang) %><b><%= t('dashboard.requiresbotownerforsecurityreasons', {}, lang) %></b></p>
                     </div>
                 </div>
                 <div class="importdiv" importtype="polaris" style="display: none">
-                    <p class="details"><%= t('dashboard.CopiesXPandsettingsfromanotherserverusingthisbot') %><b><%= t('dashboard.Requiresserverowner') %></b></p>
-                    <p class="details"><b><%= t('dashboard.Note') %></b><%= t('dashboard.Sinceyouaretransferringfromanotherserverrewardrolesandmultiplierscannotbecopied') %></p>
+                    <p class="details"><%= t('dashboard.CopiesXPandsettingsfromanotherserverusingthisbot', {}, lang) %><b><%= t('dashboard.Requiresserverowner', {}, lang) %></b></p>
+                    <p class="details"><b><%= t('dashboard.Note', {}, lang) %></b><%= t('dashboard.Sinceyouaretransferringfromanotherserverrewardrolesandmultiplierscannotbecopied', {}, lang) %></p>
                     <div class="centerflex spacedflex">
-                        <p><%= t('dashboard.Importfrom') %></p>
+                        <p><%= t('dashboard.Importfrom', {}, lang) %></p>
                         <select class="importSetting" id="otherServers" option="serverID"></select>
                     </div>
                     <div class="centerflex spacedflex">
@@ -656,49 +665,49 @@
                             <input checked="" class="importSetting" option="xp" type="checkbox"/>
                             <span class="sliderspan"></span>
                         </label>
-                        <p><%= t('dashboard.ImportXPoverwritesexistingmembers') %></p>
+                        <p><%= t('dashboard.ImportXPoverwritesexistingmembers', {}, lang) %></p>
                     </div>
                     <div class="centerflex spacedflex">
                         <label class="slider">
                             <input checked="" class="importSetting" option="settings" type="checkbox"/>
                             <span class="sliderspan"></span>
                         </label>
-                        <p><%= t('dashboard.Importsettingscooldowncurvelevelupmessageetc') %></p>
+                        <p><%= t('dashboard.Importsettingscooldowncurvelevelupmessageetc', {}, lang) %></p>
                     </div>
                 </div>
                 <div id="botimporting" style="height: 60px">
-                    <button onclick="$('#confirmBotImport').toggle()" style="margin-top: 15px; background-color: var(--emojigreen)"><%= t('dashboard.Import') %></button>
-                    <button class="hideOnLoad" id="confirmBotImport" style="margin-left: 10px; background-color: var(--emojiblue); display: none;"><%= t('dashboard.Areyousure') %></button>
+                    <button onclick="$('#confirmBotImport').toggle()" style="margin-top: 15px; background-color: var(--emojigreen)"><%= t('dashboard.Import', {}, lang) %></button>
+                    <button class="hideOnLoad" id="confirmBotImport" style="margin-left: 10px; background-color: var(--emojiblue); display: none;"><%= t('dashboard.Areyousure', {}, lang) %></button>
                 </div>
                 <div id="botimportloading" style="display: none">
-                    <p><b><%= t('dashboard.Workingonit') %></b></p>
+                    <p><b><%= t('dashboard.Workingonit', {}, lang) %></b></p>
                 </div>
             </div>
         </div>
 
         <div class="configboxes" style="display: none" tab="advanced">
             <div class="settingBox box fulllength" style="padding-bottom: 15px">
-                <h1><%= t('dashboard.AdvancedSettings') %></h1>
-                <p><%= t('dashboard.Someextrafancyorexperimentaloptions') %></p>
+                <h1><%= t('dashboard.AdvancedSettings', {}, lang) %></h1>
+                <p><%= t('dashboard.Someextrafancyorexperimentaloptions', {}, lang) %></p>
             </div>
             <div class="settingBox box" style="height: 171px">
-                <h2><%= t('dashboard.IgnorePermissions') %></h2>
-                <p class="details"><%= t('dashboard.Allows') %><b><%= t('dashboard.anyone') %></b><%= t('dashboard.torunmoderatorcommandsegaddxporcleareveniftheydonthavetheManageServerpermissionUsefulifyouwanttosetcustomslashcommandpermissionsfortheserver') %></p>
+                <h2><%= t('dashboard.IgnorePermissions', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.Allows', {}, lang) %><b><%= t('dashboard.anyone', {}, lang) %></b><%= t('dashboard.torunmoderatorcommandsegaddxporcleareveniftheydonthavetheManageServerpermissionUsefulifyouwanttosetcustomslashcommandpermissionsfortheserver', {}, lang) %></p>
                 <label class="slider" style="margin-top: 5px">
                     <input db="manualPerms" savename="db" tabindex="0" type="checkbox"/>
                     <span class="sliderspan"></span>
                 </label>
             </div>
             <div class="settingBox box" style="height: 171px">
-                <h2><%= t('dashboard.MaximumLevel') %></h2>
-                <p class="details"><%= t('dashboard.ThehighestlevelthatmemberscanreachTheycanstillgainXPpastthis') %><br/><%= t('dashboard.TodisableXPgainafterreachingthemaxlevelusearewardrolewitha0xmultiplier') %></p>
+                <h2><%= t('dashboard.MaximumLevel', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.ThehighestlevelthatmemberscanreachTheycanstillgainXPpastthis', {}, lang) %><br/><%= t('dashboard.TodisableXPgainafterreachingthemaxlevelusearewardrolewitha0xmultiplier', {}, lang) %></p>
                 <div class="centerflex spacedflex" style="margin-top: 10px">
                     <input db="maxLevel" default="1000" max="1000" min="0" placeholder="1000" savename="db" style="width: 80px" type="number"/>
                 </div>
             </div>
             <div class="settingBox box" style="height: 145px">
-                <h2><%= t('dashboard.CustomrankEmbedColor') %></h2>
-                <p class="details"><%= t('dashboard.Changestheembedcolorwhenusingrank') %><br/><%= t('dashboard.Usesthemembersroleprofilecolorbydefault') %></p>
+                <h2><%= t('dashboard.CustomrankEmbedColor', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.Changestheembedcolorwhenusingrank', {}, lang) %><br/><%= t('dashboard.Usesthemembersroleprofilecolorbydefault', {}, lang) %></p>
                 <div class="centerflex" style="height: 45px">
                     <label class="slider" style="margin-top: 5px">
                         <input id="useCustomEmbedColRank" onchange="$('#customEmbedColRankConfig').toggle($(this).prop('checked')); checkUnsavedChanges()" tabindex="0" type="checkbox"/>
@@ -712,8 +721,8 @@
                 </div>
             </div>
             <div class="settingBox box" style="height: 145px">
-                <h2><%= t('dashboard.CustomtopEmbedColor') %></h2>
-                <p class="details"><%= t('dashboard.Changestheembedcolorwhenusingtop') %><br/><%= t('dashboard.UsesPolarisgreenbydefault') %></p>
+                <h2><%= t('dashboard.CustomtopEmbedColor', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.Changestheembedcolorwhenusingtop', {}, lang) %><br/><%= t('dashboard.UsesPolarisgreenbydefault', {}, lang) %></p>
                 <div class="centerflex" style="height: 45px">
                     <label class="slider" style="margin-top: 5px">
                         <input id="useCustomEmbedColTop" onchange="$('#customEmbedColTopConfig').toggle($(this).prop('checked')); checkUnsavedChanges()" tabindex="0" type="checkbox"/>
@@ -732,101 +741,101 @@
 <script>
     // Diccionario para el JavaScript
     window.i18nConfig = {
-        settings_for: "<%= t('config_page.js.settings_for') %>",
-        axis_level: "<%= t('config_page.js.axis_level') %>",
-        axis_xp: "<%= t('config_page.js.axis_xp') %>",
-        desmos_fail: "<%= t('config_page.js.desmos_fail') %>",
-        member: "<%= t('config_page.js.member') %>",
-        members: "<%= t('config_page.js.members') %>",
-        custom_settings_desc: "<%= t('config_page.js.custom_settings_desc') %>",
-        table_level: "<%= t('config_page.js.table_level') %>",
-        table_xp: "<%= t('config_page.js.table_xp') %>",
-        table_msgs: "<%= t('config_page.js.table_msgs') %>",
-        table_time: "<%= t('config_page.js.table_time') %>",
-        table_total_xp: "<%= t('config_page.js.table_total_xp') %>",
-        table_total_msgs: "<%= t('config_page.js.table_total_msgs') %>",
-        table_total_time: "<%= t('config_page.js.table_total_time') %>",
-        enabled: "<%= t('config_page.js.enabled') %>",
-        disabled: "<%= t('config_page.js.disabled') %>",
-        xp_disabled: "<%= t('config_page.js.xp_disabled') %>",
-        xp_every: "<%= t('config_page.js.xp_every') %>",
-        reward_role: "<%= t('config_page.js.reward_role') %>",
-        no_reward_roles: "<%= t('config_page.js.no_reward_roles') %>",
-        embedded: "<%= t('config_page.js.embedded') %>",
-        role: "<%= t('config_page.js.role') %>",
-        channel: "<%= t('config_page.js.channel') %>",
-        invisible: "<%= t('config_page.js.invisible') %>",
-        private: "<%= t('config_page.js.private') %>",
-        max: "<%= t('config_page.js.max') %>",
-        last_saved: "<%= t('config_page.js.last_saved') %>",
-        never: "<%= t('config_page.js.never') %>",
-        table_role: "<%= t('config_page.js.table_role') %>",
-        table_channel: "<%= t('config_page.js.table_channel') %>",
-        table_keep: "<%= t('config_page.js.table_keep') %>",
-        table_sync: "<%= t('config_page.js.table_sync') %>",
-        table_delete: "<%= t('config_page.js.table_delete') %>",
-        table_multiplier: "<%= t('config_page.js.table_multiplier') %>",
-        yes: "<%= t('config_page.js.yes') %>",
-        no: "<%= t('config_page.js.no') %>",
-        opt_role: "<%= t('config_page.js.opt_role') %>",
-        too_high: "<%= t('config_page.js.too_high') %>",
-        opt_channel: "<%= t('config_page.js.opt_channel') %>",
-        alert_invalid_embed: "<%= t('config_page.js.alert_invalid_embed') %>",
-        btn_saving: "<%= t('config_page.js.btn_saving') %>",
-        btn_save: "<%= t('config_page.js.btn_save') %>",
-        confirm_reset_settings: "<%= t('config_page.js.confirm_reset_settings') %>",
-        confirm_reset_xp: "<%= t('config_page.js.confirm_reset_xp') %>",
-        alert_xp_reset: "<%= t('config_page.js.alert_xp_reset') %>",
-        alert_error: "<%= t('config_page.js.alert_error') %>",
-        alert_invalid_embed_test: "<%= t('config_page.js.alert_invalid_embed_test') %>",
-        alert_prune_nobody: "<%= t('config_page.js.alert_prune_nobody') %>",
-        alert_prune_xp: "<%= t('config_page.js.alert_prune_xp') %>",
-        confirm_prune_1: "<%= t('config_page.js.confirm_prune_1') %>",
-        confirm_prune_2: "<%= t('config_page.js.confirm_prune_2') %>",
-        confirm_prune_3: "<%= t('config_page.js.confirm_prune_3') %>",
-        confirm_prune_4: "<%= t('config_page.js.confirm_prune_4') %>",
-        alert_prune_fail: "<%= t('config_page.js.alert_prune_fail') %>",
-        alert_prune_count_fail: "<%= t('config_page.js.alert_prune_count_fail') %>",
-        alert_unsaved: "<%= t('config_page.js.alert_unsaved') %>",
-        alert_no_json: "<%= t('config_page.js.alert_no_json') %>",
-        alert_parse_fail: "<%= t('config_page.js.alert_parse_fail') %>",
-        confirm_json_xp_only: "<%= t('config_page.js.confirm_json_xp_only') %>",
-        alert_invalid_bot: "<%= t('config_page.js.alert_invalid_bot') %>",
-        alert_import_cooldown: "<%= t('config_page.js.alert_import_cooldown') %>",
-        alert_import_cooldown_2: "<%= t('config_page.js.alert_import_cooldown_2') %>",
-        alert_import_select: "<%= t('config_page.js.alert_import_select') %>",
-        alert_import_nodata_json: "<%= t('config_page.js.alert_import_nodata_json') %>",
-        alert_import_nodata: "<%= t('config_page.js.alert_import_nodata') %>",
-        alert_import_fail: "<%= t('config_page.js.alert_import_fail') %>",
-        err_no_perms_title: "<%= t('config_page.js.err_no_perms_title') %>",
-        err_no_perms_desc: "<%= t('config_page.js.err_no_perms_desc') %>",
-        err_login_title: "<%= t('config_page.js.err_login_title') %>",
-        err_login_desc: "<%= t('config_page.js.err_login_desc') %>",
-        mult_role_largest: "<%= t('config_page.js.mult_role_largest') %>",
-        mult_role_smallest: "<%= t('config_page.js.mult_role_smallest') %>",
-        mult_role_highest: "<%= t('config_page.js.mult_role_highest') %>",
-        mult_role_add: "<%= t('config_page.js.mult_role_add') %>",
-        mult_role_combine: "<%= t('config_page.js.mult_role_combine') %>",
-        mult_chan_multiply: "<%= t('config_page.js.mult_chan_multiply') %>",
-        mult_chan_add: "<%= t('config_page.js.mult_chan_add') %>",
-        mult_chan_largest: "<%= t('config_page.js.mult_chan_largest') %>",
-        mult_chan_channel: "<%= t('config_page.js.mult_chan_channel') %>",
-        mult_chan_role: "<%= t('config_page.js.mult_chan_role') %>"
+        settings_for: "<%= t('config_page.js.settings_for', {}, lang) %>",
+        axis_level: "<%= t('config_page.js.axis_level', {}, lang) %>",
+        axis_xp: "<%= t('config_page.js.axis_xp', {}, lang) %>",
+        desmos_fail: "<%= t('config_page.js.desmos_fail', {}, lang) %>",
+        member: "<%= t('config_page.js.member', {}, lang) %>",
+        members: "<%= t('config_page.js.members', {}, lang) %>",
+        custom_settings_desc: "<%= t('config_page.js.custom_settings_desc', {}, lang) %>",
+        table_level: "<%= t('config_page.js.table_level', {}, lang) %>",
+        table_xp: "<%= t('config_page.js.table_xp', {}, lang) %>",
+        table_msgs: "<%= t('config_page.js.table_msgs', {}, lang) %>",
+        table_time: "<%= t('config_page.js.table_time', {}, lang) %>",
+        table_total_xp: "<%= t('config_page.js.table_total_xp', {}, lang) %>",
+        table_total_msgs: "<%= t('config_page.js.table_total_msgs', {}, lang) %>",
+        table_total_time: "<%= t('config_page.js.table_total_time', {}, lang) %>",
+        enabled: "<%= t('config_page.js.enabled', {}, lang) %>",
+        disabled: "<%= t('config_page.js.disabled', {}, lang) %>",
+        xp_disabled: "<%= t('config_page.js.xp_disabled', {}, lang) %>",
+        xp_every: "<%= t('config_page.js.xp_every', {}, lang) %>",
+        reward_role: "<%= t('config_page.js.reward_role', {}, lang) %>",
+        no_reward_roles: "<%= t('config_page.js.no_reward_roles', {}, lang) %>",
+        embedded: "<%= t('config_page.js.embedded', {}, lang) %>",
+        role: "<%= t('config_page.js.role', {}, lang) %>",
+        channel: "<%= t('config_page.js.channel', {}, lang) %>",
+        invisible: "<%= t('config_page.js.invisible', {}, lang) %>",
+        private: "<%= t('config_page.js.private', {}, lang) %>",
+        max: "<%= t('config_page.js.max', {}, lang) %>",
+        last_saved: "<%= t('config_page.js.last_saved', {}, lang) %>",
+        never: "<%= t('config_page.js.never', {}, lang) %>",
+        table_role: "<%= t('config_page.js.table_role', {}, lang) %>",
+        table_channel: "<%= t('config_page.js.table_channel', {}, lang) %>",
+        table_keep: "<%= t('config_page.js.table_keep', {}, lang) %>",
+        table_sync: "<%= t('config_page.js.table_sync', {}, lang) %>",
+        table_delete: "<%= t('config_page.js.table_delete', {}, lang) %>",
+        table_multiplier: "<%= t('config_page.js.table_multiplier', {}, lang) %>",
+        yes: "<%= t('config_page.js.yes', {}, lang) %>",
+        no: "<%= t('config_page.js.no', {}, lang) %>",
+        opt_role: "<%= t('config_page.js.opt_role', {}, lang) %>",
+        too_high: "<%= t('config_page.js.too_high', {}, lang) %>",
+        opt_channel: "<%= t('config_page.js.opt_channel', {}, lang) %>",
+        alert_invalid_embed: "<%= t('config_page.js.alert_invalid_embed', {}, lang) %>",
+        btn_saving: "<%= t('config_page.js.btn_saving', {}, lang) %>",
+        btn_save: "<%= t('config_page.js.btn_save', {}, lang) %>",
+        confirm_reset_settings: "<%= t('config_page.js.confirm_reset_settings', {}, lang) %>",
+        confirm_reset_xp: "<%= t('config_page.js.confirm_reset_xp', {}, lang) %>",
+        alert_xp_reset: "<%= t('config_page.js.alert_xp_reset', {}, lang) %>",
+        alert_error: "<%= t('config_page.js.alert_error', {}, lang) %>",
+        alert_invalid_embed_test: "<%= t('config_page.js.alert_invalid_embed_test', {}, lang) %>",
+        alert_prune_nobody: "<%= t('config_page.js.alert_prune_nobody', {}, lang) %>",
+        alert_prune_xp: "<%= t('config_page.js.alert_prune_xp', {}, lang) %>",
+        confirm_prune_1: "<%= t('config_page.js.confirm_prune_1', {}, lang) %>",
+        confirm_prune_2: "<%= t('config_page.js.confirm_prune_2', {}, lang) %>",
+        confirm_prune_3: "<%= t('config_page.js.confirm_prune_3', {}, lang) %>",
+        confirm_prune_4: "<%= t('config_page.js.confirm_prune_4', {}, lang) %>",
+        alert_prune_fail: "<%= t('config_page.js.alert_prune_fail', {}, lang) %>",
+        alert_prune_count_fail: "<%= t('config_page.js.alert_prune_count_fail', {}, lang) %>",
+        alert_unsaved: "<%= t('config_page.js.alert_unsaved', {}, lang) %>",
+        alert_no_json: "<%= t('config_page.js.alert_no_json', {}, lang) %>",
+        alert_parse_fail: "<%= t('config_page.js.alert_parse_fail', {}, lang) %>",
+        confirm_json_xp_only: "<%= t('config_page.js.confirm_json_xp_only', {}, lang) %>",
+        alert_invalid_bot: "<%= t('config_page.js.alert_invalid_bot', {}, lang) %>",
+        alert_import_cooldown: "<%= t('config_page.js.alert_import_cooldown', {}, lang) %>",
+        alert_import_cooldown_2: "<%= t('config_page.js.alert_import_cooldown_2', {}, lang) %>",
+        alert_import_select: "<%= t('config_page.js.alert_import_select', {}, lang) %>",
+        alert_import_nodata_json: "<%= t('config_page.js.alert_import_nodata_json', {}, lang) %>",
+        alert_import_nodata: "<%= t('config_page.js.alert_import_nodata', {}, lang) %>",
+        alert_import_fail: "<%= t('config_page.js.alert_import_fail', {}, lang) %>",
+        err_no_perms_title: "<%= t('config_page.js.err_no_perms_title', {}, lang) %>",
+        err_no_perms_desc: "<%= t('config_page.js.err_no_perms_desc', {}, lang) %>",
+        err_login_title: "<%= t('config_page.js.err_login_title', {}, lang) %>",
+        err_login_desc: "<%= t('config_page.js.err_login_desc', {}, lang) %>",
+        mult_role_largest: "<%= t('config_page.js.mult_role_largest', {}, lang) %>",
+        mult_role_smallest: "<%= t('config_page.js.mult_role_smallest', {}, lang) %>",
+        mult_role_highest: "<%= t('config_page.js.mult_role_highest', {}, lang) %>",
+        mult_role_add: "<%= t('config_page.js.mult_role_add', {}, lang) %>",
+        mult_role_combine: "<%= t('config_page.js.mult_role_combine', {}, lang) %>",
+        mult_chan_multiply: "<%= t('config_page.js.mult_chan_multiply', {}, lang) %>",
+        mult_chan_add: "<%= t('config_page.js.mult_chan_add', {}, lang) %>",
+        mult_chan_largest: "<%= t('config_page.js.mult_chan_largest', {}, lang) %>",
+        mult_chan_channel: "<%= t('config_page.js.mult_chan_channel', {}, lang) %>",
+        mult_chan_role: "<%= t('config_page.js.mult_chan_role', {}, lang) %>"
     };
 </script>
 <script>
     // Diccionario global para extras.js
     window.i18nGlobal = {
-        forever: "<%= t('global_js.forever') %>",
-        sec: "<%= t('global_js.sec') %>",
-        second: "<%= t('global_js.second') %>",
-        min: "<%= t('global_js.min') %>",
-        minute: "<%= t('global_js.minute') %>",
-        hour: "<%= t('global_js.hour') %>",
-        day: "<%= t('global_js.day') %>",
-        year: "<%= t('global_js.year') %>",
-        error_title: "<%= t('global_js.error_title') %>",
-        log_in: "<%= t('global_js.log_in') %>"
+        forever: "<%= t('global_js.forever', {}, lang) %>",
+        sec: "<%= t('global_js.sec', {}, lang) %>",
+        second: "<%= t('global_js.second', {}, lang) %>",
+        min: "<%= t('global_js.min', {}, lang) %>",
+        minute: "<%= t('global_js.minute', {}, lang) %>",
+        hour: "<%= t('global_js.hour', {}, lang) %>",
+        day: "<%= t('global_js.day', {}, lang) %>",
+        year: "<%= t('global_js.year', {}, lang) %>",
+        error_title: "<%= t('global_js.error_title', {}, lang) %>",
+        log_in: "<%= t('global_js.log_in', {}, lang) %>"
     };
 </script>
 <script src="/polaris.js" type="text/javascript"></script>

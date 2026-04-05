@@ -1,21 +1,28 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<%= lang %>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <link href="/css/polaris.css?v=1" type="text/css" rel="stylesheet">
     <link rel="icon" href="/assets/polaris.svg">
-    <title><%= t('leaderboard_page.title') %></title>
-
-    <meta property="og:title" content="<%= t('home_page.title') %>">
-    <meta property="og:description" content="<%= t('home_page.description') %>">
-    <meta property="og:type" content="website">
-    <meta name="theme-color" content="#00ff80">
-    <meta name="twitter:card" content="summary">
+    
+    <title><%= t('leaderboard_page.title', {}, lang) %></title>
     <meta name="robots" content="noindex">
+    <meta name="theme-color" content="#00ff80">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<%= siteURL %>/leaderboard">
+    <meta property="og:title" content="<%= t('leaderboard_page.title', {}, lang) %>">
+    <meta property="og:description" content="<%= t('home_page.description', {}, lang) %>">
+    <meta property="og:image" content="<%= siteURL %>/assets/cheese.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%= t('leaderboard_page.title', {}, lang) %>">
+    <meta name="twitter:description" content="<%= t('home_page.description', {}, lang) %>">
+    <meta name="twitter:image" content="<%= siteURL %>/assets/cheese.png">
 </head>
 <body>
-    <h2 class="middleflex" id="loading"><%= t('leaderboard_page.loading') %></h2>
+    <h2 class="middleflex" id="loading"><%= t('leaderboard_page.loading', {}, lang) %></h2>
 
     <div id="everything" style="display: none">
 
@@ -23,45 +30,45 @@
         <h1 id="serverName" style="text-align: center"></h1>
         <p id="serverMembers" style="margin-top: 2px"></p>
 
-        <h2 style="color: #ff5555; margin: 0px 0px 15px 0px; text-align: center; display: none" id="notInServerWarning"><%= t('leaderboard_page.not_in_server_warning') %></h2>
-        <button id="bigLoginBtn" onclick="loginButton()" style="display: none; background-color: var(--emojipurple); width: 350px; margin-bottom: 30px; margin-top: 10px; font-size: 22px; height: 50px"><%= t('leaderboard_page.login_personal_stats') %></button>
+        <h2 style="color: #ff5555; margin: 0px 0px 15px 0px; text-align: center; display: none" id="notInServerWarning"><%= t('leaderboard_page.not_in_server_warning', {}, lang) %></h2>
+        <button id="bigLoginBtn" onclick="loginButton()" style="display: none; background-color: var(--emojipurple); width: 350px; margin-bottom: 30px; margin-top: 10px; font-size: 22px; height: 50px"><%= t('leaderboard_page.login_personal_stats', {}, lang) %></button>
 
         <div id="lbButtons" style="margin-bottom: 20px; margin-top: 2px">
-            <button class="selectedlb" box="leaderboard"><%= t('leaderboard_page.tabs.leaderboard') %></button><button box="rank" id="yourrank"><%= t('leaderboard_page.tabs.your_rank') %></button><button box="roles"><%= t('leaderboard_page.tabs.reward_roles') %></button><button box="levels"><%= t('leaderboard_page.tabs.all_levels') %></button><button box="hidden" id="hiddenMemberTab" style="display: none"><%= t('leaderboard_page.tabs.hidden_members') %></button>
+            <button class="selectedlb" box="leaderboard"><%= t('leaderboard_page.tabs.leaderboard', {}, lang) %></button><button box="rank" id="yourrank"><%= t('leaderboard_page.tabs.your_rank', {}, lang) %></button><button box="roles"><%= t('leaderboard_page.tabs.reward_roles', {}, lang) %></button><button box="levels"><%= t('leaderboard_page.tabs.all_levels', {}, lang) %></button><button box="hidden" id="hiddenMemberTab" style="display: none"><%= t('leaderboard_page.tabs.hidden_members', {}, lang) %></button>
         </div>
     </div>
 
     <div id="leaderboard" box="leaderboard" class="leaderboardBox lbBox"></div>
-    <h2 id="noXPYet" box="leaderboard" style="text-align: center; display: none" class="lbBox"><%= t('leaderboard_page.empty_states.no_xp_yet') %></h2>
+    <h2 id="noXPYet" box="leaderboard" style="text-align: center; display: none" class="lbBox"><%= t('leaderboard_page.empty_states.no_xp_yet', {}, lang) %></h2>
 
     <div id="pageInfo" box="leaderboard" class="middleflex lbBox" style="flex-direction: row; margin-top: 20px">
         <button id="pageDown" onclick="setPage(page - 1)" disabled style="width: 50px; min-width: 50px; background-color: var(--emojipurple); margin-right: 20px;">&lt;-</button>
-        <p style="font-weight: bold; font-size: 22px"><%= t('leaderboard_page.pagination.page') %> <input id="pageNumber" min="1" onchange="setPage(+$(this).val())" type="number" value="1" style="font-size: 22px; margin: 0px 5px; font-weight: bold; width: 50px; height: 32px; text-align: center"> <%= t('leaderboard_page.pagination.of') %> <span id="totalPages">1</span></p>
+        <p style="font-weight: bold; font-size: 22px"><%= t('leaderboard_page.pagination.page', {}, lang) %> <input id="pageNumber" min="1" onchange="setPage(+$(this).val())" type="number" value="1" style="font-size: 22px; margin: 0px 5px; font-weight: bold; width: 50px; height: 32px; text-align: center"> <%= t('leaderboard_page.pagination.of', {}, lang) %> <span id="totalPages">1</span></p>
         <button id="pageUp" onclick="setPage(page + 1)" style="width: 50px; min-width: 50px; background-color: var(--emojipurple); margin-left: 20px;">-&gt;</button>
     </div>
 
-    <h2 box="roles" class="lbBox plsLogIn"><%= t('leaderboard_page.login_prompts.roles') %></h2>
+    <h2 box="roles" class="lbBox plsLogIn"><%= t('leaderboard_page.login_prompts.roles', {}, lang) %></h2>
     <div id="roleList" box="roles" class="leaderboardBox lbBox" style="display: none"></div>
-    <h2 id="noRewardRoles" box="roles" style="text-align: center; display: none" class="lbBox"><%= t('leaderboard_page.empty_states.no_reward_roles') %></h2>
+    <h2 id="noRewardRoles" box="roles" style="text-align: center; display: none" class="lbBox"><%= t('leaderboard_page.empty_states.no_reward_roles', {}, lang) %></h2>
 
-    <h2 box="levels" class="lbBox plsLogIn"><%= t('leaderboard_page.login_prompts.levels') %></h2>
+    <h2 box="levels" class="lbBox plsLogIn"><%= t('leaderboard_page.login_prompts.levels', {}, lang) %></h2>
     <div id="progress" box="levels" class="leaderboardBox lbBox" style="display: none"></div>
 
     <div box="hidden" class="lbBox" style="margin-bottom: 20px; display: none">
-        <h2 style="text-align: center"><%= t('leaderboard_page.hidden_info.title') %></h2>
+        <h2 style="text-align: center"><%= t('leaderboard_page.hidden_info.title', {}, lang) %></h2>
         <p style="text-align: center; margin-top: 4px">
-            <%= t('leaderboard_page.hidden_info.desc_1') %><br>
-            <%= t('leaderboard_page.hidden_info.desc_2') %><br>
-            <b><%= t('leaderboard_page.hidden_info.desc_3') %></b></p>
+            <%= t('leaderboard_page.hidden_info.desc_1', {}, lang) %><br>
+            <%= t('leaderboard_page.hidden_info.desc_2', {}, lang) %><br>
+            <b><%= t('leaderboard_page.hidden_info.desc_3', {}, lang) %></b></p>
     </div>
     <div id="hiddenMemberList" box="hidden" class="emptyLbBox lbBox middleflex centerflex" style="display: none"></div>
 
-    <h2 box="rank" class="lbBox plsLogIn"><%= t('leaderboard_page.login_prompts.rank') %></h2>
-    <h2 box="rank" class="lbBox" id="noRankInfo" style="text-align: center; display: none"><%= t('leaderboard_page.empty_states.no_rank_info') %></h2>
+    <h2 box="rank" class="lbBox plsLogIn"><%= t('leaderboard_page.login_prompts.rank', {}, lang) %></h2>
+    <h2 box="rank" class="lbBox" id="noRankInfo" style="text-align: center; display: none"><%= t('leaderboard_page.empty_states.no_rank_info', {}, lang) %></h2>
     <div id="accountInfo" box="rank" class="leaderboardBox lbBox" style="display: none">
         <div id="accountPartial" style="display: none">
-            <h2 style="text-align: center; color: rgb(255, 85, 85); margin-bottom: 0px"><%= t('leaderboard_page.empty_states.error_fetching') %></h2>
-            <p style="text-align: center; color: rgb(255, 85, 85); margin-top: 2px"><%= t('leaderboard_page.empty_states.error_roles') %></p>
+            <h2 style="text-align: center; color: rgb(255, 85, 85); margin-bottom: 0px"><%= t('leaderboard_page.empty_states.error_fetching', {}, lang) %></h2>
+            <p style="text-align: center; color: rgb(255, 85, 85); margin-top: 2px"><%= t('leaderboard_page.empty_states.error_roles', {}, lang) %></p>
         </div>
         <div class="accountBox centerflex" style="padding-top: 20px; flex-direction: column; overflow: hidden;">
             <div class="middleflex" style="margin-bottom: 20px">
@@ -86,29 +93,29 @@
 
             <div style="width: 100%; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-around;">
                 <div class="statBox" stat="level">
-                    <p><%= t('leaderboard_page.stats.prev_level') %></p>
+                    <p><%= t('leaderboard_page.stats.prev_level', {}, lang) %></p>
                         <p style="color: lime" lb="prev"></p>
-                    <p><%= t('leaderboard_page.stats.xp_since_prev') %></p>
+                    <p><%= t('leaderboard_page.stats.xp_since_prev', {}, lang) %></p>
                         <p style="color: lime" lb="sinceprev"></p>
-                    <p><%= t('leaderboard_page.stats.xp_to_next') %></p>
+                    <p><%= t('leaderboard_page.stats.xp_to_next', {}, lang) %></p>
                         <p style="color: lime" lb="tonext"></p>
                 </div>
     
                 <div class="statBox" stat="roles">
-                    <p><%= t('leaderboard_page.stats.top_role') %></p>
+                    <p><%= t('leaderboard_page.stats.top_role', {}, lang) %></p>
                         <p lb="toprole"></p>
-                    <p><%= t('leaderboard_page.stats.roles_reached') %></p>
+                    <p><%= t('leaderboard_page.stats.roles_reached', {}, lang) %></p>
                         <p lb="totalroles"></p>
-                    <p><%= t('leaderboard_page.stats.multiplier') %></p>
+                    <p><%= t('leaderboard_page.stats.multiplier', {}, lang) %></p>
                         <p lb="multiplier"></p>
                 </div>
     
                 <div class="statBox" stat="xp">
-                    <p><%= t('leaderboard_page.stats.xp_per_msg') %></p>
+                    <p><%= t('leaderboard_page.stats.xp_per_msg', {}, lang) %></p>
                         <p style="color: aqua" lb="xppermessage"></p>
-                    <p><%= t('leaderboard_page.stats.cooldown') %></p>
+                    <p><%= t('leaderboard_page.stats.cooldown', {}, lang) %></p>
                         <p style="color: aqua" lb="cooldown"></p>
-                    <p><%= t('leaderboard_page.stats.msgs_to_level') %></p>
+                    <p><%= t('leaderboard_page.stats.msgs_to_level', {}, lang) %></p>
                         <p style="color: aqua" lb="messages"></p>
                 </div>
             </div>
@@ -126,8 +133,8 @@
                 <p lb="name" style="font-weight: bold; cursor: help"></p>
                 <div style="display: flex">
                     <p lb="level"></p>
-                    <p lb="warning" class="red" style="margin-left: 10px; display: none; opacity: 100%; text-decoration: unset !important; font-weight: bold !important;"><%= t('leaderboard_page.slots.not_in_server') %></p>
-                    <p lb="hideUser" class="red hideFromLeaderboard" style="margin-left: 12px; display: none; opacity: 80%; text-decoration: underline !important"><%= t('leaderboard_page.slots.hide_member') %></p>
+                    <p lb="warning" class="red" style="margin-left: 10px; display: none; opacity: 100%; text-decoration: unset !important; font-weight: bold !important;"><%= t('leaderboard_page.slots.not_in_server', {}, lang) %></p>
+                    <p lb="hideUser" class="red hideFromLeaderboard" style="margin-left: 12px; display: none; opacity: 80%; text-decoration: underline !important"><%= t('leaderboard_page.slots.hide_member', {}, lang) %></p>
                 </div>
             </div>
         </div>
@@ -183,7 +190,7 @@
     <div class="hiddenMemberSlot" slot="hidden">
         <p lb="id" style="font-weight: bold; margin-top: 0px; margin-bottom: 4px"></p>
         <p lb="xp" style="margin-top: 2px; margin-bottom: 0px;"></p>
-        <p lb="unhide" class="unhideMember" style="margin-top: 5px; margin-bottom: 0px"><%= t('leaderboard_page.slots.unhide') %></p>
+        <p lb="unhide" class="unhideMember" style="margin-top: 5px; margin-bottom: 0px"><%= t('leaderboard_page.slots.unhide', {}, lang) %></p>
     </div>
     
     <div style="height: 40px"></div>
@@ -195,26 +202,26 @@
                 <p id="selectedusername" style="margin: 0px 0px"></p>
                 <p id="selectedid" style="margin: 0px 0px"></p>
                 <select id="addtype" style="font-size: 22px; height: 50px; text-align: center; width: 200px; margin-top: 30px">
-                    <option value="addxp"><%= t('leaderboard_page.mod_popup.add_xp') %></option>
-                    <option value="setxp"><%= t('leaderboard_page.mod_popup.set_xp') %></option>
-                    <option value="addlevel"><%= t('leaderboard_page.mod_popup.add_levels') %></option>
-                    <option value="setlevel"><%= t('leaderboard_page.mod_popup.set_level') %></option>
+                    <option value="addxp"><%= t('leaderboard_page.mod_popup.add_xp', {}, lang) %></option>
+                    <option value="setxp"><%= t('leaderboard_page.mod_popup.set_xp', {}, lang) %></option>
+                    <option value="addlevel"><%= t('leaderboard_page.mod_popup.add_levels', {}, lang) %></option>
+                    <option value="setlevel"><%= t('leaderboard_page.mod_popup.set_level', {}, lang) %></option>
                 </select>
                 <br>
                 <input id="addamount" class="lineinput" type="number" value="42069" style="margin-top: 20px; margin-bottom: 20px; font-size: 22px; width: 300px">
 
                 <div class="middleflex">
-                    <p style="width: 100px; text-align: right; margin-right: 8px; font-size: 22px"><b><%= t('leaderboard_page.mod_popup.old_xp') %></b></p>
+                    <p style="width: 100px; text-align: right; margin-right: 8px; font-size: 22px"><b><%= t('leaderboard_page.mod_popup.old_xp', {}, lang) %></b></p>
                     <p id="oldxp" style="text-align: left; font-size: 22px"></p>
                 </div>
 
                 <div class="middleflex">
-                    <p style="color: aqua; width: 100px; text-align: right; margin-right: 8px; font-size: 22px"><b><%= t('leaderboard_page.mod_popup.new_xp') %></b></p>
+                    <p style="color: aqua; width: 100px; text-align: right; margin-right: 8px; font-size: 22px"><b><%= t('leaderboard_page.mod_popup.new_xp', {}, lang) %></b></p>
                     <p id="newxp" style="color: aqua; text-align: left; font-size: 22px"></p>
                 </div>
 
-                <button class="popupConfirm" style="background-color: var(--lightestfg)" onclick="$('.popup').hide()"><%= t('leaderboard_page.mod_popup.btn_cancel') %></button>
-                <button id="savexp" class="popupConfirm"><%= t('leaderboard_page.mod_popup.btn_save') %></button>
+                <button class="popupConfirm" style="background-color: var(--lightestfg)" onclick="$('.popup').hide()"><%= t('leaderboard_page.mod_popup.btn_cancel', {}, lang) %></button>
+                <button id="savexp" class="popupConfirm"><%= t('leaderboard_page.mod_popup.btn_save', {}, lang) %></button>
 
             </div>
         </div>
@@ -223,12 +230,12 @@
     <div class="popup" id="confirmHide">
         <div class="popupbox">
             <div class="box">
-                <h2 style="font-size: 36px"><%= t('leaderboard_page.hide_popup.title') %></h2>
+                <h2 style="font-size: 36px"><%= t('leaderboard_page.hide_popup.title', {}, lang) %></h2>
                 <p style="margin: 10px 0px"><%- t('leaderboard_page.hide_popup.desc') %></p>
-                <p style="opacity: 50%"><%= t('leaderboard_page.hide_popup.shift_tip') %></p>
+                <p style="opacity: 50%"><%= t('leaderboard_page.hide_popup.shift_tip', {}, lang) %></p>
 
-                <button class="popupConfirm" style="background-color: var(--lightestfg)" onclick="$('.popup').hide()"><%= t('leaderboard_page.mod_popup.btn_cancel') %></button>
-                <button id="hideConfirmation" class="popupConfirm"><%= t('leaderboard_page.hide_popup.btn_confirm') %></button>
+                <button class="popupConfirm" style="background-color: var(--lightestfg)" onclick="$('.popup').hide()"><%= t('leaderboard_page.mod_popup.btn_cancel', {}, lang) %></button>
+                <button id="hideConfirmation" class="popupConfirm"><%= t('leaderboard_page.hide_popup.btn_confirm', {}, lang) %></button>
             </div>
         </div>
     </div>
@@ -241,54 +248,54 @@
 
 <script>
     window.i18n = {
-        leaderboardFor: "<%= t('leaderboard_page.js.leaderboard_for') %>",
-        member: "<%= t('leaderboard_page.js.member') %>",
-        members: "<%= t('leaderboard_page.js.members') %>",
-        ranked: "<%= t('leaderboard_page.js.ranked') %>",
-        level: "<%= t('leaderboard_page.js.level') %>",
-        roles: "<%= t('leaderboard_page.js.roles') %>",
-        xp: "<%= t('leaderboard_page.js.xp') %>",
-        nobodyMinLevel: "<%= t('leaderboard_page.js.nobody_min_level') %>",
-        levelRequired: "<%= t('leaderboard_page.js.level_required') %>",
-        obtained: "<%= t('leaderboard_page.js.obtained') %>",
-        reached: "<%= t('leaderboard_page.js.reached') %>",
-        reachedLower: "<%= t('leaderboard_page.js.reached_lower') %>",
-        hiddenRoles: "<%= t('leaderboard_page.js.hidden_roles') %>",
-        hiddenFromLb: "<%= t('leaderboard_page.js.hidden_from_lb') %>",
-        rankedNum: "<%= t('leaderboard_page.js.ranked_num') %>",
-        inStr: "<%= t('leaderboard_page.js.in') %>",
-        maxLevel: "<%= t('leaderboard_page.js.max_level') %>",
-        none: "<%= t('leaderboard_page.js.none') %>",
-        hidden: "<%= t('leaderboard_page.js.hidden') %>",
-        none1x: "<%= t('leaderboard_page.js.none_1x') %>",
-        missingUser: "<%= t('leaderboard_page.js.missing_user') %>",
-        id: "<%= t('leaderboard_page.js.id') %>",
-        avg: "<%= t('leaderboard_page.js.avg') %>",
+        leaderboardFor: "<%= t('leaderboard_page.js.leaderboard_for', {}, lang) %>",
+        member: "<%= t('leaderboard_page.js.member', {}, lang) %>",
+        members: "<%= t('leaderboard_page.js.members', {}, lang) %>",
+        ranked: "<%= t('leaderboard_page.js.ranked', {}, lang) %>",
+        level: "<%= t('leaderboard_page.js.level', {}, lang) %>",
+        roles: "<%= t('leaderboard_page.js.roles', {}, lang) %>",
+        xp: "<%= t('leaderboard_page.js.xp', {}, lang) %>",
+        nobodyMinLevel: "<%= t('leaderboard_page.js.nobody_min_level', {}, lang) %>",
+        levelRequired: "<%= t('leaderboard_page.js.level_required', {}, lang) %>",
+        obtained: "<%= t('leaderboard_page.js.obtained', {}, lang) %>",
+        reached: "<%= t('leaderboard_page.js.reached', {}, lang) %>",
+        reachedLower: "<%= t('leaderboard_page.js.reached_lower', {}, lang) %>",
+        hiddenRoles: "<%= t('leaderboard_page.js.hidden_roles', {}, lang) %>",
+        hiddenFromLb: "<%= t('leaderboard_page.js.hidden_from_lb', {}, lang) %>",
+        rankedNum: "<%= t('leaderboard_page.js.ranked_num', {}, lang) %>",
+        inStr: "<%= t('leaderboard_page.js.in', {}, lang) %>",
+        maxLevel: "<%= t('leaderboard_page.js.max_level', {}, lang) %>",
+        none: "<%= t('leaderboard_page.js.none', {}, lang) %>",
+        hidden: "<%= t('leaderboard_page.js.hidden', {}, lang) %>",
+        none1x: "<%= t('leaderboard_page.js.none_1x', {}, lang) %>",
+        missingUser: "<%= t('leaderboard_page.js.missing_user', {}, lang) %>",
+        id: "<%= t('leaderboard_page.js.id', {}, lang) %>",
+        avg: "<%= t('leaderboard_page.js.avg', {}, lang) %>",
         errors: {
-            no_lb_title: "<%= t('leaderboard_page.js.errors.no_lb_title') %>",
-            no_lb_desc: "<%= t('leaderboard_page.js.errors.no_lb_desc') %>",
-            private_lb_title: "<%= t('leaderboard_page.js.errors.private_lb_title') %>",
-            private_lb_desc: "<%= t('leaderboard_page.js.errors.private_lb_desc') %>",
-            xp_disabled_title: "<%= t('leaderboard_page.js.errors.xp_disabled_title') %>",
-            xp_disabled_desc: "<%= t('leaderboard_page.js.errors.xp_disabled_desc') %>",
-            lb_disabled_title: "<%= t('leaderboard_page.js.errors.lb_disabled_title') %>",
-            lb_disabled_desc: "<%= t('leaderboard_page.js.errors.lb_disabled_desc') %>"
+            no_lb_title: "<%= t('leaderboard_page.js.errors.no_lb_title', {}, lang) %>",
+            no_lb_desc: "<%= t('leaderboard_page.js.errors.no_lb_desc', {}, lang) %>",
+            private_lb_title: "<%= t('leaderboard_page.js.errors.private_lb_title', {}, lang) %>",
+            private_lb_desc: "<%= t('leaderboard_page.js.errors.private_lb_desc', {}, lang) %>",
+            xp_disabled_title: "<%= t('leaderboard_page.js.errors.xp_disabled_title', {}, lang) %>",
+            xp_disabled_desc: "<%= t('leaderboard_page.js.errors.xp_disabled_desc', {}, lang) %>",
+            lb_disabled_title: "<%= t('leaderboard_page.js.errors.lb_disabled_title', {}, lang) %>",
+            lb_disabled_desc: "<%= t('leaderboard_page.js.errors.lb_disabled_desc', {}, lang) %>"
         }
     };
 </script>
 <script>
     // Diccionario global para extras.js
     window.i18nGlobal = {
-        forever: "<%= t('global_js.forever') %>",
-        sec: "<%= t('global_js.sec') %>",
-        second: "<%= t('global_js.second') %>",
-        min: "<%= t('global_js.min') %>",
-        minute: "<%= t('global_js.minute') %>",
-        hour: "<%= t('global_js.hour') %>",
-        day: "<%= t('global_js.day') %>",
-        year: "<%= t('global_js.year') %>",
-        error_title: "<%= t('global_js.error_title') %>",
-        log_in: "<%= t('global_js.log_in') %>"
+        forever: "<%= t('global_js.forever', {}, lang) %>",
+        sec: "<%= t('global_js.sec', {}, lang) %>",
+        second: "<%= t('global_js.second', {}, lang) %>",
+        min: "<%= t('global_js.min', {}, lang) %>",
+        minute: "<%= t('global_js.minute', {}, lang) %>",
+        hour: "<%= t('global_js.hour', {}, lang) %>",
+        day: "<%= t('global_js.day', {}, lang) %>",
+        year: "<%= t('global_js.year', {}, lang) %>",
+        error_title: "<%= t('global_js.error_title', {}, lang) %>",
+        log_in: "<%= t('global_js.log_in', {}, lang) %>"
     };
 </script>
 <script type="text/javascript" src="/polaris.js"></script>

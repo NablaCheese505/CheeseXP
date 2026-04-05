@@ -1,30 +1,39 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<%= lang %>">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <link href="/css/polaris.css" type="text/css" rel="stylesheet">
-    <link rel="icon" href="/assets/polaris.svg">
-    <title><%= t('servers_page.title') %></title>
-    <meta property="og:title" content="<%= t('servers_page.title') %>">
-    <meta property="og:description" content="<%= t('servers_page.description') %>">
-    <meta property="og:type" content="website">
+    <link href="/css/polaris.css?v=2" rel="stylesheet" type="text/css"/>
+    <link href="/assets/polaris.svg" rel="icon"/>
+
+    <title><%= t('servers_page.title', {}, lang) %></title>
+    <meta name="robots" content="noindex">
     <meta name="theme-color" content="#00ff80">
-    <meta name="twitter:card" content="summary">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<%= siteURL %>/servers">
+    <meta property="og:title" content="<%= t('servers_page.title', {}, lang) %>">
+    <meta property="og:description" content="<%= t('servers_page.description', {}, lang) %>">
+    <meta property="og:image" content="<%= siteURL %>/assets/cheese.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%= t('servers_page.title', {}, lang) %>">
+    <meta name="twitter:description" content="<%= t('servers_page.description', {}, lang) %>">
+    <meta name="twitter:image" content="<%= siteURL %>/assets/cheese.png">
 </head>
 <body>
-    <h2 class="middleflex" id="loading"><%= t('servers_page.loading') %></h2>
+    <h2 class="middleflex" id="loading"><%= t('servers_page.loading', {}, lang) %></h2>
 
     <div id="everything" style="display: none">
         <div class="centerflex" style="flex-direction: column">
-            <h2 style="font-size: 30px"><%= t('servers_page.welcome_back') %> <span id="username"></span></h2>
-            <p style="font-size: 20px; margin-top: 4px; margin-bottom: 25px"><%= t('servers_page.select_server') %></p>
+            <h2 style="font-size: 30px"><%= t('servers_page.welcome_back', {}, lang) %> <span id="username"></span></h2>
+            <p style="font-size: 20px; margin-top: 4px; margin-bottom: 25px"><%= t('servers_page.select_server', {}, lang) %></p>
         </div>
 
         <div id="serverList" style="padding-bottom: 20px"></div>
 
         <div class="middleflex" style="padding-bottom: 30px">
-            <a tabindex="-1" href="/logout"><button class="boringbutton" style="font-size: 22px; text-align: center; text-decoration: underline;"><%= t('servers_page.log_out') %></button></a>
+            <a tabindex="-1" href="/logout"><button class="boringbutton" style="font-size: 22px; text-align: center; text-decoration: underline;"><%= t('servers_page.log_out', {}, lang) %></button></a>
         </div>
 
         <div class="serverOption canfocus" tabindex="0">
@@ -37,16 +46,16 @@
             </div>
             
             <div class="serverIcons" style="display: flex; align-items: center; justify-content: flex-end;">
-                <a class="canfocus" sv="leaderboard" title="<%= t('servers_page.tooltips.leaderboard') %>">
+                <a class="canfocus" sv="leaderboard" title="<%= t('servers_page.tooltips.leaderboard', {}, lang) %>">
                     <i data-lucide="bar-chart-2"></i>
                 </a>
-                <a class="canfocus" sv="settings" title="<%= t('servers_page.tooltips.settings') %>">
+                <a class="canfocus" sv="settings" title="<%= t('servers_page.tooltips.settings', {}, lang) %>">
                     <i data-lucide="settings"></i>
                 </a>
-                <a class="canfocus" sv="downloaddata" title="<%= t('servers_page.tooltips.download') %>">
+                <a class="canfocus" sv="downloaddata" title="<%= t('servers_page.tooltips.download', {}, lang) %>">
                     <i data-lucide="download"></i>
                 </a>
-                <a class="canfocus" sv="invite" title="<%= t('servers_page.tooltips.invite') %>">
+                <a class="canfocus" sv="invite" title="<%= t('servers_page.tooltips.invite', {}, lang) %>">
                     <i data-lucide="plus"></i>
                 </a>
             </div>
@@ -55,19 +64,19 @@
 
     <script>
         window.i18nServers = {
-            owner: "<%= t('servers_page.js.server_owner') %>",
-            moderator: "<%= t('servers_page.js.moderator') %>",
-            member: "<%= t('servers_page.js.member') %>",
-            confirm_dl_1: "<%= t('servers_page.js.confirm_download_1') %>",
-            confirm_dl_2: "<%= t('servers_page.js.confirm_download_2') %>",
-            error: "<%= t('servers_page.js.error') %>",
-            error_dl: "<%= t('servers_page.js.error_downloading') %>"
+            owner: "<%= t('servers_page.js.server_owner', {}, lang) %>",
+            moderator: "<%= t('servers_page.js.moderator', {}, lang) %>",
+            member: "<%= t('servers_page.js.member', {}, lang) %>",
+            confirm_dl_1: "<%= t('servers_page.js.confirm_download_1', {}, lang) %>",
+            confirm_dl_2: "<%= t('servers_page.js.confirm_download_2', {}, lang) %>",
+            error: "<%= t('servers_page.js.error', {}, lang) %>",
+            error_dl: "<%= t('servers_page.js.error_downloading', {}, lang) %>"
         };
     </script>
     <script>
         window.i18nGlobal = {
-            error_title: "<%= t('global_js.error_title') %>",
-            log_in: "<%= t('global_js.log_in') %>"
+            error_title: "<%= t('global_js.error_title', {}, lang) %>",
+            log_in: "<%= t('global_js.log_in', {}, lang) %>"
         };
     </script>
 

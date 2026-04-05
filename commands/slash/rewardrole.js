@@ -8,10 +8,10 @@ metadata: {
     name: "rewardrole",
     description: t('commands.rewardrole.metadata_description'),
     args: [
-        { type: "role", name: "role_name", description: t('commands.rewardrole.args_role_desc'), required: true },
+        { type: "role", name: "role_name", description: t('commands.rewardrole.args_role_name_desc'), required: true },
         { type: "integer", name: "level", description: t('commands.rewardrole.args_level_desc'), min: 0, max: 1000, required: true },
         { type: "bool", name: "keep", description: t('commands.rewardrole.args_keep_desc') },
-        { type: "bool", name: "dont_sync", description: t('commands.rewardrole.args_dontsync_desc') }
+        { type: "bool", name: "dont_sync", description: t('commands.rewardrole.args_dont_sync_desc') }
     ]
 },
 

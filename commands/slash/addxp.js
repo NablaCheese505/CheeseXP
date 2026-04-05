@@ -10,19 +10,19 @@ metadata: {
         { 
             type: "user", 
             name: "member", 
-            description: t('commands.addxp.args_member_description'), 
+            description: t('commands.addxp.args_member_desc'), 
             required: true 
         },
         { 
             type: "integer", 
             name: "xp", 
-            description: t('commands.addxp.args_xp_description'), 
+            description: t('commands.addxp.args_xp_desc'), 
             min: -1e10, max: 1e10, required: true 
         },
         { 
             type: "string", 
             name: "operation", 
-            description: t('commands.addxp.args_operation_description'), 
+            description: t('commands.addxp.args_operation_desc'), 
             required: false, 
             choices: [
                 { name: t('commands.addxp.choice_add_xp'), value: "add_xp" },

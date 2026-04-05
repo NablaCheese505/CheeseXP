@@ -4,32 +4,60 @@ const DiscordBuilders = require("@discordjs/builders")
 const Discord = require("discord.js")
 const { REST } = require("@discordjs/rest")
 const { Routes } = require("discord-api-types/v9")
+const { getLocalizations } = require('../../utils/i18n.js');
 
-function prepareOption(option, arg) {
+function prepareOption(option, arg, commandName, subcommandName = null) {
     option.setName(arg.name.toLowerCase())
-    if (arg.description) option.setDescription(arg.description)
+    
+    if (arg.description) {
+        option.setDescription(arg.description);
+        let descKey = `commands.${commandName}.args_${arg.name}_desc`;
+        if (subcommandName) {
+            descKey = `commands.${commandName}.subcommands.${subcommandName}.args_${arg.name}_desc`;
+        }
+        
+        if (arg.description.startsWith('commands.')) {
+            descKey = arg.description;
+        }
+
+        const localizations = getLocalizations(descKey);
+        if (Object.keys(localizations).length > 0) {
+            option.setDescriptionLocalizations(localizations);
+        }
+    }
+
     if (arg.required) option.setRequired(true)
     return option
 }
 
-function createSlashArg(data, arg) {
+function createSlashArg(data, arg, commandName) {
     switch (arg.type) {
         case "subcommand":
             return data.addSubcommand(cmd => {
                 cmd.setName(arg.name)
                 cmd.setDescription(arg.description)
-                if (arg.args?.length) arg.args.forEach(a => { createSlashArg(cmd, a) })
+                
+                let subDescKey = `commands.${commandName}.args_${arg.name}_desc`;
+                if(arg.description.startsWith('commands.')){
+                     subDescKey = arg.description;
+                }
+                const subLocalizations = getLocalizations(subDescKey);
+                if (Object.keys(subLocalizations).length > 0) {
+                     cmd.setDescriptionLocalizations(subLocalizations);
+                }
+
+                if (arg.args?.length) arg.args.forEach(a => { createSlashArg(cmd, a, commandName) })
                 return cmd
             })
         case "string":
             return data.addStringOption(option => {
-                prepareOption(option, arg)
+                prepareOption(option, arg, commandName)
                 if (arg.choices) option.setChoices(...arg.choices)
                 return option
             })
         case "integer": case "number":
             return data.addIntegerOption(option => {
-                prepareOption(option, arg)
+                prepareOption(option, arg, commandName)
                 if (arg.choices) option.setChoices(...arg.choices)
                 if (!isNaN(arg.min)) option.setMinValue(arg.min)
                 if (!isNaN(arg.max)) option.setMaxValue(arg.max)
@@ -37,7 +65,7 @@ function createSlashArg(data, arg) {
             })
         case "float":
             return data.addNumberOption(option => {
-                prepareOption(option, arg)
+                prepareOption(option, arg, commandName)
                 if (arg.choices) option.setChoices(...arg.choices)
                 if (!isNaN(arg.min)) option.setMinValue(arg.min)
                 if (!isNaN(arg.max)) option.setMaxValue(arg.max)
@@ -45,19 +73,18 @@ function createSlashArg(data, arg) {
             })
         case "channel":
             return data.addChannelOption(option => {
-                prepareOption(option, arg)
+                prepareOption(option, arg, commandName)
                 if (arg.types) option.addChannelTypes(arg.types)
                 else if (arg.acceptAll) option.addChannelTypes([0, 2, 4, 5, 10, 11, 12, 13, 15, 16]) // lol
                 else option.addChannelTypes([Discord.ChannelType.GuildText, Discord.ChannelType.GuildAnnouncement])
                 return option
             })
-        case "bool": return data.addBooleanOption(option => prepareOption(option, arg))
-        case "file": return data.addAttachmentOption(option => prepareOption(option, arg))
-        case "user": return data.addUserOption(option => prepareOption(option, arg))
-        case "role": return data.addRoleOption(option => prepareOption(option, arg))
+        case "bool": return data.addBooleanOption(option => prepareOption(option, arg, commandName))
+        case "file": return data.addAttachmentOption(option => prepareOption(option, arg, commandName))
+        case "user": return data.addUserOption(option => prepareOption(option, arg, commandName))
+        case "role": return data.addRoleOption(option => prepareOption(option, arg, commandName))
     } 
 }
-
 
 module.exports = {
 metadata: {
@@ -71,8 +98,6 @@ metadata: {
     ]
 },
 
-// I made my own slash command builder because discord.js's one is ass
-// https://discord.js.org/#/docs/builders/main/class/SlashCommandBuilder
 async run(client, int, tools) {
 
     let isPublic = int && !!int.options.get("global")?.value
@@ -86,9 +111,15 @@ async run(client, int, tools) {
         else if (!isPublic && !metadata.dev) return
 
         switch (metadata.type) {
-
-            case "user_context": case "message_context": // context menu, user
+            case "user_context": case "message_context": 
                 let ctx = { name: metadata.name, type: metadata.type == "user_context" ? 2 : 3, dm_permission: !!metadata.dm, contexts: [0] }
+                
+                // Intento de localizar el nombre del comando de contexto
+                const ctxLocalizations = getLocalizations(`commands.${metadata.name}.name`);
+                if(Object.keys(ctxLocalizations).length > 0){
+                    ctx.name_localizations = ctxLocalizations;
+                }
+                
                 interactionList.push(ctx);
                 break;
 
@@ -98,9 +129,24 @@ async run(client, int, tools) {
                 data.setContexts([0])
                 if (metadata.dev) data.setDefaultMemberPermissions(0)
                 else if (metadata.permission) data.setDefaultMemberPermissions(Discord.PermissionFlagsBits[metadata.permission])
-                if (metadata.description) data.setDescription(metadata.description)
+                
+                if (metadata.description) {
+                    data.setDescription(metadata.description);
+                    
+                    // Obtener la clave original o intentar adivinarla
+                    let descKey = `commands.${metadata.name}.metadata_description`;
+                    if (metadata.description.startsWith('commands.')){
+                        descKey = metadata.description;
+                    }
+                    
+                    const localizations = getLocalizations(descKey);
+                    if (Object.keys(localizations).length > 0) {
+                        data.setDescriptionLocalizations(localizations);
+                    }
+                }
+                
                 if (metadata.args) metadata.args.forEach(arg => {
-                    return createSlashArg(data, arg)
+                    return createSlashArg(data, arg, metadata.name)
                 })
                 interactionList.push(data.toJSON())
                 break;
@@ -115,10 +161,9 @@ async run(client, int, tools) {
         .then(() => {
             if (int) int.reply(`**${!undeploy ? `${interactionList.length} global commands registered!` : "Global commands cleared!"}** (Wait a bit, or refresh with Ctrl+R to see changes)`)
             else console.info("Global commands registered!") 
-            client.shard.broadcastEval(cl => { cl.application.commands.fetch(); return }) // cache new slash commands
+            client.shard.broadcastEval(cl => { cl.application.commands.fetch(); return }) 
         }).catch(e => console.error(`Error deploying global commands to ${id}: ${e.message}`));
     }
-
     else {
         let serverIDs = targetServer ? [targetServer] : (int?.guild) ? [int.guild.id] : config.test_server_ids
         if (!serverIDs) return console.warn("Cannot deploy dev commands! No test server IDs provided in config.")
@@ -133,6 +178,4 @@ async run(client, int, tools) {
             }).catch(e => console.error(`Error deploying dev commands to ${id}: ${e.message}`));
         })
     }
-
-
 }}

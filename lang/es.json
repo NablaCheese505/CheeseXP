@@ -7,9 +7,9 @@
     },
     "addxp": {
       "metadata_description": "Añade o quita XP a un miembro. (requiere gestionar servidor)",
-      "args_member_description": "Qué miembro modificar",
-      "args_xp_description": "Cuánta XP añadir (número negativo para quitar XP)",
-      "args_operation_description": "Cómo debe interpretarse la cantidad de XP",
+      "args_member_desc": "Qué miembro modificar",
+      "args_xp_desc": "Cuánta XP añadir (número negativo para quitar XP)",
+      "args_operation_desc": "Cómo debe interpretarse la cantidad de XP",
       "choice_add_xp": "Añadir XP",
       "choice_set_xp": "Fijar XP a",
       "choice_add_levels": "Añadir niveles",

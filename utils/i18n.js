@@ -38,4 +38,19 @@ function t(key, variables = {}, lang = DEFAULT_LANG) {
     return text;
 }
 
-module.exports = { t, getAvailableLanguages, availableLanguages, DEFAULT_LANG };
+function getLocalizations(key) {
+    const localizations = {};
+    for (const lang of availableLanguages) {
+        let discordLang = lang;
+        if (lang === 'en') discordLang = 'en-US';
+        if (lang === 'es') discordLang = 'es-ES';
+        
+        const text = t(key, {}, lang);
+        if (text !== key) {
+            localizations[discordLang] = text;
+        }
+    }
+    return localizations;
+}
+
+module.exports = { t, getAvailableLanguages, availableLanguages, DEFAULT_LANG, getLocalizations };

@@ -20,7 +20,7 @@ async run(client, int, tools) {
     if (foundUser) member = foundUser.member
 
     let db = await tools.fetchSettings(member?.id || int.user.id, int.guild.id)
-    let serverLang = db?.settings?.lang || config.defaultLanguage || 'es';
+    let serverLang = db?.settings?.lang || config.defaultLanguage || 'en';
 
     if (!member) return tools.warn(t('commands.rank.notFound', {}, serverLang))
 

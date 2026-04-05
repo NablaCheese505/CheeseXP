@@ -12,7 +12,7 @@ metadata: {
 async run(client, int, tools) {
 
     let db = await tools.fetchSettings(int.user.id, int.guild.id)
-    let serverLang = db?.settings?.lang || config.defaultLanguage || 'es';
+    let serverLang = db?.settings?.lang || config.defaultLanguage || 'en';
 
     let versionNumber = client.version.version != Math.round(client.version.version) ? client.version.version : client.version.version.toFixed(1)
 

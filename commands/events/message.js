@@ -11,7 +11,7 @@ async run(client, message, tools) {
     if (message.content.trim().match(mentionRegex)) {
         
         let db = await tools.fetchSettings(message.author.id, message.guild.id);
-        let serverLang = db?.settings?.lang || config.defaultLanguage || 'es';
+        let serverLang = db?.settings?.lang || config.defaultLanguage || 'en';
         
         return message.reply({ 
             content: t('mention_help', {}, serverLang) 

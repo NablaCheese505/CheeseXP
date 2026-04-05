@@ -12,7 +12,7 @@ metadata: {
 async run(client, int, tools) {
 
     let db = await tools.fetchSettings(int.user.id, int.guild.id)
-    let serverLang = db?.settings?.lang || config.defaultLanguage || 'es';
+    let serverLang = db?.settings?.lang || config.defaultLanguage || 'en';
     let settings = db.settings
 
     if (!tools.canManageServer(int.member, db.settings.manualPerms)) return tools.warn("*notMod")

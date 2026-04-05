@@ -37,7 +37,7 @@ metadata: {
 async run(client, int, tools) {
     let db = await tools.fetchSettings(int.user.id, int.guild.id)
     
-    let serverLang = db?.settings?.lang || config.defaultLanguage || 'es';
+    let serverLang = db?.settings?.lang || config.defaultLanguage || 'en';
 
     const member = int.options.get("member")?.member
     const amount = int.options.get("xp")?.value

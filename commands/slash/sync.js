@@ -17,7 +17,7 @@ async run(client, int, tools) {
     let member = foundUser ? foundUser.member : int.member
 
     let db = await tools.fetchSettings(member.id, int.guild.id)
-    let serverLang = db?.settings?.lang || config.defaultLanguage || 'es';
+    let serverLang = db?.settings?.lang || config.defaultLanguage || 'en';
 
     if (!int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageRoles)) return tools.warn("*cantManageRoles")
 

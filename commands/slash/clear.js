@@ -18,7 +18,7 @@ async run(client, int, tools) {
 
     // 1. Extraer DB y definir idioma
     let db = await tools.fetchSettings(user.id, int.guild.id)
-    let serverLang = db?.settings?.lang || config.defaultLanguage || 'es';
+    let serverLang = db?.settings?.lang || config.defaultLanguage || 'en';
 
     if (!db) return tools.warn("*noData")
     else if (!tools.canManageServer(int.member, db.settings.manualPerms)) return tools.warn("*notMod")

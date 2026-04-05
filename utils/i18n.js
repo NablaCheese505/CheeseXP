@@ -2,7 +2,7 @@ const config = require('../config.json');
 const fs = require('fs');
 const path = require('path');
 
-const DEFAULT_LANG = config.defaultLanguage || 'es';
+const DEFAULT_LANG = config.defaultLanguage || 'en';
 const locales = {};
 const availableLanguages = [];
 

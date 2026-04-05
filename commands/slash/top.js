@@ -16,7 +16,7 @@ metadata: {
 async run(client, int, tools) {
 
     let db = await tools.fetchAll(int.guild.id) 
-    let serverLang = db?.settings?.lang || config.defaultLanguage || 'es';
+    let serverLang = db?.settings?.lang || config.defaultLanguage || 'en';
 
     let lbLink = `${tools.WEBSITE}/leaderboard/${int.guild.id}`
 

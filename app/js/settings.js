@@ -41,7 +41,7 @@ addUhOh()
             restrictGridToFirstQuadrant: true,
             xAxisLabel: i18n.axis_level,
             yAxisLabel: i18n.axis_xp,
-            backgroundColor: "#202020",
+            backgroundColor: "#151e2f",
         }
 
         let desmosBounds = {
@@ -231,7 +231,7 @@ addUhOh()
             })
 
             if (desmosGraph) {
-                desmosGraph.setExpression({ id: 'xp', color: "#0080FF", latex: `y = ${curve[3]}x^3 + ${curve[2]}x^2 + ${curve[1]}x \\{x>=0\\}` })
+                desmosGraph.setExpression({ id: 'xp', color: "#43dada", latex: `y = ${curve[3]}x^3 + ${curve[2]}x^2 + ${curve[1]}x \\{x>=0\\}` })
             }
 
             let curveDiff = getCurveDifficulty(curve)

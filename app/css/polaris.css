@@ -666,7 +666,17 @@ input:checked + .sliderspan:before {
 
 #rewards div p:hover:not(:first-child) { background-color: var(--waylighterfg); }
 
-.deleteRow:hover { background-color: var(--emojired) !important }
+.deleteRow:hover { 
+    background-color: rgba(255, 107, 107, 0.15) !important; 
+}
+
+.deleteRow svg {
+    transition: transform 0.2s ease;
+}
+
+.deleteRow:hover svg {
+    transform: scale(1.15);
+}
 
 .toggleRow:hover {
     cursor: pointer;
@@ -1537,5 +1547,28 @@ input:checked + .sliderspan:before {
     /* Refuerzo por si el número está en un <span> separado */
     #totalPages {
         margin-left: 2px !important;
+    }
+    /* ========================================= */
+    /* 17. AVISO DE GUARDAR CAMBIOS (MÓVIL)      */
+    /* ========================================= */
+
+    #unsavedWarning {
+        bottom: 80px !important; /* Lo subimos por encima del menú */
+        z-index: 105 !important; 
+        transform: translateY(150px) !important; /* Cuando está inactivo, lo empujamos FUERA de la pantalla */
+    }
+
+    #unsavedWarning.activeWarning {
+        transform: translateY(0px) !important; /* Cuando se activa, sube a su posición perfecta */
+    }
+
+    .unsavedBox {
+        width: 90% !important; 
+        max-width: 400px !important;
+        padding: 10px 15px !important;
+    }
+    
+    .unsavedBox p {
+        font-size: 16px !important; 
     }
 }

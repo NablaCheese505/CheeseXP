@@ -680,5 +680,6 @@
         "error": "Error!",
         "error_downloading": "Error downloading data!"
       }
-    }
+    },
+    "mention_help": "Hi there! I use `/` (Slash) commands. Try `/help` or `/config` to get started."
 }

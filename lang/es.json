@@ -680,5 +680,6 @@
         "error": "¡Error!",
         "error_downloading": "¡Error al descargar los datos!"
       }
-    }  
+    },
+    "mention_help": "¡Hola! Mi prefijo aquí son los comandos `/` (Slash). Usa `/help` o `/config` para empezar."
 }

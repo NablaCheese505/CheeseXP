@@ -1,9 +1,23 @@
 const LevelUpMessage = require("../../classes/LevelUpMessage.js")
 const config = require("../../config.json")
+const { t } = require("../../utils/i18n.js")
 
 module.exports = {
 
 async run(client, message, tools) {
+    if (message.author.bot) return;
+
+    const mentionRegex = new RegExp(`^<@!?${client.user.id}>$`);
+    if (message.content.trim().match(mentionRegex)) {
+        
+        let db = await tools.fetchSettings(message.author.id, message.guild.id);
+        let serverLang = db?.settings?.lang || 'es';
+        
+        // Enviar respuesta traducida y detener la ejecución
+        return message.reply({ 
+            content: t('mention_help', { lng: serverLang }) 
+        }).catch(() => {});
+    }
 
     if (config.lockBotToDevOnly && !tools.isDev(message.author)) return
 

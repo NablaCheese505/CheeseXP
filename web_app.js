@@ -13,7 +13,7 @@ const Model = require("./classes/DatabaseModel.js");
 const LevelUpEmbed = require('./classes/LevelUpEmbed.js')
 const LevelUpMessage = require("./classes/LevelUpMessage.js")
 const auth = require('./config.json')
-const { t } = require('./utils/i18n.js');
+const { t, availableLanguages, DEFAULT_LANG } = require('./utils/i18n.js');
 const curvePresets = require('./json/curve_presets.json')
 const schemaData = require("./database_schema.js")
 
@@ -26,28 +26,24 @@ app.set('views', path.join(__dirname, 'app/html'));
 const tools = Tools.global
 
 app.use(cookieParser());
-app.use(express.json({ limit: '20mb' }));  // keeping the limit pretty high for json imports, some servers are like 10+ megabytes
+app.use(express.json({ limit: '20mb' }));
 app.use(timeout('20s'));
 app.set('json spaces', 2)
 
-require('express-async-errors') // why is this NEEDED (actually malding)
+require('express-async-errors') 
 
 const siteURL = tools.WEBSITE
 
-// discord endpoints
 const discordAPI = "https://discord.com/api/v9/"
 const discord_auth = discordAPI + `oauth2/authorize?client_id=${process.env.DISCORD_ID}&redirect_uri=${encodeURIComponent(siteURL)}%2Fauth&response_type=code&scope=identify%20guilds`
 
-// use this for discord requests
 const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_TOKEN);
 
-// discord perms
 const manage_roles = BigInt(Discord.PermissionFlagsBits.ManageRoles)
 const manage_messages = BigInt(Discord.PermissionFlagsBits.ManageMessages)
 const manage_server = BigInt(Discord.PermissionFlagsBits.ManageGuild)
 const server_admin = BigInt(Discord.PermissionFlagsBits.Administrator)
 
-// database
 let schema = new mongoose.Schema({
     _id: String,
     access_token: String,
@@ -56,8 +52,16 @@ let schema = new mongoose.Schema({
 }, { collection: "auth" })
 let authDB = new Model("auth", schema)
 
-function sendPage(res, name) {
-    return res.render(name, { t: t });
+function sendPage(req, res, name, extraData = {}) {
+    let userLang = req.acceptsLanguages(availableLanguages) || DEFAULT_LANG;
+    
+    let renderData = Object.assign({ 
+        t, 
+        lang: userLang, 
+        siteURL: auth.siteURL
+    }, extraData);
+
+    return res.render(name, renderData);
 }
 
 function sendRedirect(res, name) {
@@ -114,12 +118,12 @@ const apiLimiter = rateLimit({
     message: { apiError: true, message: "Demasiadas peticiones. Por favor, intenta de nuevo en 5 minutos." }
 });
 
-
 app.use("/api/", apiLimiter);
-app.get("/servers", (req, res) => sendPage(res, "servers"))
-app.get("/settings/:id", (req, res) => sendPage(res, "config"))
-app.get("/leaderboard/:id", (req, res) => sendPage(res, "leaderboard"))
-app.get("/", (req, res) => sendPage(res, "home"))
+
+app.get("/servers", (req, res) => sendPage(req, res, "servers"))
+app.get("/settings/:id", (req, res) => sendPage(req, res, "config"))
+app.get("/leaderboard/:id", (req, res) => sendPage(req, res, "leaderboard"))
+app.get("/", (req, res) => sendPage(req, res, "home"))
 
 app.get(["/settings", "/leaderboard", "/servers"], (req, res) => sendRedirect(res, "/servers"))
 
@@ -133,7 +137,6 @@ app.get("/invite/:id?", (req, res) => {
 app.get("/api/loggedin", async function(req, res) {
     let botPublic = await botIsPublic()
     let info = await getDiscordInfo(req, true)
-    console.log(info)
     return res.send({ login: info ? { id: info.id, username: info.username } : null, botPublic })
 })
 
@@ -146,13 +149,11 @@ app.get("/api/guilds", async function(req, res) {
     let [user, guilds] = await getDiscordInfo(req)
     if (!user || !guilds) return res.apiError("Not logged in!", "login")
 
-    // don't send all user stuff, just the important things
     let userData = { id: user.id, username: user.username, displayName: user.global_name, avatar: user.avatar, color: user.banner_color }
 
-    // find all servers that exist in the database + the user is currently in
     let guildList = guilds.map(x => x.id)
     let foundServers = await client.db.find({ "_id": { $in: guildList } }, "settings").catch(() => [])
-    let validServers = guilds.filter(x => x.owner || ((BigInt(x.permissions) & manage_server) === manage_server) || foundServers.some(g => g._id == x.id)) // filter to just the servers above, OR manageable servers
+    let validServers = guilds.filter(x => x.owner || ((BigInt(x.permissions) & manage_server) === manage_server) || foundServers.some(g => g._id == x.id)) 
     let activeIDs = await client.shard.broadcastEval(async (cl, xd) => {
         return xd.ids.filter(x => cl.guilds.cache.has(x))
     }, { context: { ids: validServers.map(x => x.id) } })
@@ -169,8 +170,8 @@ app.get("/api/guilds", async function(req, res) {
             messages: admin || ((p & manage_messages) === manage_messages),
         }
         let foundDB = foundServers.find(g => g._id == x.id)
-        let xpEnabled = inServer && foundDB?.settings?.enabled  // if xp is enabled for this server
-        let hasLeaderboard = xpEnabled && !foundDB.settings.leaderboard.disabled // if leaderboard is enabled
+        let xpEnabled = inServer && foundDB?.settings?.enabled 
+        let hasLeaderboard = xpEnabled && !foundDB.settings.leaderboard.disabled 
         return { id: x.id, name: x.name, icon: x.icon, permissions: perms, xp: xpEnabled, inServer, leaderboard: hasLeaderboard, hasData: !!foundDB?.settings }
     })
 
@@ -185,9 +186,6 @@ app.get("/api/settings/:id", async function(req, res) {
     let serverID = req.params.id
     if (!serverID) return res.apiError("Invalid server ID!")
 
-    // this allows devs to view and modify ANY SERVER
-    // it's actually new to the open source version, previously i hacked together some other thing
-    // main use for this is to make json imports easy
     let force = tools.isDev(user)
 
     let foundGuild = guilds.find(x => x.id == serverID)
@@ -202,7 +200,7 @@ app.get("/api/settings/:id", async function(req, res) {
     let guildData = await client.shard.broadcastEval(async (cl, xd) => {
         const Discord = require('discord.js')
         const path = require("path")
-        const Tools = require(path.join(xd.dir, "/classes/Tools.js"))  // broadcastEval executes from a different path so gotta do this
+        const Tools = require(path.join(xd.dir, "/classes/Tools.js"))
         const ChannelType = Discord.ChannelType
         let tools = Tools.global
         let guild = cl.guilds.cache.get(xd.guildID)
@@ -239,7 +237,7 @@ app.get("/api/settings/:id", async function(req, res) {
         return { server, roles, channels }
 
     }, { context: { guildID: serverID, dir: __dirname } })
-    .then(x => x.find(r => r)) // filter out empty shards
+    .then(x => x.find(r => r)) 
     .catch(console.error)
 
     if (!guildData) return res.apiError("Could not fetch server info!");
@@ -300,7 +298,6 @@ function validateSetting(val, setting, guildData={}) {
 }
 
 app.post("/api/settings", async function(req, res) {
-    
     if (typeof req.body != "object") return res.apiError("Invalid save data!");
     let guildID = req.body.guildID
     if (!guildID) return res.apiError("No guild ID!");
@@ -357,7 +354,6 @@ app.post("/api/settings", async function(req, res) {
         else dbObj["settings.levelUp.message"] = JSON.stringify(lvlEmbed.json())
     }
 
-    // prevent min > max
     let xpMin = dbObj["settings.gain.min"]
     let xpMax = dbObj["settings.gain.max"]
     if (xpMin > xpMax) {
@@ -365,7 +361,6 @@ app.post("/api/settings", async function(req, res) {
         dbObj["settings.gain.max"] = xpMin
     }
 
-    // prevent 0 curve
     if (dbObj["settings.curve.3"] == 0 && dbObj["settings.curve.2"] == 0 && dbObj["settings.curve.1"] == 0) dbObj["settings.curve.1"] = 1
 
     dbObj['info.lastUpdate'] = Date.now()
@@ -412,7 +407,7 @@ app.post("/api/sendexample", async function(req, res) {
 
         return { server, roles, member }
     }, { context: { guildID, userID: user.id } })
-    .then(x => x.find(r => r)) // filter out empty shards
+    .then(x => x.find(r => r))
     .catch(console.error)
 
     if (!guildData) return res.apiError("Could not fetch server info!");
@@ -529,7 +524,7 @@ app.post("/api/importfrombot", async function(req, res) {
 
     if (bot == "json") {
         if (!req.body.jsonData) return res.apiError("No .json data provided!")    
-        if (!isDev) importSettings.settings = null;  // only devs can import settings
+        if (!isDev) importSettings.settings = null;  
         else importSettings.isDev = true;
     }
 
@@ -555,8 +550,6 @@ app.post("/api/importfrombot", async function(req, res) {
             else return res.apiError(`Database error: ${e.message}`)
         })
     }
-
-
 })
 
 app.get("/api/leaderboard/:id", cors(), async function(req, res) {
@@ -579,7 +572,6 @@ app.get("/api/leaderboard/:id", cors(), async function(req, res) {
 
     if (!isMod && settings.leaderboard.disabled) return res.apiError("The leaderboard is disabled in this server!", "leaderboardDisabled")
 
-    // private leaderboard
     if (settings.leaderboard.private && !isInGuild) return res.apiError(loggedIn ? "Only server members can access this leaderboard!" : "This leaderboard is private! Login is required.", "privateLeaderboard")
 
     let minLeaderboardXP = settings.leaderboard.minLevel > 1 ? tools.xpForLevel(settings.leaderboard.minLevel, settings) : 0
@@ -587,7 +579,6 @@ app.get("/api/leaderboard/:id", cors(), async function(req, res) {
     let rewardList = settings.leaderboard.hideRoles ? [] : settings.rewards.filter(x => x.level <= settings.maxLevel)
     let importantRoles = settings.multipliers.roles.concat(rewardList).map(x => x.id)
     
-    // convert xp object to array (+ remove useless info like cooldowns)
     let xpArray = []
     let hiddenMembers = []
 
@@ -655,7 +646,7 @@ app.get("/api/leaderboard/:id", cors(), async function(req, res) {
         return { server, roles, members }
 
     }, { context: { members: memberList, guildID, importantRoles } })
-    .then(x => x.find(r => r)) // filter out empty shards
+    .then(x => x.find(r => r)) 
     .catch(console.error)
     
     if (!guildData) return res.apiError("Couldn't get server data!")
@@ -673,7 +664,6 @@ app.get("/api/leaderboard/:id", cors(), async function(req, res) {
         return data
     })
 
-    // if logged in, show level info
     let userLevel = { noLogin: true }
     if (loggedIn) {
         let foundInPage = paginated.find(x => x.id == userInfo.id && !x.missing)
@@ -691,7 +681,6 @@ app.get("/api/leaderboard/:id", cors(), async function(req, res) {
     }
     if (userLevel.partial) delete userLevel.missing
 
-    // *almost* all settings
     let importantSettings = {
         enabled: settings.enabled,
         gain: settings.gain,
@@ -794,45 +783,28 @@ app.get("/api/xp/:id", cors(), async function(req, res) {
 
     switch (format) {
 
-        case "txt": // plain text
+        case "txt": 
             return res.send(xpList.map(x => `${x.id} - ${x.xp}`).join("\n"))
 
-        case "csv": // spreadsheet
+        case "csv": 
             let header = "ID,Total XP\n"
             return res.send(header + xpList.map(x => `${x.id},${x.xp}`).join("\n"))
         
-        case "everything": // full data
+        case "everything": 
             return res.send({ settings: data.settings, users: data.users })
             
-        default: // xp json
+        default: 
             return res.send(`[\n${xpList.map(x => `\t{ "id": "${x.id}", "xp": ${x.xp} },`).join("\n").slice(0, -1)}\n]`)
     }
 })
 
-
-
-// ========================================================================= \\
-// ======= WELCOME TO THE DISCORD AUTHORIZATION SECTION OF THE CODE! ======= \\
-// ========================================================================= \\
-
-/* STEP 1
-The client visits this URL, which takes them to a Discord authorization page
-By authorizing, they give permission for us to view basic info and see what servers they're in (identify + guilds) */
+// ===== DISCORD OAUTH =====
 app.get("/discord", function(req, res) { return res.redirect(discord_auth) })
 
-/* STEP 2
-After authorizing, Discord redirects them to /auth over on our end, with a few secret codes that we can use
-Think of these codes as a parent signed permission slip for us to get the data they authorized for */ 
 app.get("/auth", async function(req, res) {
-
-    // if they actually authorized, there will be a code here
     if (req.query.code && req.query.code.length > 10) { 
-
-        // prove we're allowed to do this
         let authCreds = Buffer.from(`${process.env.DISCORD_ID}:${process.env.DISCORD_SECRET}`).toString('base64');
 
-        // make a request to the discord token endpoint, to show that the code is in the right hands
-        // tried using rest for this but ran into issues, oh well
         fetch(discordAPI + "/oauth2/token", {
             method: "POST",
             headers: {
@@ -845,23 +817,18 @@ app.get("/auth", async function(req, res) {
                 redirect_uri: siteURL + "/auth"
             })
         }).then(x => x.json()).then(data => {
-            if (data["error"]) return sendRedirect(res, "/"); // if discord sends an error (fake code, etc)
-            else return storeAuthToken(res, data) // if we reach here, it means the code was valid! on to step 3!
+            if (data["error"]) return sendRedirect(res, "/"); 
+            else return storeAuthToken(res, data) 
         }).catch(e => { console.error(e); sendRedirect(res, "/?authorized") })
     }
-    
-    // if there's no code, do nothing
     else sendRedirect(res, "/?authorized");
 })
 
-/* STEP 3
-Discord gave us the codes we need to get their private information, let's goooo!
-Now it gets stored in the database for a week, and we give the client our own made up token so we know when it's them */ 
 function storeAuthToken(res, tokens) {
     let randomNumbers = [tools.rng(1e3, 1e4-1), tools.rng(1e4, 1e5-1), tools.rng(1e5, 1e6-1), tools.rng(1e6, 1e7-1), Number(Date.now().toString().slice(-7))]
-    let randomID = randomNumbers.map(x => x.toString(16)).join("-") // just combine a bunch of random numbers!!!! pretty much anything goes here
-    let expiration = Date.now() + (1000 * tokens.expires_in) // when the token expires (one week)
-    authDB.delete({ expires: { $lt: Date.now() } }).then(() => {}) // clear expired tokens
+    let randomID = randomNumbers.map(x => x.toString(16)).join("-") 
+    let expiration = Date.now() + (1000 * tokens.expires_in) 
+    authDB.delete({ expires: { $lt: Date.now() } }).then(() => {}) 
     authDB.create({ _id: randomID, access_token: tokens.access_token, refresh_token: tokens.refresh_token, expires: expiration }).then((data) => {
         res.cookie("polaris", randomID, { 
             expires: new Date(expiration),
@@ -869,53 +836,45 @@ function storeAuthToken(res, tokens) {
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax'
         });
-        sendRedirect(res, "/?authorized") // sweet, back to the homepage
+        sendRedirect(res, "/?authorized") 
     }).catch((e) => { console.error(e); sendRedirect(res, "/") })
 }
 
-/* STEP 4
-Everything's in place, so now we can make requests using the token!
-But first we need a way to check if the client's token matches up with the one on our server
-Also, "token" no longer sounds like a word to me */
-let tokenCache = {} // cache tokens to speed things up a little
+let tokenCache = {} 
 async function getDiscordToken(token) {
     if (!token) return null
-    let foundCache = tokenCache[token] // check the cache for the token stuff
-    if (foundCache && foundCache.expires > Date.now()) return foundCache // if it exists, send that instead of checking the database
-    return await authDB.fetch(token).then(data => { // otherwise, check the database
-        if (data && data.access_token && data.expires > Date.now()) { // if a token was found, cache and return it
+    let foundCache = tokenCache[token] 
+    if (foundCache && foundCache.expires > Date.now()) return foundCache 
+    return await authDB.fetch(token).then(data => { 
+        if (data && data.access_token && data.expires > Date.now()) { 
             tokenCache[token] = data
             return data
         }
-        else return null // if no token was found, return nothing
+        else return null 
     }).catch(e => null)
 }
 
-/* STEP 5
-Now we can make requests to Discord to get the client's stuff! */
-let discordCache = {} // cache data to prevent rate limits
+let discordCache = {} 
 async function getDiscordInfo(req, userOnly) {
-    let token = await getDiscordToken(req.cookies.polaris) // get discord's tokens using the token in their cookies
+    let token = await getDiscordToken(req.cookies.polaris) 
     if (!token) return userOnly ? null : [null, null]
 
-    let foundData = discordCache[token] // check for cached data
-    if (foundData && Date.now() <= foundData.expires) return foundData.data // return cached data if it exists and hasn't expired
+    let foundData = discordCache[token] 
+    if (foundData && Date.now() <= foundData.expires) return foundData.data 
 
-    // the two things the client authorized - user data and guilds. this is all we need
     let options = { auth: false, headers: { authorization: `Bearer ${token.access_token}` } };
     let userData = await rest.get("/users/@me", options).catch(e => null)
     if (userOnly) return userData || null
 
     let guilds = await rest.get("/users/@me/guilds", options).catch(e => null)
 
-    if (!userData || !guilds || userData.message || guilds.message || !userData.id) return [null, null] // if discord sends error
-    let discordRes = [userData, guilds] // return this as an array, so we can do "let [userData, guilds]"
-    discordCache[token] = {data: discordRes, expires: Date.now() + 15000} // 15 second cache to prevent ratelimits uwu
+    if (!userData || !guilds || userData.message || guilds.message || !userData.id) return [null, null] 
+    let discordRes = [userData, guilds] 
+    discordCache[token] = {data: discordRes, expires: Date.now() + 15000} 
     return discordRes
 }
 
-/* STEP 6
-If the client wants to log out, we should probably respect that and delete their stuff */
+// ESTA ES LA RUTA QUE FALTABA CORREGIR
 app.get("/logout", async function(req, res) {
     let token = await getDiscordToken(req.cookies.polaris)
     if (!token) return sendRedirect(res, "/")
@@ -928,19 +887,16 @@ app.get("/logout", async function(req, res) {
             client_secret: auth.secret,
             token
         })
-    }).then(() => { // discord has invalidated the token!
-        res.clearCookie("polaris"); // remove token from cookies
-        sendRedirect(res, "/"); // return home
+    }).then(() => { 
+        res.clearCookie("polaris"); 
+        sendRedirect(res, "/"); 
     }).catch(e => sendRedirect(res, "/"))
 })
 
-// ========================================================================= \\
-// ===== OK BYE THAT'S ALL THE AUTHORIZATION CODE HOPE IT DOESN'T SUCK ===== \\
-// ========================================================================= \\
-
+// ===== ERROR HANDLERS =====
 app.get("/api", function(req, res) { res.send("ඞ") })
 
-app.get("*", function(req, res) { res.status(404); sendPage(res, "404") })
+app.get("*", function(req, res) { res.status(404); sendPage(req, res, "404") })
 
 app.use(function (err, req, res, next) {
     if (err && err.message == "Response timeout") res.status(500).send({ apiError: true, internalError: true, message: 'Internal server error! (Timed out)'})

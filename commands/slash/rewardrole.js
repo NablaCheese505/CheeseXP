@@ -1,6 +1,6 @@
-//slash/rewardrole.js
 const { t } = require('../../utils/i18n.js');
 const Discord = require("discord.js")
+const config = require('../../config.json');
 
 module.exports = {
 metadata: {
@@ -17,7 +17,10 @@ metadata: {
 
 async run(client, int, tools) {
 
-    let db = await tools.fetchSettings()
+    // 1. Extraer la base de datos y definir el idioma
+    let db = await tools.fetchSettings(int.user.id, int.guild.id)
+    let serverLang = db?.settings?.lang || config.defaultLanguage || 'es';
+
     if (!tools.canManageServer(int.member, db.settings.manualPerms)) return tools.warn("*notMod")
 
     let role = int.options.getRole("role_name")
@@ -33,7 +36,7 @@ async run(client, int, tools) {
     if (foundExisting) newRoles.splice(existingIndex, 1)
 
     function finish(msg) {
-        let viewRewardRoles = tools.row(tools.button({style: "Primary", label: t('commands.rewardrole.btn_view_all', { count: newRoles.length }), customId: "list_reward_roles"}))
+        let viewRewardRoles = tools.row(tools.button({style: "Primary", label: t('commands.rewardrole.btn_view_all', { count: newRoles.length }, serverLang), customId: "list_reward_roles"}))
 
         client.db.update(int.guild.id, { $set: { 'settings.rewards': newRoles, 'info.lastUpdate': Date.now() }}).then(() => {
             return int.reply({ content: msg, components: viewRewardRoles })        
@@ -41,27 +44,27 @@ async run(client, int, tools) {
     }
     
     if (level == 0) {
-        if (!foundExisting) return tools.warn(t('commands.rewardrole.levelZeroError'))
-        return finish(t('commands.rewardrole.deleted', { role: `<@&${role.id}>`, level: foundExisting.level }), newRoles)
+        if (!foundExisting) return tools.warn(t('commands.rewardrole.levelZeroError', {}, serverLang))
+        return finish(t('commands.rewardrole.deleted', { role: `<@&${role.id}>`, level: foundExisting.level }, serverLang), newRoles)
     }
 
     if (!int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageRoles)) return tools.warn("*cantManageRoles")
 
-    if (!role.editable) return tools.warn(t('commands.rewardrole.noPerms', { role: `<@&${role.id}>` }))
+    if (!role.editable) return tools.warn(t('commands.rewardrole.noPerms', { role: `<@&${role.id}>` }, serverLang))
 
     let roleData = { id: role.id, level }
     let extraStrings = []
-    if (isKeep) { roleData.keep = true; extraStrings.push(t('commands.rewardrole.alwaysKept')) }
-    if (isDontSync) { roleData.noSync = true; extraStrings.push(t('commands.rewardrole.ignoresSync')) }
+    if (isKeep) { roleData.keep = true; extraStrings.push(t('commands.rewardrole.alwaysKept', {}, serverLang)) }
+    if (isDontSync) { roleData.noSync = true; extraStrings.push(t('commands.rewardrole.ignoresSync', {}, serverLang)) }
 
     newRoles.push(roleData)
     let extraStr = (extraStrings.length < 1) ? "" : ` (${extraStrings.join(", ")})`
 
     if (foundExisting) {
-        if (foundExisting.level == level) return tools.warn(t('commands.rewardrole.alreadyGranted', { level: level }))
-        return finish(t('commands.rewardrole.updated', { role: `<@&${role.id}>`, level: level, oldLevel: foundExisting.level, extraStr: extraStr }))
+        if (foundExisting.level == level) return tools.warn(t('commands.rewardrole.alreadyGranted', { level: level }, serverLang))
+        return finish(t('commands.rewardrole.updated', { role: `<@&${role.id}>`, level: level, oldLevel: foundExisting.level, extraStr: extraStr }, serverLang))
     }
 
-    return finish(t('commands.rewardrole.added', { role: `<@&${role.id}>`, level: level, extraStr: extraStr }))
+    return finish(t('commands.rewardrole.added', { role: `<@&${role.id}>`, level: level, extraStr: extraStr }, serverLang))
 
 }}

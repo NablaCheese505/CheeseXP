@@ -1,5 +1,6 @@
 //slash/multiplier.js
 const { t } = require('../../utils/i18n.js');
+const config = require('../../config.json');
 
 module.exports = {
 metadata: {
@@ -23,11 +24,13 @@ metadata: {
 
 async run(client, int, tools) {
 
-    let db = await tools.fetchSettings()
+    let db = await tools.fetchSettings(int.user.id, int.guild.id)
+    let serverLang = db?.settings?.lang || config.defaultLanguage || 'es';
+
     if (!tools.canManageServer(int.member, db.settings.manualPerms)) return tools.warn("*notMod")
 
     let type = int.options.getSubcommand(false)
-    let typeTranslated = type === 'role' ? t('commands.multiplier.type_role') : t('commands.multiplier.type_channel');
+    let typeTranslated = type === 'role' ? t('commands.multiplier.type_role', {}, serverLang) : t('commands.multiplier.type_channel', {}, serverLang);
 
     let boostVal = int.options.get("multiplier")?.value ?? 1
     
@@ -50,8 +53,8 @@ async run(client, int, tools) {
 
     function finish(msg) {
         let viewMultipliers = tools.row([
-            tools.button({style: role ? "Primary" : "Secondary", label: t('commands.multiplier.btn_role_mult', { count: newList.roles.length }), customId: "list_multipliers~roles"}),
-            tools.button({style: role ? "Secondary" : "Primary", label: t('commands.multiplier.btn_channel_mult', { count: newList.channels.length }), customId: "list_multipliers~channels"})
+            tools.button({style: role ? "Primary" : "Secondary", label: t('commands.multiplier.btn_role_mult', { count: newList.roles.length }, serverLang), customId: "list_multipliers~roles"}),
+            tools.button({style: role ? "Secondary" : "Primary", label: t('commands.multiplier.btn_channel_mult', { count: newList.channels.length }, serverLang), customId: "list_multipliers~channels"})
         ])
 
         client.db.update(int.guild.id, { $set: { [`settings.multipliers.${typeIndex}`]: newList[typeIndex], 'info.lastUpdate': Date.now() }}).then(() => {
@@ -60,19 +63,19 @@ async run(client, int, tools) {
     }
 
     if (remove) {
-        if (!foundExisting) return tools.warn(t('commands.multiplier.neverHad', { type: typeTranslated }))
-        return finish(t('commands.multiplier.deleted', { boost: foundExisting.boost, tag: tag }))
+        if (!foundExisting) return tools.warn(t('commands.multiplier.neverHad', { type: typeTranslated }, serverLang))
+        return finish(t('commands.multiplier.deleted', { boost: foundExisting.boost, tag: tag }, serverLang))
     }
 
     let boostData = { id: target.id, boost }
     newList[typeIndex].push(boostData)
-    let boostStr = boost == 0 ? t('commands.multiplier.noXP') : t('commands.multiplier.xpBoost', { boost: boost })
+    let boostStr = boost == 0 ? t('commands.multiplier.noXP', {}, serverLang) : t('commands.multiplier.xpBoost', { boost: boost }, serverLang)
 
     if (foundExisting) {
-        if (foundExisting.boost == boost) return tools.warn(t('commands.multiplier.alreadyGives', { type: typeTranslated, boost: boost }))
-        return finish(t('commands.multiplier.updated', { tag: tag, boostStr: boostStr, oldBoost: foundExisting.boost }))
+        if (foundExisting.boost == boost) return tools.warn(t('commands.multiplier.alreadyGives', { type: typeTranslated, boost: boost }, serverLang))
+        return finish(t('commands.multiplier.updated', { tag: tag, boostStr: boostStr, oldBoost: foundExisting.boost }, serverLang))
     }
     
-    return finish(t('commands.multiplier.added', { tag: tag, boostStr: boostStr }))
+    return finish(t('commands.multiplier.added', { tag: tag, boostStr: boostStr }, serverLang))
 
 }}

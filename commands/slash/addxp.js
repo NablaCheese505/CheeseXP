@@ -1,9 +1,10 @@
 const { t } = require('../../utils/i18n.js');
+const config = require('../../config.json');
 
 module.exports = {
 metadata: {
     permission: "ManageGuild",
-    name: "addxp", // Los nombres de comandos deben ir fijos en minúsculas por reglas de Discord
+    name: "addxp",
     description: t('commands.addxp.metadata_description'),
     args: [
         { 
@@ -34,23 +35,25 @@ metadata: {
 },
 
 async run(client, int, tools) {
+    let db = await tools.fetchSettings(int.user.id, int.guild.id)
+    
+    let serverLang = db?.settings?.lang || config.defaultLanguage || 'es';
 
     const member = int.options.get("member")?.member
     const amount = int.options.get("xp")?.value
     const operation = int.options.get("operation")?.value || "add_xp"
 
     let user = member?.user
-    // Inyección de i18n
-    if (!user) return tools.warn(t('commands.addxp.memberNotFound'))
+    
+    if (!user) return tools.warn(t('commands.addxp.memberNotFound', {}, serverLang))
 
-    let db = await tools.fetchSettings(user.id)
     if (!db) return tools.warn("*noData")
     else if (!tools.canManageServer(int.member, db.settings.manualPerms)) return tools.warn("*notMod")
     else if (!db.settings.enabled) return tools.warn("*xpDisabled")
 
     // Inyección de i18n
-    if (amount === 0 && operation.startsWith("add")) return tools.warn(t('commands.addxp.invalidAmount'))
-    else if (user.bot) return tools.warn(t('commands.addxp.noBots'))
+    if (amount === 0 && operation.startsWith("add")) return tools.warn(t('commands.addxp.invalidAmount', {}, serverLang))
+    else if (user.bot) return tools.warn(t('commands.addxp.noBots', {}, serverLang))
 
     let currentXP = db.users[user.id]
     let xp = currentXP?.xp || 0
@@ -81,12 +84,10 @@ async run(client, int, tools) {
 
     client.db.update(int.guild.id, { $set: { [`users.${user.id}.xp`]: newXP } }).then(() => {
         
-        // --- PREPARAR VARIABLES PARA EL TEXTO TRADUCIDO ---
         const emoji = newXP > xp ? "⏫" : "⏬";
-        const levelText = newLevel != level ? t('commands.addxp.levelText', { newLevel }) : "";
+        const levelText = newLevel != level ? t('commands.addxp.levelText', { newLevel }, serverLang) : "";
         const formattedDiff = `${xpDiff >= 0 ? "+" : ""}${tools.commafy(xpDiff)}`;
         
-        // Llamamos a la función t() inyectando todas las variables
         const replyMessage = t('commands.addxp.success', {
             emoji: emoji,
             user: user.displayName,
@@ -94,10 +95,10 @@ async run(client, int, tools) {
             levelText: levelText,
             oldXP: tools.commafy(xp),
             xpDiff: formattedDiff
-        });
+        }, serverLang);
 
         int.reply(replyMessage);
 
-    }).catch(() => tools.warn(t('commands.addxp.error')))
+    }).catch(() => tools.warn(t('commands.addxp.error', {}, serverLang)))
 
 }}

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const { availableLanguages, DEFAULT_LANG } = require("./utils/i18n.js") // <-- AÑADE ESTA LÍNEA
 
 // Most of the properties below are used for the web server, they are not built into the mongo schema
 
@@ -11,7 +12,8 @@ const mongoose = require("mongoose")
 
 const settings = {
     enabled: { type: "bool", default: false },
-
+    lang: { type: "string", default: DEFAULT_LANG, accept: availableLanguages },
+    
     gain: {
         min: { type: "int", default: 50, min: 0, max: 5000 },
         max: { type: "int", default: 100, min: 0, max: 5000 },

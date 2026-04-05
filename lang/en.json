@@ -1,5 +1,10 @@
 {
+  "languageName": "English",
   "commands": {
+    "language": {
+      "metadata_description": "Change the bot's language in this server",
+      "success": "✅ Done! The server language has been changed to **{lang}**."
+    },
     "addxp": {
       "metadata_description": "Add or remove XP from a member. (requires manage server permission)",
       "args_member_description": "Which member to modify",

@@ -1,5 +1,10 @@
 {
+  "languageName": "Español",
   "commands": {
+    "language": {
+      "metadata_description": "Cambia el idioma del bot en este servidor",
+      "success": "✅ ¡Listo! El idioma del servidor se ha cambiado a **{lang}**."
+    },
     "addxp": {
       "metadata_description": "Añade o quita XP a un miembro. (requiere gestionar servidor)",
       "args_member_description": "Qué miembro modificar",

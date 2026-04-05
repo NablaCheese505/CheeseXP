@@ -2,40 +2,40 @@ const config = require('../config.json');
 const fs = require('fs');
 const path = require('path');
 
-
-const locales = {
-    es: require('../lang/es.json'),
-    en: require('../lang/en.json')
-};
-
-// Idioma por defecto
 const DEFAULT_LANG = config.defaultLanguage || 'es';
+const locales = {};
+const availableLanguages = [];
 
-/**
- * Función para obtener un texto traducido
- * @param {string} key - La ruta del texto (ej. "commands.ping.pong")
- * @param {object} variables - Variables a reemplazar (ej. { ms: 120 })
- * @param {string} lang - El idioma solicitado (opcional)
- */
+const langPath = path.join(__dirname, '../lang');
+const files = fs.readdirSync(langPath).filter(f => f.endsWith('.json'));
+
+for (const file of files) {
+    const langCode = file.replace('.json', '');
+    locales[langCode] = require(path.join(langPath, file));
+    availableLanguages.push(langCode);
+}
+
+function getAvailableLanguages() {
+    return availableLanguages.map(lang => {
+        const langName = locales[lang].languageName || lang.toUpperCase(); 
+        return { name: langName, value: lang };
+    });
+}
+
 function t(key, variables = {}, lang = DEFAULT_LANG) {
-    // Si el idioma no existe, usamos el por defecto
     const selectedLang = locales[lang] ? locales[lang] : locales[DEFAULT_LANG];
-    
-    // Navegamos por el JSON usando la llave (ej: commands -> ping -> pong)
     const keys = key.split('.');
     let text = selectedLang;
     
     for (const k of keys) {
+        if (text[k] === undefined) return key; 
         text = text[k];
-        if (!text) return key; // Si no encuentra la traducción, devuelve la llave misma
     }
 
-    // Reemplazamos las variables en el texto (ej. {ms} por 120)
     for (const [varName, varValue] of Object.entries(variables)) {
         text = text.replace(`{${varName}}`, varValue);
     }
-
     return text;
 }
 
-module.exports = { t };
+module.exports = { t, getAvailableLanguages, availableLanguages, DEFAULT_LANG };

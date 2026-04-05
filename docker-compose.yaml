@@ -13,3 +13,8 @@ services:
       - ./json/auto:/usr/src/app/json/auto
     environment:
       - NODE_ENV=production
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

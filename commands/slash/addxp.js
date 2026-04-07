@@ -97,7 +97,13 @@ async run(client, int, tools) {
     
     let xpDiff = newXP - xp;
 
-    client.db.update(int.guild.id, { $set: { [`users.${user.id}.xp`]: newXP } }).then(() => {
+    let updateQuery = { $set: { [`users.${user.id}.xp`]: newXP } };
+    
+    if (!db.users[user.id]) {
+        updateQuery = { $set: { [`users.${user.id}`]: { xp: newXP, cooldown: 0, voiceTime: 0 } } };
+    }
+
+    client.db.update(int.guild.id, updateQuery).then(() => {
         
         const emoji = newXP > xp ? botConfig.emojis.up : botConfig.emojis.down;
         const levelText = newLevel != level ? t('commands.addxp.levelText', { newLevel }, serverLang) : "";

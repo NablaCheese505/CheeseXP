@@ -13,13 +13,16 @@ const { availableLanguages, DEFAULT_LANG } = require("./utils/i18n.js") // <-- A
 const settings = {
     enabled: { type: "bool", default: false },
     lang: { type: "string", default: DEFAULT_LANG, accept: availableLanguages },
-    
+    enabledVoiceXp: { type: "bool", default: false },
     gain: {
         min: { type: "int", default: 50, min: 0, max: 5000 },
         max: { type: "int", default: 100, min: 0, max: 5000 },
         time: { type: "float", precision: 4, default: 60, min: 0, max: 31536000 },
     },
-
+    voice: { 
+        multiplier: { type: "float", precision: 2, default: 1, min: 0, max: 10 }, 
+        hoursLimit: { type: "float", precision: 2, default: 0, min: 0, max: 24 }, 
+    },
     curve: {
         3: { type: "float", precision: 10, default: 1, min: 0, max: 100 },
         2: { type: "float", precision: 10, default: 50, min: 0, max: 10000 },

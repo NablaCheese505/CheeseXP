@@ -84,6 +84,12 @@ client.on("messageCreate", async message => {
     else client.commands.get("message").run(client, message, client.globalTools)
 })
 
+// on voice state update
+client.on("voiceStateUpdate", async (oldState, newState) => {
+    if (!oldState.guild || !oldState.member) return; // ignore DM
+    client.commands.get("voice").run(client, oldState, newState, client.globalTools);
+})
+
 // on interaction
 client.on("interactionCreate", async int => {
     

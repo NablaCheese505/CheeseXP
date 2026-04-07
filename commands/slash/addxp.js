@@ -1,4 +1,4 @@
-const { t } = require('../../utils/i18n.js');
+const { t, getLocalizations } = require('../../utils/i18n.js');
 const config = require('../../config.json');
 const botConfig = require('../../config.json');
 
@@ -26,42 +26,55 @@ metadata: {
             description: t('commands.addxp.args_operation_desc'), 
             required: false, 
             choices: [
-                { name: t('commands.addxp.choice_add_xp'), value: "add_xp" },
-                { name: t('commands.addxp.choice_set_xp'), value: "set_xp" },
-                { name: t('commands.addxp.choice_add_levels'), value: "add_level" },
-                { name: t('commands.addxp.choice_set_level'), value: "set_level" },
+                { 
+                    name: t('commands.addxp.choice_add_xp'), 
+                    name_localizations: getLocalizations('commands.addxp.choice_add_xp'),
+                    value: "add_xp" 
+                },
+                { 
+                    name: t('commands.addxp.choice_set_xp'), 
+                    name_localizations: getLocalizations('commands.addxp.choice_set_xp'),
+                    value: "set_xp" 
+                },
+                { 
+                    name: t('commands.addxp.choice_add_levels'), 
+                    name_localizations: getLocalizations('commands.addxp.choice_add_levels'),
+                    value: "add_level" 
+                },
+                { 
+                    name: t('commands.addxp.choice_set_level'), 
+                    name_localizations: getLocalizations('commands.addxp.choice_set_level'),
+                    value: "set_level" 
+                }
             ]
         },
     ]
 },
 
 async run(client, int, tools) {
-    let db = await tools.fetchSettings(int.user.id, int.guild.id)
-    
+    const user = int.options.getUser("member");
+    const member = int.options.getMember("member");
+    const amount = int.options.get("xp")?.value;
+    const operation = int.options.get("operation")?.value || "add_xp";
+
+    let db = await tools.fetchSettings(user?.id || int.user.id, int.guild.id);
     let serverLang = db?.settings?.lang || config.defaultLanguage || 'en';
 
-    const member = int.options.get("member")?.member
-    const amount = int.options.get("xp")?.value
-    const operation = int.options.get("operation")?.value || "add_xp"
+    if (!user) return tools.warn(t('commands.addxp.memberNotFound', {}, serverLang));
 
-    let user = member?.user
-    
-    if (!user) return tools.warn(t('commands.addxp.memberNotFound', {}, serverLang))
+    if (!db) return tools.warn("*noData");
+    else if (!tools.canManageServer(int.member, db.settings.manualPerms)) return tools.warn("*notMod");
+    else if (!db.settings.enabled) return tools.warn("*xpDisabled");
 
-    if (!db) return tools.warn("*noData")
-    else if (!tools.canManageServer(int.member, db.settings.manualPerms)) return tools.warn("*notMod")
-    else if (!db.settings.enabled) return tools.warn("*xpDisabled")
+    if (amount === 0 && operation.startsWith("add")) return tools.warn(t('commands.addxp.invalidAmount', {}, serverLang));
+    else if (user.bot) return tools.warn(t('commands.addxp.noBots', {}, serverLang));
 
-    // Inyección de i18n
-    if (amount === 0 && operation.startsWith("add")) return tools.warn(t('commands.addxp.invalidAmount', {}, serverLang))
-    else if (user.bot) return tools.warn(t('commands.addxp.noBots', {}, serverLang))
+    let currentXP = db.users[user.id];
+    let xp = currentXP?.xp || 0;
+    let level = tools.getLevel(xp, db.settings);
 
-    let currentXP = db.users[user.id]
-    let xp = currentXP?.xp || 0
-    let level = tools.getLevel(xp, db.settings)
-
-    let newXP = xp
-    let newLevel = level
+    let newXP = xp;
+    let newLevel = level;
 
     switch (operation) {
         case "add_xp": newXP += amount; break;
@@ -70,18 +83,19 @@ async run(client, int, tools) {
         case "set_level": newLevel = amount; break;
     }
 
-    newXP = Math.max(0, newXP) // min 0
-    newLevel = tools.clamp(newLevel, 0, db.settings.maxLevel) // between 0 and max level
+    newXP = Math.max(0, newXP); // min 0
+    newLevel = tools.clamp(newLevel, 0, db.settings.maxLevel); // between 0 and max level
 
-    if (newXP != xp) newLevel = tools.getLevel(newXP, db.settings)
-    else if (newLevel != level) newXP = tools.xpForLevel(newLevel, db.settings)
+    if (newXP != xp) newLevel = tools.getLevel(newXP, db.settings);
+    else if (newLevel != level) newXP = tools.xpForLevel(newLevel, db.settings);
 
-    let syncMode = db.settings.rewardSyncing.sync
+    let syncMode = db.settings.rewardSyncing.sync;
     if (syncMode == "xp" || (syncMode == "level" && newLevel != level) || (newLevel > level)) { 
-        let roleCheck = tools.checkLevelRoles(int.guild.roles.cache, member.roles.cache, newLevel, db.settings.rewards)
-        tools.syncLevelRoles(member, roleCheck).catch(() => {})
+        let roleCheck = tools.checkLevelRoles(int.guild.roles.cache, member.roles.cache, newLevel, db.settings.rewards);
+        tools.syncLevelRoles(member, roleCheck).catch(() => {});
     }
-    let xpDiff = newXP - xp
+    
+    let xpDiff = newXP - xp;
 
     client.db.update(int.guild.id, { $set: { [`users.${user.id}.xp`]: newXP } }).then(() => {
         
@@ -100,6 +114,5 @@ async run(client, int, tools) {
 
         int.reply(replyMessage);
 
-    }).catch(() => tools.warn(t('commands.addxp.error', {}, serverLang)))
-
+    }).catch(() => tools.warn(t('commands.addxp.error', {}, serverLang)));
 }}

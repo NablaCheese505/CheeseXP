@@ -155,7 +155,7 @@
       "everyone": "Everyone",
       "roleCount": "**{count} roles** - {xpStr}",
       "totalMult": "**Total multiplier: {multiplier}x XP** ({stacking})",
-      "fieldMult": "{multp} Multiplier",
+      "fieldMult": "{mult} Multiplier",
       "fieldNote": "{warning} Note",
       "syncWarning": "Your level roles are not properly synced! Type {command} to fix this."
     },

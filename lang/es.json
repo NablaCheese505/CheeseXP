@@ -155,7 +155,7 @@
       "everyone": "Todos",
       "roleCount": "**{count} roles** - {xpStr}",
       "totalMult": "**Multiplicador total: {multiplier}x XP** ({stacking})",
-      "fieldMult": "🌟 Multiplicador",
+      "fieldMult": "{mult} Multiplicador",
       "fieldNote": "{warning} Nota",
       "syncWarning": "¡Tus roles de nivel no están sincronizados! Usa {command} para arreglarlo."
     },

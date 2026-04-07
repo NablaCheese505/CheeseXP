@@ -59,7 +59,8 @@
       "cooldownRemaining": "**Cooldown remaining: **{time}",
       "endOfTime": "Until the end of time",
       "embedTitle": "Level {level}{reached}",
-      "reached": " (reached!)"
+      "reached": " (reached!)",
+      "voice_estimate": "{mic} **Voice Time:** {time} (avg)"
     },
     "clear": {
       "metadata_description": "Clear a member's cooldown. (requires manage server permission)",

@@ -1,6 +1,7 @@
 //slash/config.js
 const { t } = require('../../utils/i18n.js');
 const config = require('../../config.json');
+const botConfig = require('../../config.json');
 
 module.exports = {
 metadata: {
@@ -35,14 +36,14 @@ async run(client, int, tools) {
     })
 
     let toggleButton = settings.enabled ?
-      {style: "Danger", label: t('commands.config.btnDisableXP', {}, serverLang), emoji: "❕", customId: "toggle_xp" }
-    : {style: "Success", label: t('commands.config.btnEnableXP', {}, serverLang), emoji: "✨", customId: "toggle_xp" }
+      {style: "Danger", label: t('commands.config.btnDisableXP', {}, serverLang), emoji: botConfig.emojis.disable, customId: "toggle_xp" }
+    : {style: "Success", label: t('commands.config.btnEnableXP', {}, serverLang), emoji: botConfig.emojis.xp, customId: "toggle_xp" };
 
     let buttons = tools.button([
-        {style: "Success", label: t('commands.config.btnEditSettings', {}, serverLang), emoji: "🛠", customID: "settings_list"},
+        {style: "Success", label: t('commands.config.btnEditSettings', {}, serverLang), emoji: botConfig.emojis.settings, customID: "settings_list"},
         toggleButton,
-        {style: "Link", label: t('commands.config.btnEditOnline', {}, serverLang), emoji: "🌎", url: `${tools.WEBSITE}/settings/${int.guild.id}`},
-        {style: "Secondary", label: t('commands.config.btnExport', {}, serverLang), emoji: "⏏️", customId: "export_xp"}
+        {style: "Link", label: t('commands.config.btnEditOnline', {}, serverLang), emoji: botConfig.emojis.online, url: `${tools.WEBSITE}/settings/${int.guild.id}`},
+        {style: "Secondary", label: t('commands.config.btnExport', {}, serverLang), emoji: botConfig.emojis.export, customId: "export_xp"}
     ])
 
     let listButtons = tools.button([

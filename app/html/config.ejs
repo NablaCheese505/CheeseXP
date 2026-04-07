@@ -144,6 +144,42 @@
                 </div>
             </div>
             <div class="settingBox box fulllength">
+                <h1><%= t('dashboard.VoiceXPGain', {}, lang) %></h1>
+                <p><%= t('dashboard.VoiceXPGainDesc', {}, lang) %></p>
+                <h2><%= t('dashboard.EnableVoiceXP', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.EnableVoiceXPDesc', {}, lang) %></p>
+                <label class="slider" style="margin-top: 5px">
+                    <input db="enabledVoiceXp" savename="db" type="checkbox"/>
+                    <span class="sliderspan"></span>
+                </label>
+            </div>
+            
+            <div class="settingBox box fulllength">
+                <h1><%= t('dashboard.VoiceXPSettings', {}, lang) %></h1>
+                <p><%= t('dashboard.VoiceXPSettingsDesc', {}, lang) %></p>
+                <div class="simpleflex">
+                    <div class="sideoption">
+                        <h2><%= t('dashboard.VoiceXPMultiplier', {}, lang) %></h2>
+                        <p class="details"><%= t('dashboard.VoiceXPMultiplierDesc', {}, lang) %></p>
+                        <div class="field">
+                            <div class="centerflex spacedflex">
+                                <input id="vcMultiplier" db="voice.multiplier" savename="db" default="1" max="10" min="0" step="0.1" style="width: 75px" type="number"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sideoptions">
+                        <h2><%= t('dashboard.HoursLimit', {}, lang) %></h2>
+                        <p class="details"><%= t('dashboard.HoursLimitDesc', {}, lang) %></p>
+                        <div class="field">
+                            <div class="centerflex spacedflex">
+                                <input id="hoursLimit" db="voice.hoursLimit" savename="db" default="0" max="24" min="0" step="0.5" style="width: 75px" type="number"/>
+                                <p><%= t('dashboard.hours', {}, lang) %></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="settingBox box fulllength">
                 <h1><%= t('dashboard.LevelScaling', {}, lang) %></h1>
                 <p><%= t('dashboard.BygainingenoughXPmemberscanlevelupandearnspecialrolesorbraggingrightsTheamountofXPrequiredscaleswitheachlevelearlylevelsonlyneedacouplethousandpointsbutlaterlevelsneedmillions', {}, lang) %></p>
                 <p><%= t('dashboard.YoucanadjustthelevelscalingtochangehowmanymorepointsarerequiredwitheachlevelAsmallercurvemakesiteasiertolevelupandalargercurvemakesitmuchmoredifficult', {}, lang) %></p>

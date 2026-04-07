@@ -448,7 +448,18 @@
         "Usesthemembersroleprofilecolorbydefault": "Uses the member's role/profile color by default.",
         "CustomtopEmbedColor": "Custom /top Embed Color",
         "Changestheembedcolorwhenusingtop": "Changes the embed color when using /top.",
-        "UsesPolarisgreenbydefault": "Uses Polaris' green by default."
+        "UsesPolarisgreenbydefault": "Uses Polaris' green by default.",
+        "VoiceXPGain": "Voice XP Gain",
+        "VoiceXPGainDesc": "Members can also gain XP by participating in voice channels.",
+        "EnableVoiceXP": "Enable Voice XP",
+        "EnableVoiceXPDesc": "When enabled, members will be able to gain XP over time in VC.",
+        "VoiceXPSettings": "Voice XP Settings",
+        "VoiceXPSettingsDesc": "Customize the multiplier and limits for Voice XP.",
+        "VoiceXPMultiplier": "Voice XP Multiplier",
+        "VoiceXPMultiplierDesc": "Multiplier applied to normal message XP per minute in VC.",
+        "HoursLimit": "Hours limit",
+        "HoursLimitDesc": "Max continuous hours that grant XP. 0 = No limit.",
+        "hours": "hours"
     },
   "config_page": {
       "js": {

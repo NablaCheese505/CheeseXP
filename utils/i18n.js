@@ -32,8 +32,13 @@ function t(key, variables = {}, lang = DEFAULT_LANG) {
         text = text[k];
     }
 
-    for (const [varName, varValue] of Object.entries(variables)) {
-        text = text.replace(`{${varName}}`, varValue);
+    const variablesFinales = { 
+        ...config.emojis, 
+        ...variables 
+    };
+
+    for (const [varName, varValue] of Object.entries(variablesFinales)) {
+        text = text.replaceAll(`{${varName}}`, varValue);
     }
     return text;
 }

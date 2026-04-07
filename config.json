@@ -12,5 +12,17 @@
   "defaultLanguage": "es",
   
   "changelogURL": "",
-  "supportURL": ""
+  "supportURL": "",
+  "emojis": {
+    "success": "<:circlecheck:1490876466995400795>",
+      "error": "<:circlex:1490876468710866976>",
+      "edit": "<:pencilline:1490876470980120576>",
+      "refresh": "<:refreshcw:1490876472238411827>",
+      "warning": "<:trianglealert:1490876474050482176>",
+      "xp": "<:zap:1490876475820474533>",
+      "next": "<:chevronsright:1490885940267192402>",
+      "clock": "<:clock:1490876470158163998>",
+      "mult": "<:rocket:1490876473274273802>",
+      "max": "<:trophy:1490876475082281040>"
+  }
 }

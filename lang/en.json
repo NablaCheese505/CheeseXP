@@ -3,7 +3,7 @@
   "commands": {
     "language": {
       "metadata_description": "Change the bot's language in this server",
-      "success": "✅ Done! The server language has been changed to **{lang}**."
+      "success": "{success} Done! The server language has been changed to **{lang}**."
     },
     "addxp": {
       "metadata_description": "Add or remove XP from a member. (requires manage server permission)",
@@ -43,7 +43,7 @@
       "miniTitle": "Level {level}",
       "miniDesc": "{xp} XP required",
       "miniFooter": "Rank cards are disabled, so calculations are hidden!",
-      "maxLevel": "\n🎉 You reached the maximum level{inServer}! Congratulations!",
+      "maxLevel": "\n{max} You reached the maximum level{inServer}! Congratulations!",
       "inServer": " in this server",
       "noMultiplier": "Your multiplier prevents you from gaining any XP!",
       "avg": " (avg. {avg})",
@@ -62,12 +62,12 @@
       "args_member_desc": "Which member to clear",
       "noBots": "Bots don't have cooldowns, silly!",
       "noCooldown": "This member doesn't have an active cooldown!",
-      "success": "🔄 **{user}'s cooldown has been reset!** (previously {time})",
+      "success": "{refresh} **{user}'s cooldown has been reset!** (previously {time})",
       "error": "Something went wrong while trying to reset the cooldown!"
     },
     "config": {
       "metadata_description": "Toggle XP gain, or visit the dashboard to tweak server settings. (requires manage server permission)",
-      "xpEnabled": "**✨ XP enabled: __{status}__**",
+      "xpEnabled": "**{xp} XP enabled: __{status}__**",
       "yes": "Yes!",
       "no": "No!",
       "xpPerMsg": "**XP per message:** {range}",
@@ -104,12 +104,12 @@
       "btn_role_mult": "Role multipliers ({count})",
       "btn_channel_mult": "Channel multipliers ({count})",
       "neverHad": "This {type} never had a multiplier to begin with!",
-      "deleted": "❌ **Successfully deleted {boost}x multiplier for {tag}.**",
+      "deleted": "{error} **Successfully deleted {boost}x multiplier for {tag}.**",
       "noXP": "no XP",
       "xpBoost": "{boost}x XP",
       "alreadyGives": "This {type} already gives a {boost}x multiplier!",
-      "updated": "📝 **{tag} now gives {boostStr}!** (previously {oldBoost}x)",
-      "added": "✅ **{tag} now gives {boostStr}!**",
+      "updated": "{edit} **{tag} now gives {boostStr}!** (previously {oldBoost}x)",
+      "added": "{success} **{tag} now gives {boostStr}!**",
       "type_role": "role",
       "type_channel": "channel"
     },
@@ -126,17 +126,17 @@
       "moreXP": " ({remaining} more)",
       "unableToGain": "You are unable to gain XP!",
       "toGo": "{range} to go!",
-      "fieldXP": "✨ XP",
-      "fieldNext": "⏩ Next level",
+      "fieldXP": "{xp} XP",
+      "fieldNext": "{next} Next level",
       "maxLevel": "Max level! Woah!",
-      "fieldCooldown": "🕓 Cooldown",
+      "fieldCooldown": "{clock} Cooldown",
       "none": "None!",
       "cannotGainXP": "Cannot gain XP!",
       "everyone": "Everyone",
       "roleCount": "**{count} roles** - {xpStr}",
       "totalMult": "**Total multiplier: {multiplier}x XP** ({stacking})",
-      "fieldMult": "🌟 Multiplier",
-      "fieldNote": "⚠ Note",
+      "fieldMult": "{multp} Multiplier",
+      "fieldNote": "{warning} Note",
       "syncWarning": "Your level roles are not properly synced! Type {command} to fix this."
     },
     "rewardrole": {
@@ -147,13 +147,13 @@
       "args_dont_sync_desc": "Advanced: Ignores this role when syncing roles",
       "btn_view_all": "View all rewards ({count})",
       "levelZeroError": "Reward roles can't be granted at level 0! Use this to delete existing reward roles.",
-      "deleted": "❌ **Successfully deleted reward role {role} for level {level}.**",
+      "deleted": "{error} **Successfully deleted reward role {role} for level {level}.**",
       "noPerms": "I don't have permission to grant {role}!",
       "alwaysKept": "always kept",
       "ignoresSync": "ignores sync",
       "alreadyGranted": "This role is already granted at level {level}!",
-      "updated": "📝 **{role} will now be granted at level {level}!** (previously {oldLevel}){extraStr}",
-      "added": "✅ **{role} will now be granted at level {level}!**{extraStr}"
+      "updated": "{edit} **{role} will now be granted at level {level}!** (previously {oldLevel}){extraStr}",
+      "added": "{success} **{role} will now be granted at level {level}!**{extraStr}"
     },
     "sync": {
       "metadata_description": "Sync your level roles by adding missing ones and removing incorrect ones.",
@@ -161,8 +161,8 @@
       "noPermOther": "You don't have permission to sync someone else's roles!",
       "noPermSelf": "You don't have permission to sync your level roles!",
       "noRoles": "This server doesn't have any reward roles!",
-      "alreadySynced": "✅ Your level roles are already properly synced!",
-      "success": "🔄 **Level roles successfully synced!**",
+      "alreadySynced": "{success} Your level roles are already properly synced!",
+      "success": "{refresh} **Level roles successfully synced!**",
       "added": "Added: {roles}",
       "removed": "Removed: {roles}",
       "error": "Error syncing roles! {error}"
@@ -644,7 +644,7 @@
         "hidden_from_lb": "Hidden from server leaderboard. Gain XP to be automatically unhidden!",
         "ranked_num": "Ranked #",
         "in": " in ",
-        "max_level": "Max level! 🎉",
+        "max_level": "Max level! {max}",
         "none": "(none)",
         "hidden": "Hidden",
         "none_1x": "None (1x XP)",

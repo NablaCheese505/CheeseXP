@@ -1,4 +1,5 @@
-const Tools = require("./Tools.js")
+const { t } = require('../utils/i18n.js');
+const Tools = require("./Tools.js");
 const tools = Tools.global
 
 const activeCollectors = {}
@@ -16,6 +17,7 @@ class PageEmbed {
         this.timeoutSecs = config.timeoutSecs || 30
         this.ownerID = config.owner
         this.ephemeral = config.ephemeral
+        this.lang = config.lang || 'en'
 
         this.suffix = embed.data.description
         this.footer = embed.data.footer?.text
@@ -57,9 +59,14 @@ class PageEmbed {
         let firstPage = (this.page == 1)
         let lastPage = (this.page >= this.pages)
 
+        let prevNum = firstPage ? this.pages : Math.max((this.page - 1) || 1, 1);
+        let nextNum = lastPage ? 1 : Math.min((this.page + 1), this.pages);
+        let wordPage = t('pagination.page', {}, this.lang) || "Page";
+        let wordOf = t('pagination.of', {}, this.lang) || "of";
+
         let pageOptions = [
-            {style: firstPage ? "Secondary" : "Success", label: `<< Page ${firstPage ? this.pages : Math.max((this.page - 1) || 1, 1)}`, customId: 'prev'},
-            {style: lastPage ? "Secondary" : "Success", label: `Page ${lastPage ? 1 : Math.min((this.page + 1), this.pages)} >>`, customId: 'next'}
+            {style: firstPage ? "Secondary" : "Success", label: `<< ${wordPage} ${prevNum}`, customId: 'prev'},
+            {style: lastPage ? "Secondary" : "Success", label: `${wordPage} ${nextNum} >>`, customId: 'next'}
         ]
 
         if (this.pages == 2) {
@@ -70,7 +77,7 @@ class PageEmbed {
         let pageButtons = this.pages <= 1 ? this.extraButtons : tools.button(pageOptions).concat(this.extraButtons)
 
         let footerText = this.footer || ""
-        if (this.pages > 1) footerText += `\nPage ${this.page} of ${this.pages}`
+        if (this.pages > 1) footerText += `\n${wordPage} ${this.page} ${wordOf} ${this.pages}`
         if (footerText) this.embed.setFooter({text: footerText})
 
         let pgButtonRow = pageButtons[0] ? tools.row(pageButtons) : null

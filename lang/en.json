@@ -5,6 +5,10 @@
       "metadata_description": "Change the bot's language in this server",
       "success": "{success} Done! The server language has been changed to **{lang}**."
     },
+    "help": {
+      "metadata_description": "Displays an interactive list of all my commands.",
+      "title": "📚 Command List"
+    },
     "addxp": {
       "metadata_description": "Add or remove XP from a member. (requires manage server permission)",
       "args_member_desc": "Which member to modify",
@@ -184,6 +188,10 @@
       "noMembersPage": "There are no members on this page!"
     }
   },
+  "pagination": {
+    "page": "Page",
+    "of": "of"
+    },
   "global_js": {
       "forever": "Forever",
       "sec": "sec",

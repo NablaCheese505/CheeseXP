@@ -1,5 +1,6 @@
 const { t } = require('../../utils/i18n.js');
 const config = require('../../config.json');
+const botConfig = require('../../config.json');
 
 module.exports = {
 metadata: {
@@ -84,7 +85,7 @@ async run(client, int, tools) {
 
     client.db.update(int.guild.id, { $set: { [`users.${user.id}.xp`]: newXP } }).then(() => {
         
-        const emoji = newXP > xp ? "⏫" : "⏬";
+        const emoji = newXP > xp ? botConfig.emojis.up : botConfig.emojis.down;
         const levelText = newLevel != level ? t('commands.addxp.levelText', { newLevel }, serverLang) : "";
         const formattedDiff = `${xpDiff >= 0 ? "+" : ""}${tools.commafy(xpDiff)}`;
         

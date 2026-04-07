@@ -96,7 +96,22 @@
       "btnExport": "Export Data",
       "btnRewardRoles": "Reward Roles ({count})",
       "btnRoleMulti": "Role Multipliers ({count})",
-      "btnChannelMulti": "Channel Multipliers ({count})"
+      "btnChannelMulti": "Channel Multipliers ({count})",
+      "voiceEnabled": "**{mic} Voice XP:** __{status}__",
+      "voiceMultiplier": "**Voice Multiplier:** {mult}x",
+      "voiceLimit": "**Voice Limit:** {limit}",
+      "noLimit": "No limit",
+      "btnDisableVoice": "Disable Voice XP",
+      "btnEnableVoice": "Enable Voice XP"
+    },
+    "toggle_xp": {
+      "enabled": "enabled",
+      "disabled": "disabled",
+      "voiceAlready": "Voice XP is already {state} in this server!",
+      "voiceSuccess": "{success} **Voice XP is now {state} in this server!**",
+      "xpAlready": "General XP is already {state} in this server!",
+      "xpSuccess": "{success} **General XP is now {state} in this server!**",
+      "error": "Something went wrong while trying to toggle settings!"
     },
     "multiplier": {
       "metadata_description": "Add or remove an XP multiplier. (requires manage server permission)",
@@ -187,6 +202,22 @@
       "listItem": "**{p})** {highlight1}Lv. {level} - <@{id}> ({xp} XP){highlight2}",
       "btnOnline": "Online Leaderboard",
       "noMembersPage": "There are no members on this page!"
+    },
+    "list_rewards": {
+      "noRewardRoles": "This server doesn't have any reward roles!",
+      "title": "Reward Roles ({count})",
+      "footer": "Add or remove reward roles with /rewardrole",
+      "item": "**Level {level}** - <@&{id}>{keep}{noSync}",
+      "keep": " (keep)",
+      "noSync": " (no sync)"
+    },
+    "list_multipliers": {
+      "noMultipliers": "This server doesn't have any {type} multipliers!",
+      "title": "{type} Multipliers ({count})",
+      "footer": "Add or remove multipliers with /multiplier",
+      "typeRole": "Role",
+      "typeChannel": "Channel",
+      "category": "(category)"
     }
   },
   "pagination": {
@@ -706,5 +737,92 @@
         "error_downloading": "Error downloading data!"
       }
     },
-    "mention_help": "Hi there! I use `/` (Slash) commands. Try `/help` or `/config` to get started."
+    "mention_help": "Hi there! I use `/` (Slash) commands. Try `/help` or `/config` to get started.",
+    "quick_settings": {
+    "group_default": "Settings",
+    "group_home": "Quick settings",
+    "group_general": "General settings",
+    "group_level": "Levelling settings",
+    "group_rank": "Rank and Leaderboard settings",
+    "footer_home": "Most basic settings can be toggled from here",
+    "placeholder_home": "Choose a category...",
+    "placeholder_setting": "Choose a setting...",
+    
+    "folder_home": "Back",
+    "folder_general": "General",
+    "folder_level": "Levelling",
+    "folder_rank": "Rank and Leaderboard",
+    
+    "name_enabled": "Enable XP (Text)",
+    "desc_enabled": "Allows members to gain XP by sending messages",
+    
+    "name_enabledVoiceXp": "Enable Voice XP",
+    "desc_enabledVoiceXp": "Allows members to gain XP while in voice channels",
+
+    "name_gain_min": "Min XP",
+    "desc_gain_min": "Minimum amount of XP to earn per message",
+    
+    "name_gain_max": "Max XP",
+    "desc_gain_max": "Maximum amount of XP to earn per message",
+    
+    "name_gain_time": "XP Cooldown",
+    "desc_gain_time": "Members must wait this many seconds before they can gain XP again",
+    
+    "name_maxLevel": "Level Cap",
+    "desc_maxLevel": "The highest level that members can reach",
+    
+    "name_levelUp_enabled": "Enable level up message",
+    "desc_levelUp_enabled": "Sends a message or DM when a member levels up",
+    
+    "name_level_up_multiple": "Level up multiple",
+    "desc_level_up_multiple": "Only sends the level up message when reaching a multiple of this level (e.g. every 5 levels)",
+    
+    "name_levelUp_multipleUntil": "Multiple Cap",
+    "desc_levelUp_multipleUntil": "After this level, the multiple is ignored and a message is sent on every level",
+    "zero_levelUp_multipleUntil": "Disabled",
+    
+    "name_rewardSyncing_noManual": "Manual Sync",
+    "desc_rewardSyncing_noManual": "Allows members to manually sync their roles using /sync",
+    
+    "name_rewardSyncing_noWarning": "Sync Warning",
+    "desc_rewardSyncing_noWarning": "Show a warning message in /rank if roles are out of sync",
+    
+    "name_rankCard_disabled": "Enable /rank",
+    "desc_rankCard_disabled": "Enables /rank (Disabling this also hides most info in /calculate)",
+    
+    "name_rankCard_ephemeral": "Hide /rank messages",
+    "desc_rankCard_ephemeral": "Forces /rank messages to be visible only to the user who ran the command",
+    
+    "name_rankCard_hideCooldown": "Hide cooldown",
+    "desc_rankCard_hideCooldown": "Hides the time remaining until the next XP gain",
+    
+    "name_hideMultipliers": "Hide multipliers",
+    "desc_hideMultipliers": "Hides which roles grant multipliers (except 0x)",
+    
+    "name_rankCard_relativeLevel": "Show relative XP",
+    "desc_rankCard_relativeLevel": "Changes the 'next level' section of /rank to start at 0 from the current level",
+    
+    "name_leaderboard_disabled": "Enable Leaderboard",
+    "desc_leaderboard_disabled": "Enables the online server leaderboard",
+    
+    "name_leaderboard_private": "Private Leaderboard",
+    "desc_leaderboard_private": "Restricts the web leaderboard so only server members can view it",
+    
+    "name_leaderboard_hideRoles": "Hide Reward Roles",
+    "desc_leaderboard_hideRoles": "Hides the role list on the public web leaderboard",
+    
+    "name_leaderboard_ephemeral": "Hide /top messages",
+    "desc_leaderboard_ephemeral": "Forces /top messages to be visible only to the user who ran the command",
+    
+    "name_leaderboard_minLevel": "Minimum Leaderboard Level",
+    "desc_leaderboard_minLevel": "Hides members below this level from the leaderboard",
+    "zero_leaderboard_minLevel": "None",
+    
+    "name_leaderboard_maxEntries": "Max Leaderboard Entries",
+    "desc_leaderboard_maxEntries": "Only shows the Top X members on the leaderboard",
+    "zero_leaderboard_maxEntries": "Unlimited",
+    
+    "trueText": "__True__",
+    "falseText": "False"
+  }
 }

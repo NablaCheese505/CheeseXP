@@ -96,7 +96,22 @@
       "btnExport": "Exportar Datos",
       "btnRewardRoles": "Roles de Recompensa ({count})",
       "btnRoleMulti": "Multiplicadores de Rol ({count})",
-      "btnChannelMulti": "Multiplicadores de Canal ({count})"
+      "btnChannelMulti": "Multiplicadores de Canal ({count})",
+      "voiceEnabled": "**{mic} Voice XP:** __{status}__",
+      "voiceMultiplier": "**Voice Multiplier:** {mult}x",
+      "voiceLimit": "**Voice Limit:** {limit}",
+      "noLimit": "No limit",
+      "btnDisableVoice": "Desactivar Voz",
+      "btnEnableVoice": "Activar Voz"
+    },
+    "toggle_xp": {
+      "enabled": "activada",
+      "disabled": "desactivada",
+      "voiceAlready": "¡La XP por Voz ya está {state} en este servidor!",
+      "voiceSuccess": "{success} **¡La XP por Voz ahora está {state} en este servidor!**",
+      "xpAlready": "¡La XP general ya está {state} en este servidor!",
+      "xpSuccess": "{success} **¡La XP general ahora está {state} en este servidor!**",
+      "error": "¡Algo salió mal al intentar cambiar la configuración!"
     },
     "multiplier": {
       "metadata_description": "Añade o quita un multiplicador de XP. (requiere gestionar servidor)",
@@ -187,6 +202,22 @@
       "listItem": "**{p})** {highlight1}Nvl. {level} - <@{id}> ({xp} XP){highlight2}",
       "btnOnline": "Tabla Online",
       "noMembersPage": "¡No hay miembros en esta página!"
+    },
+    "list_rewards": {
+      "noRewardRoles": "¡Este servidor no tiene roles de recompensa!",
+      "title": "Roles de Recompensa ({count})",
+      "footer": "Añade o quita roles de recompensa con /rewardrole",
+      "item": "**Nivel {level}** - <@&{id}>{keep}{noSync}",
+      "keep": " (mantener)",
+      "noSync": " (sin sync)"
+    },
+    "list_multipliers": {
+      "noMultipliers": "¡Este servidor no tiene multiplicadores de {type}!",
+      "title": "Multiplicadores de {type} ({count})",
+      "footer": "Añade o quita multiplicadores con /multiplier",
+      "typeRole": "Rol",
+      "typeChannel": "Canal",
+      "category": "(categoría)"
     }
   },
   "pagination": {
@@ -706,5 +737,92 @@
         "error_downloading": "¡Error al descargar los datos!"
       }
     },
-    "mention_help": "¡Hola! Mi prefijo aquí son los comandos `/` (Slash). Usa `/help` o `/config` para empezar."
+    "mention_help": "¡Hola! Mi prefijo aquí son los comandos `/` (Slash). Usa `/help` o `/config` para empezar.",
+    "quick_settings": {
+    "group_default": "Ajustes",
+    "group_home": "Ajustes rápidos",
+    "group_general": "Ajustes generales",
+    "group_level": "Ajustes de subida de nivel",
+    "group_rank": "Ajustes de Rango y Clasificación",
+    "footer_home": "Los ajustes más básicos pueden ser configurados desde aquí",
+    "placeholder_home": "Elige una categoría...",
+    "placeholder_setting": "Elige un ajuste...",
+    
+    "folder_home": "Atrás",
+    "folder_general": "General",
+    "folder_level": "Subida de nivel",
+    "folder_rank": "Rango y Clasificación",
+    
+    "name_enabled": "Activar XP (Texto)",
+    "desc_enabled": "Permite a los miembros ganar XP enviando mensajes",
+    
+    "name_enabledVoiceXp": "Activar XP por Voz",
+    "desc_enabledVoiceXp": "Permite a los miembros ganar XP estando en canales de voz",
+
+    "name_gain_min": "XP Mínima",
+    "desc_gain_min": "Cantidad mínima de XP a ganar por mensaje",
+    
+    "name_gain_max": "XP Máxima",
+    "desc_gain_max": "Cantidad máxima de XP a ganar por mensaje",
+    
+    "name_gain_time": "Cooldown de XP",
+    "desc_gain_time": "Los miembros deben esperar estos segundos antes de ganar XP de nuevo",
+    
+    "name_maxLevel": "Nivel Máximo",
+    "desc_maxLevel": "El nivel más alto que los miembros pueden alcanzar",
+    
+    "name_levelUp_enabled": "Activar mensaje de subida",
+    "desc_levelUp_enabled": "Envía un mensaje o MD cuando un miembro sube de nivel",
+    
+    "name_levelUp_multiple": "Múltiplo de subida",
+    "desc_levelUp_multiple": "Solo envía el mensaje en múltiplos de este nivel (ej. cada 5 niveles)",
+    
+    "name_levelUp_multipleUntil": "Límite del Múltiplo",
+    "desc_levelUp_multipleUntil": "Después de este nivel, el múltiplo se ignora y avisa en cada nivel",
+    "zero_levelUp_multipleUntil": "Desactivado",
+    
+    "name_rewardSyncing_noManual": "Sincronización Manual",
+    "desc_rewardSyncing_noManual": "Permite a los miembros sincronizar sus roles manualmente usando /sync",
+    
+    "name_rewardSyncing_noWarning": "Advertencia de sincronización",
+    "desc_rewardSyncing_noWarning": "Muestra una advertencia en /rank si los roles están desincronizados",
+    
+    "name_rankCard_disabled": "Activar /rank",
+    "desc_rankCard_disabled": "Activa /rank (Desactivarlo oculta datos en /calculate)",
+    
+    "name_rankCard_ephemeral": "Ocultar mensajes de /rank",
+    "desc_rankCard_ephemeral": "Fuerza que los mensajes de /rank solo sean visibles para quien usa el comando",
+    
+    "name_rankCard_hideCooldown": "Ocultar cooldown",
+    "desc_rankCard_hideCooldown": "Oculta el tiempo restante hasta la próxima ganancia de XP",
+    
+    "name_hideMultipliers": "Ocultar multiplicadores",
+    "desc_hideMultipliers": "Oculta qué roles otorgan multiplicadores (excepto 0x)",
+    
+    "name_rankCard_relativeLevel": "Mostrar XP relativa",
+    "desc_rankCard_relativeLevel": "Hace que la sección 'siguiente nivel' de /rank empiece en 0 desde el nivel actual",
+    
+    "name_leaderboard_disabled": "Activar tabla de clasificación",
+    "desc_leaderboard_disabled": "Activa la tabla de líderes online del servidor",
+    
+    "name_leaderboard_private": "Tabla privada",
+    "desc_leaderboard_private": "Restringe la web para que solo los miembros del servidor puedan verla",
+    
+    "name_leaderboard_hideRoles": "Ocultar roles de recompensa",
+    "desc_leaderboard_hideRoles": "Oculta la lista de roles en la web pública",
+    
+    "name_leaderboard_ephemeral": "Ocultar mensajes de /top",
+    "desc_leaderboard_ephemeral": "Fuerza que los mensajes de /top solo sean visibles para quien los usa",
+    
+    "name_leaderboard_minLevel": "Nivel mínimo para tabla",
+    "desc_leaderboard_minLevel": "Oculta de la tabla a los miembros por debajo de este nivel",
+    "zero_leaderboard_minLevel": "Ninguno",
+    
+    "name_leaderboard_maxEntries": "Máximo de miembros en tabla",
+    "desc_leaderboard_maxEntries": "Muestra solo al Top X de miembros",
+    "zero_leaderboard_maxEntries": "Ilimitado",
+    
+    "trueText": "__Sí__",
+    "falseText": "No"
+  }
 }

@@ -20,6 +20,11 @@ async run(client, int, tools) {
 
     let polarisSettings = [
         t('commands.config.xpEnabled', { status: settings.enabled ? t('commands.config.yes', {}, serverLang) : t('commands.config.no', {}, serverLang) }, serverLang),
+        
+        t('commands.config.voiceEnabled', { status: settings.enabledVoiceXp ? t('commands.config.yes', {}, serverLang) : t('commands.config.no', {}, serverLang) }, serverLang),
+        t('commands.config.voiceMultiplier', { mult: settings.voice.multiplier }, serverLang),
+        t('commands.config.voiceLimit', { limit: settings.voice.hoursLimit > 0 ? `${settings.voice.hoursLimit}h` : t('commands.config.noLimit', {}, serverLang) }, serverLang),
+
         t('commands.config.xpPerMsg', { range: settings.gain.min == settings.gain.max ? tools.commafy(settings.gain.min) : `${tools.commafy(settings.gain.min)} - ${tools.commafy(settings.gain.max)}` }, serverLang),
         t('commands.config.xpCooldown', { time: tools.commafy(settings.gain.time), sec: tools.extraS("sec", settings.gain.time) }, serverLang),
         t('commands.config.xpCurve', { curve: `${settings.curve[3]}x³ + ${settings.curve[2]}x² + ${settings.curve[1]}x` }, serverLang),
@@ -35,16 +40,24 @@ async run(client, int, tools) {
         description: polarisSettings.join("\n")
     })
 
-    let toggleButton = settings.enabled ?
+    let toggleBtn = settings.enabled ?
       {style: "Danger", label: t('commands.config.btnDisableXP', {}, serverLang), emoji: botConfig.emojis.disable, customId: "toggle_xp" }
     : {style: "Success", label: t('commands.config.btnEnableXP', {}, serverLang), emoji: botConfig.emojis.xp, customId: "toggle_xp" };
 
-    let buttons = tools.button([
-        {style: "Success", label: t('commands.config.btnEditSettings', {}, serverLang), emoji: botConfig.emojis.settings, customID: "settings_list"},
-        toggleButton,
+    let toggleVoiceBtn = settings.enabledVoiceXp ?
+      {style: "Danger", label: t('commands.config.btnDisableVoice', {}, serverLang), emoji: botConfig.emojis.disable, customId: "toggle_voice" }
+    : {style: "Success", label: t('commands.config.btnEnableVoice', {}, serverLang), emoji: botConfig.emojis.mic || "🎤", customId: "toggle_voice" };
+
+    let buttonsRow1 = tools.button([
+        {style: "Success", label: t('commands.config.btnEditSettings', {}, serverLang), emoji: botConfig.emojis.settings, customId: "settings_list"},
+        toggleBtn,
+        toggleVoiceBtn
+    ]);
+    
+    let buttonsRow2 = tools.button([
         {style: "Link", label: t('commands.config.btnEditOnline', {}, serverLang), emoji: botConfig.emojis.online, url: `${tools.WEBSITE}/settings/${int.guild.id}`},
         {style: "Secondary", label: t('commands.config.btnExport', {}, serverLang), emoji: botConfig.emojis.export, customId: "export_xp"}
-    ])
+    ]);
 
     let listButtons = tools.button([
         {style: "Primary", label: t('commands.config.btnRewardRoles', { count: settings.rewards.length }, serverLang), customId: "list_reward_roles"},
@@ -52,6 +65,6 @@ async run(client, int, tools) {
         {style: "Primary", label: t('commands.config.btnChannelMulti', { count: settings.multipliers.channels.length }, serverLang), customId: "list_multipliers~channels"}
     ])
 
-    return int.reply({embeds: [embed], components: [tools.row(buttons)[0], tools.row(listButtons)[0]]})
+    return int.reply({embeds: [embed], components: [tools.row(buttonsRow1)[0], tools.row(buttonsRow2)[0], tools.row(listButtons)[0]]})
 
 }}

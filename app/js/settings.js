@@ -345,7 +345,7 @@ addUhOh()
             appendRoleSelect('#roleMultiplierSelect', roleOption, x, false, roleMultipliers.some(r => r.id == x.id))
         })
 
-        let channelPrefixes = { channel: "#", category: "&gt; ", vc: "🔊 ", thread: "└─ ", forum: "💬 "}
+        let channelPrefixes = { channel: "# ", category: "📂 ", vc: "🔊 ", thread: "🧵 ", forum: "💬 "}
         let chMultiplierChannels = data.channels.map(x => `<option ${x.type == "category" ? `style="font-weight: bold"` : ""} value="${x.id}">${channelPrefixes[x.type] || "* "}${escapeHTML(x.name)}</option>`)
         $('#channelMultiplierSelect').append(`<option value='none' selected disabled>${i18n.opt_channel}</option>`).append(chMultiplierChannels)
 

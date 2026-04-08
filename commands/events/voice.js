@@ -18,49 +18,60 @@ module.exports = {
         const joinedVoice = !oldState.channelId && newState.channelId;
         const leftVoice = oldState.channelId && !newState.channelId;
         const movedChannel = oldState.channelId && newState.channelId && oldState.channelId !== newState.channelId;
+        
+        const stateChanged = oldState.channelId === newState.channelId && 
+                             (oldState.selfDeaf !== newState.selfDeaf || oldState.selfMute !== newState.selfMute);
 
         let userData = db.users[userId] || { xp: 0, cooldown: 0, voiceTime: 0 };
         let needsSave = false;
 
-        if (leftVoice || movedChannel) {
+        if (leftVoice || movedChannel || stateChanged) {
             
-            if (userData.voiceTime && (Date.now() - userData.voiceTime > 30000)) {
+            if (userData.voiceTime && userData.voiceTime > 0) {
                 
-                const multiplierData = tools.getMultiplier(oldState.member, settings, oldState.channel);
+                const timeSpentMs = Date.now() - userData.voiceTime;
                 
-                if (multiplierData.multiplier > 0 && settings.voice.multiplier > 0) {
-                    const oldXP = userData.xp;
+                if (timeSpentMs > 30000) {
                     
-                    let xpRange = [settings.gain.min, settings.gain.max].map(x => Math.round(x * multiplierData.multiplier));
-                    let baseXP = tools.rng(...xpRange); 
+                    const oldChannel = oldState.channel;
                     
-                    baseXP = Math.round(settings.voice.multiplier * baseXP);
+                    const isAFKChannel = oldState.guild.afkChannelId && oldState.channelId === oldState.guild.afkChannelId;
                     
-                    let timeSpentMs = Date.now() - userData.voiceTime;
+                    const wasDeafOrMute = oldState.selfDeaf || oldState.selfMute;
                     
+                    const wasAlone = !oldChannel; 
+
+                    let exceededLimit = false;
                     if (settings.voice.hoursLimit > 0) {
                         const maxMsAllowed = settings.voice.hoursLimit * 3600000;
-                        if (timeSpentMs > maxMsAllowed) {
-                            timeSpentMs = maxMsAllowed;
-                        }
+                        if (timeSpentMs > maxMsAllowed) exceededLimit = true;
                     }
-                    
-                    let minutesSpent = timeSpentMs / 60000;
-                    let xpGained = Math.round(baseXP * minutesSpent);
-                    
-                    if (xpGained > 0) {
-                        userData.xp += xpGained;
-                        
-                        userData.cooldown = Date.now() + (settings.gain.time * 1000);
-                        
-                        const oldLevel = tools.getLevel(oldXP, settings);
-                        const newLevel = tools.getLevel(userData.xp, settings);
 
-                        if (newLevel > oldLevel) {
-                            let syncMode = settings.rewardSyncing.sync;
-                            if (syncMode === "xp" || syncMode === "level") {
-                                let roleCheck = tools.checkLevelRoles(oldState.guild.roles.cache, oldState.member.roles.cache, newLevel, settings.rewards, null, oldLevel);
-                                tools.syncLevelRoles(oldState.member, roleCheck).catch(() => {});
+                    if (!isAFKChannel && !wasDeafOrMute && !wasAlone && !exceededLimit) {
+                        const multiplierData = tools.getMultiplier(oldState.member, settings, oldChannel);
+                        
+                        if (multiplierData.multiplier > 0 && settings.voice.multiplier > 0) {
+                            const oldXP = userData.xp;
+                            
+                            let xpRange = [settings.gain.min, settings.gain.max].map(x => Math.round(x * multiplierData.multiplier));
+                            let baseXP = tools.rng(...xpRange); 
+                            
+                            let minutesSpent = timeSpentMs / 60000;
+                            let xpGained = Math.round(baseXP * settings.voice.multiplier * minutesSpent);
+                            
+                            if (xpGained > 0) {
+                                userData.xp += xpGained;
+                                
+                                const oldLevel = tools.getLevel(oldXP, settings);
+                                const newLevel = tools.getLevel(userData.xp, settings);
+        
+                                if (newLevel > oldLevel) {
+                                    let syncMode = settings.rewardSyncing.sync;
+                                    if (syncMode === "xp" || syncMode === "level") {
+                                        let roleCheck = tools.checkLevelRoles(oldState.guild.roles.cache, oldState.member.roles.cache, newLevel, settings.rewards, null, oldLevel);
+                                        tools.syncLevelRoles(oldState.member, roleCheck).catch(() => {});
+                                    }
+                                }
                             }
                         }
                     }
@@ -71,9 +82,18 @@ module.exports = {
             needsSave = true;
         }
 
-        if (joinedVoice || movedChannel) {
-            userData.voiceTime = Date.now();
-            needsSave = true;
+        if (joinedVoice || movedChannel || stateChanged) {
+            
+            const isAFKChannel = newState.guild.afkChannelId && newState.channelId === newState.guild.afkChannelId;
+            const isDeafOrMute = newState.selfDeaf || newState.selfMute;
+
+            if (newState.channelId && !isAFKChannel && !isDeafOrMute) {
+                userData.voiceTime = Date.now();
+                needsSave = true;
+            } else if (userData.voiceTime > 0) {
+                userData.voiceTime = 0;
+                needsSave = true;
+            }
         }
 
         if (needsSave) {

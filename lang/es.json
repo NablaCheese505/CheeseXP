@@ -218,6 +218,13 @@
       "typeRole": "Rol",
       "typeChannel": "Canal",
       "category": "(categoría)"
+    },
+    "settings_view": {
+      "currentValue": "Valor actual",
+      "default": "Predeterminado",
+      "back": "Atrás",
+      "edit": "Editar",
+      "toggle": "Alternar"
     }
   },
   "pagination": {
@@ -823,6 +830,14 @@
     "zero_leaderboard_maxEntries": "Ilimitado",
     
     "trueText": "__Sí__",
-    "falseText": "No"
+    "falseText": "No",
+
+    "group_voice": "Ajustes de Voz",
+    "folder_voice": "Voz",
+    "name_voice_multiplier": "Multiplicador de Voz",
+    "desc_voice_multiplier": "Multiplicador de XP base por cada minuto en voz",
+    "name_voice_hoursLimit": "Límite de Horas",
+    "desc_voice_hoursLimit": "Máximo de horas continuas que otorgan XP",
+    "zero_voice_hoursLimit": "Sin límite"
   }
 }

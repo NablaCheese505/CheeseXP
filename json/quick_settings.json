@@ -1,14 +1,14 @@
 {
-
     "home": [
         { "groupName": "Quick settings" },
-        { "emoji": "✨", "name": "General", "folder": "general" },
-        { "emoji": "🎁", "name": "Levelling", "folder": "level" },
-        { "emoji": "📊", "name": "Rank and Leaderboard", "folder": "rank" }
+        { "emoji": "settings", "name": "General", "folder": "general" },
+        { "emoji": "mic", "name": "Voice XP", "folder": "voice" },
+        { "emoji": "up", "name": "Levelling", "folder": "level" },
+        { "emoji": "max", "name": "Rank and Leaderboard", "folder": "rank" }
     ],
 
     "general": [
-        { "emoji": "⬅️", "name": "Back", "folder": "home", "groupName": "General settings" },
+        { "emoji": "back", "name": "Back", "folder": "home", "groupName": "General settings" },
         { "db": "enabled", "name": "Enable XP", "desc": "Allows members to gain XP", "tip": "Disabling will prevent anyone from gaining XP, but will not reset or remove existing XP." },
         { "db": "gain.min", "name": "Min XP", "desc": "Minimum amount of XP to earn per message", "tip": "Each message gives a random amount of XP, this changes the lower bound" },
         { "db": "gain.max", "name": "Max XP", "desc": "Maximum amount of XP to earn per message", "tip": "Each message gives a random amount of XP, this changes the upper bound" },
@@ -16,8 +16,15 @@
         { "db": "maxLevel", "name": "Level cap", "desc": "The highest level members can reach", "tip": "Members can still gain XP past this, unless you reward a role with a 0x multiplier" }
     ],
 
+    "voice": [
+        { "emoji": "back", "name": "Back", "folder": "home", "groupName": "Voice XP settings" },
+        { "db": "enabledVoiceXp", "name": "Enable Voice XP", "desc": "Allows members to gain XP while in voice channels" },
+        { "db": "voice.multiplier", "name": "Voice Multiplier", "desc": "Multiplier applied to normal message XP for every minute in voice", "tip": "Example: If set to 1, users get 1 message worth of XP per minute." },
+        { "db": "voice.hoursLimit", "name": "Hours Limit", "desc": "Maximum continuous hours in voice that grant XP", "tip": "Set to 0 for unlimited. Prevents 24/7 AFK farming.", "zeroText": "No limit" }
+    ],
+
     "level": [
-        { "emoji": "⬅️", "name": "Back", "folder": "home", "groupName": "Levelling settings" },
+        { "emoji": "back", "name": "Back", "folder": "home", "groupName": "Levelling settings" },
         { "db": "levelUp.enabled", "name": "Enable level up message", "desc": "Sends a message or DM when a member levels up" },
         { "db": "levelUp.multiple", "name": "Level up multiple", "desc": "Only sends the level up message when reaching a multiple of this number", "tip": "A multiple of 5 sends on levels 5, 10, 15, 20, 25, ...", "str": "Every # level(s)" },
         { "db": "levelUp.multipleUntil", "name": "Level up multiple cap", "desc": "After reaching this level, the level up multiple is no longer used and a message is posted on every level reached", "tip": "Set to 0 to disable", "str": "Level #", "zeroText": "Disabled" },
@@ -27,7 +34,7 @@
     ],
 
     "rank": [
-        { "emoji": "⬅️", "name": "Back", "folder": "home", "groupName": "Rank and Leaderboard settings" },
+        { "emoji": "back", "name": "Back", "folder": "home", "groupName": "Rank and Leaderboard settings" },
         { "db": "rankCard.disabled", "name": "Enable /rank", "invert": true, "desc": "Enables /rank cards", "tip": "Disabling this also hides most info in /calculate" },
         { "db": "rankCard.ephemeral", "name": "Hide /rank messages", "desc": "Forces /rank messages to be ephemeral, meaning only the member who typed the commmand can see it" },
         { "db": "rankCard.hideCooldown", "name": "Hide cooldown", "desc": "Hides the amount of time until XP can be gained again " },

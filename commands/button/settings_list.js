@@ -42,8 +42,8 @@ async run(client, int, tools, selected) {
 
     function getDataEmoji(type, val) {
         if (type == "bool") return val ? botConfig.emojis.success : botConfig.emojis.error;
-        else if (type == "int" || type == "float") return "🔢";
-        else return "📝";
+        else if (type == "int" || type == "float") return botConfig.emojis.number || "🔢"; 
+        else return botConfig.emojis.text || "📝"; 
     }
 
     let dirName = (selected ? selected[1] : int.isButton ? buttonData[1] : rootFolder) || rootFolder
@@ -65,7 +65,7 @@ async run(client, int, tools, selected) {
         if (x.groupName) return; // Ya lo procesamos arriba
         
         if (x.folder) {
-            let emoji = x.emoji || "📁"
+            let emoji = botConfig.emojis[x.emoji] || x.emoji || "📁"
             let fName = t(`quick_settings.folder_${x.folder}`, {}, serverLang);
             if (fName === `quick_settings.folder_${x.folder}`) fName = x.name; // fallback
             

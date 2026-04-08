@@ -218,6 +218,13 @@
       "typeRole": "Role",
       "typeChannel": "Channel",
       "category": "(category)"
+    },
+    "settings_view": {
+      "currentValue": "Current value",
+      "default": "Default",
+      "back": "Back",
+      "edit": "Edit",
+      "toggle": "Toggle"
     }
   },
   "pagination": {
@@ -823,6 +830,14 @@
     "zero_leaderboard_maxEntries": "Unlimited",
     
     "trueText": "__True__",
-    "falseText": "False"
+    "falseText": "False",
+
+    "group_voice": "Voice XP Settings",
+    "folder_voice": "Voice XP",
+    "name_voice_multiplier": "Voice Multiplier",
+    "desc_voice_multiplier": "Multiplier applied to normal message XP for every minute in voice",
+    "name_voice_hoursLimit": "Hours Limit",
+    "desc_voice_hoursLimit": "Maximum continuous hours in voice that grant XP",
+    "zero_voice_hoursLimit": "No limit"
   }
 }

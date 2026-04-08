@@ -1,5 +1,7 @@
 const config = require("../../json/quick_settings.json")
 const schema = require("../../database_schema.js").settingsIDs
+const { t } = require('../../utils/i18n.js');
+const botConfig = require("../../config.json");
 
 module.exports = {
 metadata: {
@@ -8,7 +10,9 @@ metadata: {
 
 async run(client, int, tools, selected) {
 
-    let db = await tools.fetchSettings()
+    let db = await tools.fetchSettings(int.user.id, int.guild.id)
+    let serverLang = db?.settings?.lang || botConfig.defaultLanguage || 'en';
+
     if (!db) return tools.warn("*noData")
 
     let settings = db.settings
@@ -33,10 +37,23 @@ async run(client, int, tools, selected) {
     let val = tools.getSettingFromID(settingID, settings)
     let data = config[group].find(x => x.db == settingID)
 
+    let settingName = t(`quick_settings.name_${settingID.replace(/\./g, '_')}`, {}, serverLang);
+    if (settingName === `quick_settings.name_${settingID.replace(/\./g, '_')}`) settingName = data.name; // fallback
+
+    let settingDesc = t(`quick_settings.desc_${settingID.replace(/\./g, '_')}`, {}, serverLang);
+    if (settingDesc === `quick_settings.desc_${settingID.replace(/\./g, '_')}`) settingDesc = data.desc; // fallback
+    
+    let settingTipKey = `quick_settings.tip_${settingID.replace(/\./g, '_')}`;
+    let settingTip = t(settingTipKey, {}, serverLang);
+    if (settingTip === settingTipKey) settingTip = data.tip || ""; // fallback
+
     function previewSetting(val) {
+        let tZero = t(`quick_settings.zero_${settingID.replace(/\./g, '_')}`, {}, serverLang);
+        if (tZero !== `quick_settings.zero_${settingID.replace(/\./g, '_')}` && val === 0) return `0 (${tZero})`;
         if (data.zeroText && val === 0) return `0 (${data.zeroText})`
+        
         else switch(setting.type) {
-            case "bool": return ((data.invert ? !val : val) ? "True" : "False");
+            case "bool": return ((data.invert ? !val : val) ? t('quick_settings.trueText', {}, serverLang) : t('quick_settings.falseText', {}, serverLang));
             case "int": return tools.commafy(+val);
             case "float": return tools.commafy(Number(val.toFixed(setting.precision || 8)));
         }
@@ -45,19 +62,19 @@ async run(client, int, tools, selected) {
 
     let currentVal = previewSetting(val)
     
-    let footer = data.tip || ""
-    if (setting.default !== undefined) footer += `${footer ? "\n" : ""}Default: ${previewSetting(setting.default)}`
+    let footer = settingTip;
+    if (setting.default !== undefined) footer += `${footer ? "\n" : ""}${t('commands.settings_view.default', {}, serverLang)}: ${previewSetting(setting.default)}`
 
     let embed = tools.createEmbed({
         color: tools.COLOR,
-        title: data.name,
-        description: `**Current value:** ${currentVal}\n\n💡 ${data.desc}`,
+        title: settingName,
+        description: `**${t('commands.settings_view.currentValue', {}, serverLang)}:** ${currentVal}\n\nℹ️ ${settingDesc}`,
         footer: footer || null
     })
 
     let buttons = tools.button([
-        {style: "Secondary", label: "Back", customID: `settings_list~${group}~${int.user.id}`},
-        {style: "Primary", label: (setting.type == "bool") ? "Toggle" : "Edit", customId: `settings_edit~${settingID}~${int.user.id}`}
+        {style: "Secondary", label: t('commands.settings_view.back', {}, serverLang), customID: `settings_list~${group}~${int.user.id}`},
+        {style: "Primary", label: (setting.type == "bool") ? t('commands.settings_view.toggle', {}, serverLang) : t('commands.settings_view.edit', {}, serverLang), customId: `settings_edit~${settingID}~${int.user.id}`}
     ])
 
     tools.editOrReply({embeds: [embed], components: tools.row(buttons)})

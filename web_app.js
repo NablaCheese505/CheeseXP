@@ -893,6 +893,17 @@ app.get("/logout", async function(req, res) {
     }).catch(e => sendRedirect(res, "/"))
 })
 
+// Limpiador automático de cachés caducadas (Libera RAM)
+setInterval(() => {
+    let now = Date.now();
+    for (let t in tokenCache) {
+        if (tokenCache[t].expires <= now) delete tokenCache[t];
+    }
+    for (let t in discordCache) {
+        if (discordCache[t].expires <= now) delete discordCache[t];
+    }
+}, 3600000); // Se ejecuta cada hora (3600000 ms)
+
 // ===== ERROR HANDLERS =====
 app.get("/api", function(req, res) { res.send("ඞ") })
 

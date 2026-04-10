@@ -27,7 +27,7 @@
     },
     "botstatus": {
       "metadata_description": "Mira algunos detalles sobre el bot",
-      "creator": "**Creador original:** **[Colon](https://gdcolon.com)** 🦊⛩️",
+      "creator": "**Dev Actual:** **[NablaCheese505](https://github.com/NablaCheese505)** 🧀",
       "version": "**Versión:** v{version} - actualizado <t:{time}:R>",
       "shard": "**Shard:** {id}/{count}",
       "uptime": "**Tiempo en línea:** {time}",
@@ -35,7 +35,7 @@
       "on_shard": " (en shard: {count})",
       "memory": "**Uso de memoria:** {ram} MB",
       "pinging": "Haciendo ping...",
-      "ping_result": "Ping: {ms}ms",
+      "ping_result": "Ping: {ms}ms | Creador original: Colon",
       "btn_website": "Sitio Web",
       "btn_changelog": "Actualizaciones",
       "btn_support": "Soporte"

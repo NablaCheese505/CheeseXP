@@ -28,6 +28,11 @@ const client = new Discord.Client({
         ThreadMemberManager: 0, 
         ThreadManager: 10
     }),
+    sweepers: {
+        ...Discord.Options.DefaultSweeperSettings,
+        messages: { interval: 3600, lifetime: 1800 }, 
+        users: { interval: 3600, filter: () => user => user.id !== client.user.id }
+    },
     intents: ['Guilds', 'GuildMessages', 'DirectMessages', 'GuildVoiceStates'].map(i => Discord.GatewayIntentBits[i]),
     partials: ['Channel'].map(p => Discord.Partials[p]),
     failIfNotExists: false

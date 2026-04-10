@@ -20,7 +20,14 @@ const startTime = Date.now()
 // create client
 const client = new Discord.Client({
     allowedMentions: { parse: ["users"] },
-    makeCache: Discord.Options.cacheWithLimits({ MessageManager: 0 }),
+    makeCache: Discord.Options.cacheWithLimits({
+        ...Discord.Options.DefaultMakeCacheSettings, 
+        MessageManager: 10, 
+        PresenceManager: 0, 
+        ReactionManager: 0, 
+        ThreadMemberManager: 0, 
+        ThreadManager: 10
+    }),
     intents: ['Guilds', 'GuildMessages', 'DirectMessages', 'GuildVoiceStates'].map(i => Discord.GatewayIntentBits[i]),
     partials: ['Channel'].map(p => Discord.Partials[p]),
     failIfNotExists: false

@@ -1581,4 +1581,26 @@ input:checked + .sliderspan:before {
     .unsavedBox p {
         font-size: 16px !important; 
     }
+    /* ========================================= */
+    /* 18.        RANKCARDS PERSONALIZABLES      */
+    /* ========================================= */
+    /* Seleccionamos el contenedor flex principal que creamos */
+    .customRankCardSettings > div {
+        flex-direction: column-reverse !important; /* Invertimos el orden para que la imagen (que está a la derecha/abajo en el código) suba */
+        align-items: stretch !important;
+    }
+
+    /* Ajustamos el contenedor de controles (lado izquierdo original) */
+    .customRankCardSettings > div > div:first-child {
+        min-width: 100% !important; /* Que ocupe todo el ancho */
+        grid-template-columns: 1fr !important; /* En lugar de 2 columnas, que sea 1 sola columna para los inputs */
+    }
+
+    /* Ajustamos el contenedor de previsualización (lado derecho original) */
+    .customRankCardSettings > div > div:last-child {
+        min-width: 100% !important;
+        position: relative !important; /* Quitamos el 'sticky' para que fluya normal en móvil */
+        top: 0 !important;
+        margin-bottom: 20px; /* Damos un poco de espacio antes de los controles */
+    }
 }

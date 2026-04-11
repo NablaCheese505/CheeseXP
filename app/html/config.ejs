@@ -574,8 +574,8 @@
             <div class="settingBreak"></div>
 
             <div class="settingBox box fulllength ifrankenabled">
-                <h2>Usar Tarjetas de Imagen (Rank Card)</h2>
-                <p class="details">Envía una tarjeta gráfica generada en lugar del mensaje de texto tradicional.</p>
+                <h2><%= t('dashboard.RankcardUseImage', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.RankcardUseImageDesc', {}, lang) %></p>
                 <label class="slider" style="margin-top: 5px; margin-bottom: 20px;">
                     <input db="rankCard.useImageCard" id="toggleImageCard" onchange="$('.customRankCardSettings').toggle($(this).prop('checked'));" savename="db" tabindex="0" type="checkbox"/>
                     <span class="sliderspan"></span>
@@ -587,21 +587,21 @@
                         <div style="flex: 1; min-width: 400px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                             
                             <div style="grid-column: 1 / -1;">
-                                <h2>Imagen de Fondo (URL)</h2>
+                                <h2><%= t('dashboard.RankcardBgImage', {}, lang) %></h2>
                                 <input db="rankCard.backgroundURL" id="rcBg" savename="db" type="text" placeholder="https://i.imgur.com/imagen.png" style="width: 100%; margin-top: 5px;"/>
                             </div>
 
                             <div>
-                                <h2>Ajuste de Imagen</h2>
+                                <h2><%= t('dashboard.RankcardBgFit', {}, lang) %></h2>
                                 <select db="rankCard.backgroundFit" id="rcFit" savename="db" style="width: 100%; margin-top: 5px;">
-                                    <option value="cover">Llenar / Centrar</option>
-                                    <option value="contain">Ajustar completo</option>
-                                    <option value="stretch">Estirar</option>
+                                    <option value="cover"><%= t('dashboard.RankcardFitCover', {}, lang) %></option>
+                                    <option value="contain"><%= t('dashboard.RankcardFitContain', {}, lang) %></option>
+                                    <option value="stretch"><%= t('dashboard.RankcardFitStretch', {}, lang) %></option>
                                 </select>
                             </div>
 
                             <div>
-                                <h2>Color de Fondo Base</h2>
+                                <h2><%= t('dashboard.RankcardBgColor', {}, lang) %></h2>
                                 <div class="centerflex" style="margin-top: 5px;">
                                     <input db="rankCard.backgroundColor" id="rcBgCol" savename="db" type="text" maxlength="7" default="#1e1f22" style="width: 80px;"/>
                                     <input type="color" id="rcBgColPicker" value="#1e1f22" class="colorPickerBtn"/>
@@ -610,7 +610,7 @@
                             </div>
 
                             <div>
-                                <h2>Color del Overlay</h2>
+                                <h2><%= t('dashboard.RankcardOverlayColor', {}, lang) %></h2>
                                 <div class="centerflex" style="margin-top: 5px;">
                                     <input db="rankCard.overlayColor" id="rcOverlayCol" savename="db" type="text" maxlength="7" default="#000000" style="width: 80px;"/>
                                     <input type="color" id="rcOverlayColPicker" value="#000000" class="colorPickerBtn"/>
@@ -619,7 +619,7 @@
                             </div>
 
                             <div>
-                                <h2>Opacidad del Overlay</h2>
+                                <h2><%= t('dashboard.RankcardOverlayOpacity', {}, lang) %></h2>
                                 <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
                                     <input db="rankCard.opacity" id="rcOp" savename="db" type="range" min="0" max="1" step="0.05" default="0.8" style="width: 100%; cursor: pointer;"/>
                                     <span id="rcOpVal" style="width: 30px; font-weight: bold;">0.8</span>
@@ -627,17 +627,17 @@
                             </div>
 
                             <div>
-                                <h2>Forma del Avatar</h2>
+                                <h2><%= t('dashboard.RankcardAvatarShape', {}, lang) %></h2>
                                 <div class="centerflex" style="gap: 15px; margin-top: 5px;">
                                     <input type="hidden" db="rankCard.avatarShape" id="rcAvatarShape" savename="db" value="circle"/>
                                     
-                                    <div class="shape-btn active" data-shape="circle" title="Circular"><i data-lucide="circle"></i></div>
-                                    <div class="shape-btn" data-shape="square" title="Cuadrado (Bordes redondos)"><i data-lucide="square"></i></div>
+                                    <div class="shape-btn active" data-shape="circle" title="<%= t('dashboard.RankcardShapeCircle', {}, lang) %>"><i data-lucide="circle"></i></div>
+                                    <div class="shape-btn" data-shape="square" title="<%= t('dashboard.RankcardShapeSquare', {}, lang) %>"><i data-lucide="square"></i></div>
                                 </div>
                             </div>
 
                             <div>
-                                <h2>Color del Borde (Avatar)</h2>
+                                <h2><%= t('dashboard.RankcardAvatarBorder', {}, lang) %></h2>
                                 <div class="centerflex" style="margin-top: 5px;">
                                     <input db="rankCard.avatarBorderColor" id="rcAvatarCol" savename="db" type="text" maxlength="7" default="none" style="width: 80px;"/>
                                     <input type="color" id="rcAvatarColPicker" value="#FFFFFF" class="colorPickerBtn"/>
@@ -646,7 +646,7 @@
                             </div>
 
                             <div>
-                                <h2>Color de la Barra</h2>
+                                <h2><%= t('dashboard.RankcardBarColor', {}, lang) %></h2>
                                 <div class="centerflex" style="margin-top: 5px;">
                                     <input db="rankCard.barColor" id="rcBar" savename="db" type="text" maxlength="7" default="#FFA500" style="width: 80px;"/>
                                     <input type="color" id="rcBarPicker" value="#FFA500" class="colorPickerBtn"/>
@@ -655,7 +655,7 @@
                             </div>
 
                             <div>
-                                <h2>Color del Texto</h2>
+                                <h2><%= t('dashboard.RankcardTextColor', {}, lang) %></h2>
                                 <div class="centerflex" style="margin-top: 5px;">
                                     <input db="rankCard.textColor" id="rcText" savename="db" type="text" maxlength="7" default="#FFFFFF" style="width: 80px;"/>
                                     <input type="color" id="rcTextPicker" value="#ffffff" class="colorPickerBtn"/>
@@ -666,16 +666,16 @@
                         </div>
 
                         <div style="flex: 1; min-width: 450px; position: sticky; top: 20px;">
-                            <h2>Previsualización en Vivo</h2>
+                            <h2><%= t('dashboard.RankcardLivePreview', {}, lang) %></h2>
                             
                             <div style="position: relative; margin-top: 10px;">
                                 <img id="livePreviewImage" src="" style="width: 100%; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.6); display: none; transition: opacity 0.2s;"/>
                                 
                                 <div id="previewLoading" style="width: 100%; height: 165px; background-color: #1e1f22; border-radius: 12px; display: flex; justify-content: center; align-items: center; border: 1px dashed rgba(255,255,255,0.2);">
-                                    <p style="color: #888;">Cargando visualización...</p>
+                                    <p style="color: #888;"><%= t('dashboard.RankcardLoadingPreview', {}, lang) %></p>
                                 </div>
                             </div>
-                            <p class="details" style="text-align: center; margin-top: 10px;"><i>Recuerda hacer clic en <b>Guardar</b> para aplicar al bot.</i></p>
+                            <p class="details" style="text-align: center; margin-top: 10px;"><i><%= t('dashboard.RankcardSaveReminder', {}, lang) %> <b><%= t('dashboard.RankcardSaveBtn', {}, lang) %></b> <%= t('dashboard.RankcardSaveReminder2', {}, lang) %></i></p>
                         </div>
                     </div>
                 </div>

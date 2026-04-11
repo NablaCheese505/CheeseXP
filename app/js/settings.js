@@ -712,6 +712,21 @@ addUhOh()
             console.error(e);
         });
     });
+
+    // Lógica para los Swatches de color (Estilo Koya)
+    $('.color-swatch').click(function() {
+        let targetId = $(this).parent().attr('data-target');
+        let selectedColor = $(this).attr('data-color');
+        
+        $('#' + targetId).val(selectedColor).trigger('change');
+        $('#' + targetId + 'Picker').val(selectedColor);
+        
+        // Efecto visual de selección (opcional)
+        $(this).parent().find('.color-swatch').css('border', 'none');
+        if(selectedColor === "#FFFFFF") $(this).css('border', '1px solid #444');
+        $(this).css('border', '2px solid white');
+    });
+    
     }).catch((e) => {
         console.error(e)
         $('#errorheader').css('margin-top', '70px')

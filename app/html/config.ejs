@@ -591,6 +591,15 @@
                             <p class="details">Enlace directo a una imagen (.png o .jpg). Déjalo en blanco para el fondo oscuro.</p>
                             <input db="rankCard.backgroundURL" id="rcBg" savename="db" type="text" placeholder="https://imgur.com/tu-imagen.png" style="width: 100%; margin-top: 5px;"/>
                         </div>
+                        <div class="sideoption" style="margin-top: 15px;">
+                            <h2>Ajuste de Imagen</h2>
+                            <p class="details">Cómo debe rellenar el fondo la imagen proporcionada.</p>
+                            <select db="rankCard.backgroundFit" savename="db" style="width: 200px;">
+                                <option value="cover">Llenar / Centrar (Recomendado)</option>
+                                <option value="contain">Ajustar completamente</option>
+                                <option value="stretch">Estirar</option>
+                            </select>
+                        </div>
                         <div class="sideoptions" style="width: 250px">
                             <h2>Opacidad del Fondo</h2>
                             <p class="details">Visibilidad del panel detrás del texto (0.1 a 1.0).</p>
@@ -600,19 +609,34 @@
 
                     <div class="simpleflex" style="margin-top: 25px">
                         <div class="sideoption">
-                            <h2>Color de la Barra (HEX)</h2>
-                            <p class="details">Código hexadecimal para la barra de progreso.</p>
+                            <h2>Color de la Barra</h2>
+                            <p class="details">Color principal de la barra de progreso.</p>
                             <div class="centerflex">
                                 <input db="rankCard.barColor" id="rcBar" savename="db" type="text" maxlength="7" default="#FFA500" placeholder="#FFA500" style="width: 100px;"/>
-                                <input type="color" id="rcBarPicker" value="#FFA500" style="margin-left: 10px; width: 40px; height: 35px; cursor: pointer; border: none; background: none; padding: 0;" oninput="document.getElementById('rcBar').value = this.value; $('#rcBar').trigger('change');" />
+                                <input type="color" id="rcBarPicker" value="#FFA500" style="margin-left: 10px; width: 40px; height: 35px; cursor: pointer; border: none; background: none; padding: 0;"/>
+                            </div>
+                            <div class="swatch-container" data-target="rcBar" style="display: flex; gap: 8px; margin-top: 10px;">
+                                <div class="color-swatch" data-color="#FFA500" style="background-color: #FFA500; width: 24px; height: 24px; border-radius: 50%; cursor: pointer;"></div>
+                                <div class="color-swatch" data-color="#FF5252" style="background-color: #FF5252; width: 24px; height: 24px; border-radius: 50%; cursor: pointer;"></div>
+                                <div class="color-swatch" data-color="#4CAF50" style="background-color: #4CAF50; width: 24px; height: 24px; border-radius: 50%; cursor: pointer;"></div>
+                                <div class="color-swatch" data-color="#2196F3" style="background-color: #2196F3; width: 24px; height: 24px; border-radius: 50%; cursor: pointer;"></div>
+                                <div class="color-swatch" data-color="#9C27B0" style="background-color: #9C27B0; width: 24px; height: 24px; border-radius: 50%; cursor: pointer;"></div>
                             </div>
                         </div>
+
                         <div class="sideoptions" style="width: 250px">
-                            <h2>Color del Texto (HEX)</h2>
-                            <p class="details">Código hexadecimal para las letras.</p>
+                            <h2>Color del Texto</h2>
+                            <p class="details">Color de las letras e información.</p>
                             <div class="centerflex">
                                 <input db="rankCard.textColor" id="rcText" savename="db" type="text" maxlength="7" default="#FFFFFF" placeholder="#FFFFFF" style="width: 100px;"/>
-                                <input type="color" id="rcTextPicker" value="#ffffff" style="margin-left: 10px; width: 40px; height: 35px; cursor: pointer; border: none; background: none; padding: 0;" oninput="document.getElementById('rcText').value = this.value; $('#rcText').trigger('change');" />
+                                <input type="color" id="rcTextPicker" value="#ffffff" style="margin-left: 10px; width: 40px; height: 35px; cursor: pointer; border: none; background: none; padding: 0;"/>
+                            </div>
+                            <div class="swatch-container" data-target="rcText" style="display: flex; gap: 8px; margin-top: 10px;">
+                                <div class="color-swatch" data-color="#FFFFFF" style="background-color: #FFFFFF; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 1px solid #444;"></div>
+                                <div class="color-swatch" data-color="#E0E0E0" style="background-color: #E0E0E0; width: 24px; height: 24px; border-radius: 50%; cursor: pointer;"></div>
+                                <div class="color-swatch" data-color="#FFEB3B" style="background-color: #FFEB3B; width: 24px; height: 24px; border-radius: 50%; cursor: pointer;"></div>
+                                <div class="color-swatch" data-color="#FF9800" style="background-color: #FF9800; width: 24px; height: 24px; border-radius: 50%; cursor: pointer;"></div>
+                                <div class="color-swatch" data-color="#00BCD4" style="background-color: #00BCD4; width: 24px; height: 24px; border-radius: 50%; cursor: pointer;"></div>
                             </div>
                         </div>
                     </div>

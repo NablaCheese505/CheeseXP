@@ -758,7 +758,7 @@ app.post("/api/previewRankCard", async function(req, res) {
         rank: 1,
         messagesText: "Faltan 5-10 mensajes",
         cooldownText: "00:45",
-        multiplierText: "🚀 Rol - 1.5x XP"
+        multiplierText: "Rol - 1.5x XP"
     };
 
     try {

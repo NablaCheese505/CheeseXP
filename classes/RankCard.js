@@ -42,14 +42,33 @@ class RankCard {
         if (this.settings.backgroundURL && this.settings.backgroundURL.length > 5) {
             try {
                 const bg = await loadImage(this.settings.backgroundURL);
-                ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+                const fitMode = this.settings.backgroundFit || 'cover';
+
+                if (fitMode === 'stretch') {
+                    // Estirar la imagen ignorando proporciones
+                    ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+                } 
+                else if (fitMode === 'contain') {
+                    // Ajustar la imagen completa dentro del canvas manteniendo proporción
+                    const scale = Math.min(canvas.width / bg.width, canvas.height / bg.height);
+                    const x = (canvas.width / 2) - (bg.width / 2) * scale;
+                    const y = (canvas.height / 2) - (bg.height / 2) * scale;
+                    
+                    ctx.fillStyle = '#1e1f22'; // Fondo negro detrás por si sobran bordes
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(bg, x, y, bg.width * scale, bg.height * scale);
+                } 
+                else {
+                    // Modo 'cover' (Por defecto): Llenar todo el canvas, centrando y recortando lo que sobre
+                    const scale = Math.max(canvas.width / bg.width, canvas.height / bg.height);
+                    const x = (canvas.width / 2) - (bg.width / 2) * scale;
+                    const y = (canvas.height / 2) - (bg.height / 2) * scale;
+                    ctx.drawImage(bg, x, y, bg.width * scale, bg.height * scale);
+                }
             } catch (e) {
-                ctx.fillStyle = '#1e1f22'; // Color Discord Darker
+                ctx.fillStyle = '#1e1f22';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             }
-        } else {
-            ctx.fillStyle = '#1e1f22';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
 
         // PANEL DE OSCURECIMIENTO

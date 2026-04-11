@@ -87,7 +87,8 @@ const settings = {
         backgroundURL: { type: "string", maxlength: 500, default: "" }, 
         barColor: { type: "string", maxlength: 7, default: "#FFA500" }, 
         textColor: { type: "string", maxlength: 7, default: "#FFFFFF" }, 
-        opacity: { type: "float", precision: 2, default: 0.8, min: 0.1, max: 1.0 } 
+        opacity: { type: "float", precision: 2, default: 0.8, min: 0.1, max: 1.0 },
+        backgroundFit: { type: "string", default: "cover", accept: ["cover", "contain", "stretch"] }, 
     },
 
     hideMultipliers: { type: "bool", default: false },

@@ -68,7 +68,10 @@ addUhOh()
         $('input[db], select[db]').each(function() {
             let dbKey = $(this).attr('db').split('.')
             let dbVal = db
-            while (dbKey.length) dbVal = dbVal[dbKey.shift()]
+            while (dbKey.length) {
+                if (dbVal === undefined) break;
+                dbVal = dbVal[dbKey.shift()];
+            }
             if ($(this).attr('type') == "checkbox") $(this).prop("checked", $(this).attr("invert") ? !dbVal : dbVal)
             else $(this).val(dbVal || dbVal === 0 ? dbVal : $(this).attr('default'))
         })

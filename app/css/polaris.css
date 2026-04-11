@@ -1036,6 +1036,16 @@ input:checked + .sliderspan:before {
     color: var(--polarisgreen) !important; 
 }
 
+/* Estilos para el nuevo Dashboard de Rank Card */
+.colorPickerBtn { margin-left: 5px; width: 30px; height: 30px; cursor: pointer; border: none; background: none; padding: 0; }
+.swatch-container { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.color-swatch { width: 22px; height: 22px; border-radius: 50%; cursor: pointer; transition: transform 0.1s; border: 1px solid transparent; }
+.color-swatch:hover { transform: scale(1.15); }
+.color-swatch.none-swatch { background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>') center/cover; border: 1px solid #444; }
+.shape-btn { width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; background-color: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer; transition: 0.2s; }
+.shape-btn:hover { background-color: rgba(255,255,255,0.1); }
+.shape-btn.active { background-color: var(--polarisgreen); color: black; box-shadow: 0 0 8px var(--polarisgreen); }
+
 @media screen and (max-width: 900px) {
     body, html {
         overflow-x: hidden; /* Prohíbe terminantemente el scroll horizontal */

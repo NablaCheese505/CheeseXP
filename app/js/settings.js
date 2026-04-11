@@ -636,7 +636,7 @@ addUhOh()
 
                     case "INPUT": case "TEXTAREA":
                         let aType = x.attr("type")
-                        if (aType == "number") settings[property] = +val
+                        if (aType == "number" || aType == "range") settings[property] = +val
                         else if (aType == "checkbox") settings[property] = x.attr("invert") ? !x.prop("checked") : x.prop("checked")
                         else if (aType == "color") {
                             if (x.attr("useif") && !$('#' + x.attr("useif")).prop("checked")) settings[property] = -1
@@ -667,65 +667,106 @@ addUhOh()
     $('#everything').show()
     $('#loading').hide()
     
-    if (db.rankCard && db.rankCard.useImageCard) {
-        $('.customRankCardSettings').show();
-    }
+    const standardPalette = ["#FFA500", "#FF5252", "#4CAF50", "#2196F3", "#9C27B0", "#FFFFFF", "#000000"];
     
-    $('#rcBarPicker').val($('#rcBar').val() || '#FFA500');
-    $('#rcTextPicker').val($('#rcText').val() || '#ffffff');
-    
-    $('#rcBar').on('input blur', function() {
-        if (/^#[0-9A-F]{6}$/i.test($(this).val())) $('#rcBarPicker').val($(this).val());
-    });
-    $('#rcText').on('input blur', function() {
-        if (/^#[0-9A-F]{6}$/i.test($(this).val())) $('#rcTextPicker').val($(this).val());
-    });
-
-    $('#previewRankCardBtn').click(function() {
-        if (requestInProgress) return;
+    $('.swatch-container').each(function() {
+        let container = $(this);
+        let targetId = container.attr('data-target');
         
-        let btn = $(this);
-        let originalText = btn.text();
-        
-        if (hasUnsavedChanges()) {
-            return alert("Por favor, guarda tus cambios en el botón verde de arriba antes de previsualizar la tarjeta.");
+        if (container.hasClass('with-none')) {
+            container.append(`<div class="color-swatch none-swatch" data-color="none" title="Sin color (Transparente)"></div>`);
         }
-
-        btn.text("Generando...").prop('disabled', true);
         
+        standardPalette.forEach(hex => {
+            let border = (hex === "#000000") ? "1px solid #444" : "1px solid transparent";
+            container.append(`<div class="color-swatch" data-color="${hex}" style="background-color: ${hex}; border: ${border};" title="${hex}"></div>`);
+        });
+    });
+
+    $(document).on('click', '.color-swatch', function() {
+        let targetId = $(this).parent().attr('data-target');
+        let selectedColor = $(this).attr('data-color');
+        
+        $('#' + targetId).val(selectedColor).trigger('change');
+        if (selectedColor !== 'none') $('#' + targetId + 'Picker').val(selectedColor);
+        
+        $(this).parent().find('.color-swatch').css('box-shadow', 'none');
+        $(this).css('box-shadow', '0 0 0 2px white');
+    });
+
+    $('.colorPickerBtn').on('input', function() {
+        let targetId = $(this).attr('id').replace('Picker', '');
+        $('#' + targetId).val($(this).val()).trigger('change');
+    });
+
+    $('.shape-btn').click(function() {
+        $('.shape-btn').removeClass('active');
+        $(this).addClass('active');
+        $('#rcAvatarShape').val($(this).attr('data-shape')).trigger('change');
+    });
+
+    let previewTimeout;
+    
+    function requestLivePreview() {
+        $('#livePreviewImage').css('opacity', '0.5');
+        $('#previewLoading').show();
+
+        let parsedOp = parseFloat($('#rcOp').val());
+        let finalOpacity = isNaN(parsedOp) ? 0.8 : parsedOp;
+
+        let currentSettings = {
+            backgroundURL: $('#rcBg').val(),
+            backgroundFit: $('#rcFit').val() || 'cover',
+            backgroundColor: $('#rcBgCol').val() || '#1e1f22',
+            overlayColor: $('#rcOverlayCol').val() || '#000000',
+            opacity: finalOpacity, // <- Usamos la variable corregida
+            barColor: $('#rcBar').val() || '#FFA500',
+            textColor: $('#rcText').val() || '#FFFFFF',
+            avatarShape: $('#rcAvatarShape').val() || 'circle',
+            avatarBorderColor: $('#rcAvatarCol').val() || 'none'
+        };
+
         $.ajax({
             url: "/api/previewRankCard",
             type: "post",
-            data: JSON.stringify({ guildID: guildID }),
+            data: JSON.stringify({ guildID: guildID, previewSettings: currentSettings }),
             headers: { 'Content-Type': 'application/json' },
             xhrFields: { responseType: 'blob' }
         })
         .done(function(blob) {
             let url = URL.createObjectURL(blob);
-            $('#previewCardImage').attr('src', url);
-            $('#previewCardContainer').show();
-            btn.text(originalText).prop('disabled', false);
+            $('#livePreviewImage').attr('src', url).css('opacity', '1').show();
+            $('#previewLoading').hide();
         })
         .fail(function(e) {
-            alert("Error al previsualizar la tarjeta. Revisa la URL del fondo o intenta de nuevo.");
-            btn.text(originalText).prop('disabled', false);
-            console.error(e);
+            console.error("Error preview", e);
+            $('#previewLoading').html('<p style="color: #ff5252;">Error al generar vista previa.</p>');
         });
+    }
+
+    function triggerPreview() {
+        clearTimeout(previewTimeout);
+        previewTimeout = setTimeout(requestLivePreview, 500); // 500ms de espera al terminar de mover
+    }
+
+    $('#rcOp').on('input', function() { $('#rcOpVal').text($(this).val()); });
+    
+    $('#rcBg, #rcOp, #rcBar, #rcText, #rcFit, #rcBgCol, #rcOverlayCol, #rcAvatarCol, #rcAvatarShape').on('input change', triggerPreview);
+    
+    $('#toggleImageCard').on('change', function() {
+        if($(this).prop('checked')) {
+            $('.customRankCardSettings').show();
+            triggerPreview();
+        }
     });
 
-    // Lógica para los Swatches de color (Estilo Koya)
-    $('.color-swatch').click(function() {
-        let targetId = $(this).parent().attr('data-target');
-        let selectedColor = $(this).attr('data-color');
-        
-        $('#' + targetId).val(selectedColor).trigger('change');
-        $('#' + targetId + 'Picker').val(selectedColor);
-        
-        // Efecto visual de selección (opcional)
-        $(this).parent().find('.color-swatch').css('border', 'none');
-        if(selectedColor === "#FFFFFF") $(this).css('border', '1px solid #444');
-        $(this).css('border', '2px solid white');
-    });
+    if (db.rankCard && db.rankCard.useImageCard) {
+        $('.customRankCardSettings').show();
+        let currentShape = db.rankCard.avatarShape || 'circle';
+        $('.shape-btn').removeClass('active');
+        $(`.shape-btn[data-shape="${currentShape}"]`).addClass('active');
+        triggerPreview();
+    }
     
     }).catch((e) => {
         console.error(e)

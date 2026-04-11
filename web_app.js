@@ -735,16 +735,12 @@ app.post("/api/editXP", async function(req, res) {
 
 app.post("/api/previewRankCard", async function(req, res) {
     if (typeof req.body != "object") return res.apiError("Invalid data!");
-    let guildID = req.body.guildID;
-    if (!guildID) return res.apiError("No guild ID!");
-
+    
     let [user, guilds] = await getDiscordInfo(req);
-    if (!user || !guilds) return res.apiError("Not logged in!");
-
-    let data = await client.db.fetch(guildID, ["settings"]);
-    if (!data || !data.settings) return res.apiError("No data!");
+    if (!user) return res.apiError("Not logged in!");
 
     const RankCard = require('./classes/RankCard.js');
+    let tempSettings = req.body.previewSettings || {};
 
     let mockUserData = {
         username: user.username,
@@ -753,16 +749,16 @@ app.post("/api/previewRankCard", async function(req, res) {
         currentXP: 1450,
         requiredXP: 2000,
         previousLevelXP: 0,
-        level: 10,
+        level: 35,
         isMaxLevel: false,
         rank: 1,
-        messagesText: "Faltan 5-10 mensajes",
+        messagesText: "Previsualización en vivo",
         cooldownText: "00:45",
-        multiplierText: "Rol - 1.5x XP"
+        multiplierText: "🚀 Rol - 1.5x XP"
     };
 
     try {
-        const rankCardGenerator = new RankCard(mockUserData, data.settings.rankCard);
+        const rankCardGenerator = new RankCard(mockUserData, tempSettings);
         const imageBuffer = await rankCardGenerator.build();
         
         res.set('Content-Type', 'image/png');
@@ -914,7 +910,6 @@ async function getDiscordInfo(req, userOnly) {
     return discordRes
 }
 
-// ESTA ES LA RUTA QUE FALTABA CORREGIR
 app.get("/logout", async function(req, res) {
     let token = await getDiscordToken(req.cookies.polaris)
     if (!token) return sendRedirect(res, "/")

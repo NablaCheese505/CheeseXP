@@ -575,78 +575,107 @@
 
             <div class="settingBox box fulllength ifrankenabled">
                 <h2>Usar Tarjetas de Imagen (Rank Card)</h2>
-                <p class="details">Si se activa, el comando /rank enviará una tarjeta gráfica generada en lugar del mensaje de texto tradicional.</p>
+                <p class="details">Envía una tarjeta gráfica generada en lugar del mensaje de texto tradicional.</p>
                 <label class="slider" style="margin-top: 5px; margin-bottom: 20px;">
                     <input db="rankCard.useImageCard" id="toggleImageCard" onchange="$('.customRankCardSettings').toggle($(this).prop('checked'));" savename="db" tabindex="0" type="checkbox"/>
                     <span class="sliderspan"></span>
                 </label>
 
-                <div class="customRankCardSettings" style="display: none; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);">
-                    <h2>Personalización Visual</h2>
-                    <p class="details">Cambia el aspecto de las tarjetas para todos los miembros de este servidor.</p>
-                    
-                    <div class="simpleflex" style="margin-top: 15px">
-                        <div class="sideoption">
-                            <h2>Imagen de Fondo (URL)</h2>
-                            <p class="details">Enlace directo a una imagen (.png o .jpg). Déjalo en blanco para el fondo oscuro.</p>
-                            <input db="rankCard.backgroundURL" id="rcBg" savename="db" type="text" placeholder="https://imgur.com/tu-imagen.png" style="width: 100%; margin-top: 5px;"/>
-                        </div>
-                        <div class="sideoption" style="margin-top: 15px;">
-                            <h2>Ajuste de Imagen</h2>
-                            <p class="details">Cómo debe rellenar el fondo la imagen proporcionada.</p>
-                            <select db="rankCard.backgroundFit" savename="db" style="width: 200px;">
-                                <option value="cover">Llenar / Centrar (Recomendado)</option>
-                                <option value="contain">Ajustar completamente</option>
-                                <option value="stretch">Estirar</option>
-                            </select>
-                        </div>
-                        <div class="sideoptions" style="width: 250px">
-                            <h2>Opacidad del Fondo</h2>
-                            <p class="details">Visibilidad del panel detrás del texto (0.1 a 1.0).</p>
-                            <input db="rankCard.opacity" id="rcOp" savename="db" type="number" min="0.1" max="1.0" step="0.1" decimals="2" default="0.8" style="width: 80px; margin-top: 5px;"/>
-                        </div>
-                    </div>
+                <div class="customRankCardSettings" style="display: none; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <div style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap;">
+                        
+                        <div style="flex: 1; min-width: 400px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            
+                            <div style="grid-column: 1 / -1;">
+                                <h2>Imagen de Fondo (URL)</h2>
+                                <input db="rankCard.backgroundURL" id="rcBg" savename="db" type="text" placeholder="https://i.imgur.com/imagen.png" style="width: 100%; margin-top: 5px;"/>
+                            </div>
 
-                    <div class="simpleflex" style="margin-top: 25px">
-                        <div class="sideoption">
-                            <h2>Color de la Barra</h2>
-                            <p class="details">Color principal de la barra de progreso.</p>
-                            <div class="centerflex">
-                                <input db="rankCard.barColor" id="rcBar" savename="db" type="text" maxlength="7" default="#FFA500" placeholder="#FFA500" style="width: 100px;"/>
-                                <input type="color" id="rcBarPicker" value="#FFA500" style="margin-left: 10px; width: 40px; height: 35px; cursor: pointer; border: none; background: none; padding: 0;"/>
+                            <div>
+                                <h2>Ajuste de Imagen</h2>
+                                <select db="rankCard.backgroundFit" id="rcFit" savename="db" style="width: 100%; margin-top: 5px;">
+                                    <option value="cover">Llenar / Centrar</option>
+                                    <option value="contain">Ajustar completo</option>
+                                    <option value="stretch">Estirar</option>
+                                </select>
                             </div>
-                            <div class="swatch-container" data-target="rcBar" style="display: flex; gap: 8px; margin-top: 10px;">
-                                <div class="color-swatch" data-color="#FFA500" style="background-color: #FFA500; width: 24px; height: 24px; border-radius: 50%; cursor: pointer;"></div>
-                                <div class="color-swatch" data-color="#FF5252" style="background-color: #FF5252; width: 24px; height: 24px; border-radius: 50%; cursor: pointer;"></div>
-                                <div class="color-swatch" data-color="#4CAF50" style="background-color: #4CAF50; width: 24px; height: 24px; border-radius: 50%; cursor: pointer;"></div>
-                                <div class="color-swatch" data-color="#2196F3" style="background-color: #2196F3; width: 24px; height: 24px; border-radius: 50%; cursor: pointer;"></div>
-                                <div class="color-swatch" data-color="#9C27B0" style="background-color: #9C27B0; width: 24px; height: 24px; border-radius: 50%; cursor: pointer;"></div>
+
+                            <div>
+                                <h2>Color de Fondo Base</h2>
+                                <div class="centerflex" style="margin-top: 5px;">
+                                    <input db="rankCard.backgroundColor" id="rcBgCol" savename="db" type="text" maxlength="7" default="#1e1f22" style="width: 80px;"/>
+                                    <input type="color" id="rcBgColPicker" value="#1e1f22" class="colorPickerBtn"/>
+                                </div>
+                                <div class="swatch-container" data-target="rcBgCol"></div>
                             </div>
+
+                            <div>
+                                <h2>Color del Overlay</h2>
+                                <div class="centerflex" style="margin-top: 5px;">
+                                    <input db="rankCard.overlayColor" id="rcOverlayCol" savename="db" type="text" maxlength="7" default="#000000" style="width: 80px;"/>
+                                    <input type="color" id="rcOverlayColPicker" value="#000000" class="colorPickerBtn"/>
+                                </div>
+                                <div class="swatch-container" data-target="rcOverlayCol"></div>
+                            </div>
+
+                            <div>
+                                <h2>Opacidad del Overlay</h2>
+                                <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
+                                    <input db="rankCard.opacity" id="rcOp" savename="db" type="range" min="0" max="1" step="0.05" default="0.8" style="width: 100%; cursor: pointer;"/>
+                                    <span id="rcOpVal" style="width: 30px; font-weight: bold;">0.8</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h2>Forma del Avatar</h2>
+                                <div class="centerflex" style="gap: 15px; margin-top: 5px;">
+                                    <input type="hidden" db="rankCard.avatarShape" id="rcAvatarShape" savename="db" value="circle"/>
+                                    
+                                    <div class="shape-btn active" data-shape="circle" title="Circular"><i data-lucide="circle"></i></div>
+                                    <div class="shape-btn" data-shape="square" title="Cuadrado (Bordes redondos)"><i data-lucide="square"></i></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h2>Color del Borde (Avatar)</h2>
+                                <div class="centerflex" style="margin-top: 5px;">
+                                    <input db="rankCard.avatarBorderColor" id="rcAvatarCol" savename="db" type="text" maxlength="7" default="none" style="width: 80px;"/>
+                                    <input type="color" id="rcAvatarColPicker" value="#FFFFFF" class="colorPickerBtn"/>
+                                </div>
+                                <div class="swatch-container with-none" data-target="rcAvatarCol"></div>
+                            </div>
+
+                            <div>
+                                <h2>Color de la Barra</h2>
+                                <div class="centerflex" style="margin-top: 5px;">
+                                    <input db="rankCard.barColor" id="rcBar" savename="db" type="text" maxlength="7" default="#FFA500" style="width: 80px;"/>
+                                    <input type="color" id="rcBarPicker" value="#FFA500" class="colorPickerBtn"/>
+                                </div>
+                                <div class="swatch-container" data-target="rcBar"></div>
+                            </div>
+
+                            <div>
+                                <h2>Color del Texto</h2>
+                                <div class="centerflex" style="margin-top: 5px;">
+                                    <input db="rankCard.textColor" id="rcText" savename="db" type="text" maxlength="7" default="#FFFFFF" style="width: 80px;"/>
+                                    <input type="color" id="rcTextPicker" value="#ffffff" class="colorPickerBtn"/>
+                                </div>
+                                <div class="swatch-container" data-target="rcText"></div>
+                            </div>
+
                         </div>
 
-                        <div class="sideoptions" style="width: 250px">
-                            <h2>Color del Texto</h2>
-                            <p class="details">Color de las letras e información.</p>
-                            <div class="centerflex">
-                                <input db="rankCard.textColor" id="rcText" savename="db" type="text" maxlength="7" default="#FFFFFF" placeholder="#FFFFFF" style="width: 100px;"/>
-                                <input type="color" id="rcTextPicker" value="#ffffff" style="margin-left: 10px; width: 40px; height: 35px; cursor: pointer; border: none; background: none; padding: 0;"/>
+                        <div style="flex: 1; min-width: 450px; position: sticky; top: 20px;">
+                            <h2>Previsualización en Vivo</h2>
+                            
+                            <div style="position: relative; margin-top: 10px;">
+                                <img id="livePreviewImage" src="" style="width: 100%; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.6); display: none; transition: opacity 0.2s;"/>
+                                
+                                <div id="previewLoading" style="width: 100%; height: 165px; background-color: #1e1f22; border-radius: 12px; display: flex; justify-content: center; align-items: center; border: 1px dashed rgba(255,255,255,0.2);">
+                                    <p style="color: #888;">Cargando visualización...</p>
+                                </div>
                             </div>
-                            <div class="swatch-container" data-target="rcText" style="display: flex; gap: 8px; margin-top: 10px;">
-                                <div class="color-swatch" data-color="#FFFFFF" style="background-color: #FFFFFF; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 1px solid #444;"></div>
-                                <div class="color-swatch" data-color="#E0E0E0" style="background-color: #E0E0E0; width: 24px; height: 24px; border-radius: 50%; cursor: pointer;"></div>
-                                <div class="color-swatch" data-color="#FFEB3B" style="background-color: #FFEB3B; width: 24px; height: 24px; border-radius: 50%; cursor: pointer;"></div>
-                                <div class="color-swatch" data-color="#FF9800" style="background-color: #FF9800; width: 24px; height: 24px; border-radius: 50%; cursor: pointer;"></div>
-                                <div class="color-swatch" data-color="#00BCD4" style="background-color: #00BCD4; width: 24px; height: 24px; border-radius: 50%; cursor: pointer;"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="margin-top: 30px; text-align: center;">
-                        <button id="previewRankCardBtn" style="background-color: var(--emojiblue); margin-bottom: 15px;">Previsualizar Tarjeta</button>
-                        <br>
-                        <div id="previewCardContainer" style="display: none;">
-                            <img id="previewCardImage" src="" alt="Previsualización de Tarjeta" style="max-width: 100%; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.5);"/>
-                            <p class="details" style="margin-top: 10px;"><i>Nota: Guarda los cambios antes de previsualizar para ver el resultado real.</i></p>
+                            <p class="details" style="text-align: center; margin-top: 10px;"><i>Recuerda hacer clic en <b>Guardar</b> para aplicar al bot.</i></p>
                         </div>
                     </div>
                 </div>

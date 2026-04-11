@@ -3,23 +3,18 @@ const path = require('path');
 
 // --- CARGA DE FUENTES ---
 try {
-    // 1. Cargamos las fuentes de Google que descargaste en tu carpeta assets
     GlobalFonts.registerFromPath(path.join(__dirname, '../app/assets/Roboto-Bold.ttf'), 'RobotoBold');
     GlobalFonts.registerFromPath(path.join(__dirname, '../app/assets/Roboto-Regular.ttf'), 'RobotoRegular');
     GlobalFonts.registerFromPath(path.join(__dirname, '../app/assets/NotoColorEmoji.ttf'), 'NotoEmoji');
     
-    // 2. Cargamos las fuentes nativas de Windows para leer símbolos y Emojis (solo para tu entorno local)
+    // Fuentes nativas de fallback
     GlobalFonts.registerFromPath('C:\\Windows\\Fonts\\seguiemj.ttf', 'Segoe UI Emoji');
     GlobalFonts.registerFromPath('C:\\Windows\\Fonts\\msgothic.ttc', 'MS Gothic');
-
-    // NUEVO: Intentar usar las fuentes instaladas en el sistema para símbolos raros
-    GlobalFonts.registerFromPath('C:\\Windows\\Fonts\\seguisym.ttf', 'SegoeUISymbol'); // Windows
-    GlobalFonts.registerFromPath('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 'DejaVuSans'); // Linux/Azure
+    GlobalFonts.registerFromPath('C:\\Windows\\Fonts\\seguisym.ttf', 'SegoeUISymbol');
 } catch (e) {
     console.log("Aviso: No se pudieron cargar algunas fuentes especiales.", e.message);
 }
 
-// Cola de promesas para evitar que la RAM explote
 let renderQueue = Promise.resolve();
 
 class RankCard {
@@ -34,57 +29,63 @@ class RankCard {
     }
 
     async _render() {
-        // Lienzo un poco más alto (340px) para acomodar más info
         const canvas = createCanvas(930, 340);
         const ctx = canvas.getContext('2d');
 
-        // FONDO
+        // 1. FONDO BASE (Color sólido)
+        ctx.fillStyle = this.settings.backgroundColor || '#1e1f22';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // 2. IMAGEN DE FONDO
         if (this.settings.backgroundURL && this.settings.backgroundURL.length > 5) {
             try {
                 const bg = await loadImage(this.settings.backgroundURL);
                 const fitMode = this.settings.backgroundFit || 'cover';
 
                 if (fitMode === 'stretch') {
-                    // Estirar la imagen ignorando proporciones
                     ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
                 } 
                 else if (fitMode === 'contain') {
-                    // Ajustar la imagen completa dentro del canvas manteniendo proporción
                     const scale = Math.min(canvas.width / bg.width, canvas.height / bg.height);
                     const x = (canvas.width / 2) - (bg.width / 2) * scale;
                     const y = (canvas.height / 2) - (bg.height / 2) * scale;
-                    
-                    ctx.fillStyle = '#1e1f22'; // Fondo negro detrás por si sobran bordes
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
                     ctx.drawImage(bg, x, y, bg.width * scale, bg.height * scale);
                 } 
                 else {
-                    // Modo 'cover' (Por defecto): Llenar todo el canvas, centrando y recortando lo que sobre
                     const scale = Math.max(canvas.width / bg.width, canvas.height / bg.height);
                     const x = (canvas.width / 2) - (bg.width / 2) * scale;
                     const y = (canvas.height / 2) - (bg.height / 2) * scale;
                     ctx.drawImage(bg, x, y, bg.width * scale, bg.height * scale);
                 }
             } catch (e) {
-                ctx.fillStyle = '#1e1f22';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                // Falla silenciada (se queda el fondo de color)
             }
         }
 
-        // PANEL DE OSCURECIMIENTO
-        ctx.fillStyle = `rgba(0, 0, 0, ${this.settings.opacity || 0.6})`;
+        // 3. PANEL DE OVERLAY (Usando la opacidad correctamente)
+        let opacityValue = this.settings.opacity !== undefined ? this.settings.opacity : 0.8;
+        ctx.globalAlpha = opacityValue;
+        ctx.fillStyle = this.settings.overlayColor || '#000000';
         ctx.fillRect(20, 20, canvas.width - 40, canvas.height - 40);
+        ctx.globalAlpha = 1.0; // Restablecer para no hacer transparente el texto
 
-        // AVATAR
+        // 4. PREPARAR FORMA DEL AVATAR
         const avatarX = 40;
         const avatarY = 40;
-        const avatarSize = 180; // Un poco más pequeño para dar espacio
+        const avatarSize = 180;
+        const isSquare = this.settings.avatarShape === 'square';
 
         ctx.save();
         ctx.beginPath();
-        ctx.arc(avatarX + avatarSize / 2, avatarY + avatarSize / 2, avatarSize / 2, 0, Math.PI * 2, true);
+        if (isSquare) {
+            ctx.roundRect(avatarX, avatarY, avatarSize, avatarSize, 25); // Cuadrado con bordes suaves (25px)
+        } else {
+            ctx.arc(avatarX + avatarSize / 2, avatarY + avatarSize / 2, avatarSize / 2, 0, Math.PI * 2, true); // Círculo
+        }
         ctx.closePath();
-        ctx.clip();
+        ctx.clip(); // Cortar el lienzo a esta forma
+
+        // 5. DIBUJAR AVATAR (Dentro del recorte)
         try {
             const cleanAvatarURL = this.userData.avatarURL.replace('.webp', '.png') + '?size=256';
             const avatar = await loadImage(cleanAvatarURL);
@@ -93,35 +94,49 @@ class RankCard {
             ctx.fillStyle = '#99aab5';
             ctx.fillRect(avatarX, avatarY, avatarSize, avatarSize);
         }
-        ctx.restore();
+        ctx.restore(); // Quitar el recorte
 
-        // TEXTOS BASE
+        // 6. DIBUJAR BORDE DEL AVATAR
+        let borderColor = this.settings.avatarBorderColor || 'none';
+        if (borderColor !== 'none' && borderColor !== '') {
+            ctx.lineWidth = 8;
+            ctx.strokeStyle = borderColor;
+            ctx.beginPath();
+            if (isSquare) {
+                ctx.roundRect(avatarX, avatarY, avatarSize, avatarSize, 25);
+            } else {
+                ctx.arc(avatarX + avatarSize / 2, avatarY + avatarSize / 2, avatarSize / 2, 0, Math.PI * 2, true);
+            }
+            ctx.stroke();
+        }
+
+        // 7. TEXTOS BASE
         ctx.fillStyle = this.settings.textColor || '#FFFFFF';
         
-        // Nombre
-        ctx.font = '42px "RobotoBold", "NotoEmoji", "SegoeUISymbol", "DejaVuSans", sans-serif';        let displayName = this.userData.displayName || this.userData.username;
+        // Nombre (Truncado a 25 caracteres)
+        ctx.font = '42px "RobotoBold", "NotoEmoji", "SegoeUISymbol", sans-serif';
+        let displayName = this.userData.displayName || this.userData.username;
         if (displayName.length > 25) displayName = displayName.substring(0, 25) + "...";
         ctx.fillText(displayName, 250, 90);
 
-        // Puesto en el Leaderboard (Rank)
+        // Puesto (Rank)
         ctx.textAlign = 'right';
         ctx.font = '32px "RobotoBold", sans-serif';
         ctx.fillText(`#${this.userData.rank}`, canvas.width - 40, 90);
 
-        // Nivel (Subtítulo derecho)
+        // Nivel
         ctx.fillStyle = this.settings.barColor || '#FFA500';
         ctx.font = '32px "RobotoBold", sans-serif';
         ctx.fillText(`NIVEL ${this.userData.level}`, canvas.width - 40, 135);
 
-        // Información Extra (Izquierda, debajo del nombre)
+        // Información Extra
         ctx.textAlign = 'left';
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)'; // Texto secundario un poco transparente
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
         ctx.font = '22px "RobotoRegular", "Segoe UI Emoji", sans-serif';
         let infoY = 135;
 
         // Multiplicador
         if (this.userData.multiplierText) {
-            // Limpiamos menciones feas del texto si las hay
             let cleanMult = this.userData.multiplierText.replace(/<@&[0-9]+>/g, 'Rol').replace(/<#[0-9]+>/g, 'Canal');
             ctx.fillText(`🚀 ${cleanMult}`, 250, infoY);
             infoY += 30;
@@ -132,7 +147,7 @@ class RankCard {
             ctx.fillText(`🕒 Cooldown: ${this.userData.cooldownText}`, 250, infoY);
         }
 
-        // Progreso de XP (Arriba de la barra)
+        // Progreso de XP
         ctx.textAlign = 'right';
         ctx.fillStyle = this.settings.textColor || '#FFFFFF';
         ctx.font = '22px "RobotoRegular", "Segoe UI Emoji", sans-serif';
@@ -142,18 +157,20 @@ class RankCard {
         
         ctx.fillText(`${displayCurrentXP} / ${displayRequiredXP} XP`, canvas.width - 40, 220);
 
-        // BARRA DE PROGRESO
+        // 8. BARRA DE PROGRESO
         const barX = 250;
         const barY = 235;
         const barWidth = 640;
         const barHeight = 35;
         const barRadius = 17; 
 
+        // Fondo de la barra
         ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
         ctx.beginPath();
         ctx.roundRect(barX, barY, barWidth, barHeight, barRadius);
         ctx.fill();
 
+        // Relleno de la barra
         let percent = 1;
         if (!this.userData.isMaxLevel) {
             percent = (this.userData.currentXP - currentLevelXP) / (this.userData.requiredXP - currentLevelXP);
@@ -167,7 +184,7 @@ class RankCard {
             ctx.fill();
         }
 
-        // Mensajes faltantes (Debajo de la barra, centrado)
+        // Mensajes faltantes
         if (!this.userData.isMaxLevel && this.userData.messagesText) {
             ctx.textAlign = 'center';
             ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';

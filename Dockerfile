@@ -1,6 +1,6 @@
 FROM node:20-alpine
 WORKDIR /usr/src/app
-RUN apk add --no-cache python3 make g++
+RUN apk add --no-cache python3 make g++ fontconfig ttf-dejavu
 COPY package*.json ./
 RUN npm install
 COPY . .

@@ -83,6 +83,10 @@ function notFalse(val) {
 } 
 
 function clearDeletedData(settings, roles, channels) {
+    if (!settings.multipliers) settings.multipliers = { roles: [], channels: [] };
+    if (!settings.rewards) settings.rewards = [];
+    if (!settings.levelUp) settings.levelUp = { channel: "current" };
+
     if (roles) {
         settings.rewards = settings.rewards.filter(x => roles.some(r => r.id == x.id))
         settings.multipliers.roles = settings.multipliers.roles.filter(x => roles.some(r => r.id == x.id))
@@ -90,7 +94,7 @@ function clearDeletedData(settings, roles, channels) {
 
     if (channels) {
         settings.multipliers.channels = settings.multipliers.channels.filter(x => channels.some(c => c.id == x.id))
-        if (settings.levelUp.channel.length > 10 && !channels.some(c => c.id == settings.levelUp.channel)) settings.levelUp.channel = "current"
+        if (settings.levelUp.channel && settings.levelUp.channel.length > 10 && !channels.some(c => c.id == settings.levelUp.channel)) settings.levelUp.channel = "current"
     }
 
     return settings

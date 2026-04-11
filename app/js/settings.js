@@ -760,12 +760,36 @@ addUhOh()
         }
     });
 
-    if (db.rankCard && db.rankCard.useImageCard) {
-        $('.customRankCardSettings').show();
+    if (db.rankCard) {
+        if (db.rankCard.useImageCard) {
+            $('.customRankCardSettings').show();
+        }
+
         let currentShape = db.rankCard.avatarShape || 'circle';
         $('.shape-btn').removeClass('active');
         $(`.shape-btn[data-shape="${currentShape}"]`).addClass('active');
-        triggerPreview();
+
+        ['rcBgCol', 'rcOverlayCol', 'rcAvatarCol', 'rcBar', 'rcText'].forEach(id => {
+            let val = $(`#${id}`).val();
+            if (val !== 'none' && val !== '') {
+                $(`#${id}Picker`).val(val);
+            }
+            
+            let container = $(`.swatch-container[data-target="${id}"]`);
+            container.find('.color-swatch').css('box-shadow', 'none');
+            let matchedSwatch = container.find(`.color-swatch[data-color="${val}"]`);
+            if (matchedSwatch.length) {
+                matchedSwatch.css('box-shadow', '0 0 0 2px white');
+            }
+        });
+
+        let currentOpacity = db.rankCard.opacity !== undefined ? db.rankCard.opacity : 0.8;
+        $('#rcOp').val(currentOpacity);
+        $('#rcOpVal').text(currentOpacity);
+
+        if (db.rankCard.useImageCard) {
+            triggerPreview();
+        }
     }
     
     }).catch((e) => {

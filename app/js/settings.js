@@ -666,7 +666,52 @@ addUhOh()
 
     $('#everything').show()
     $('#loading').hide()
+    
+    if (db.rankCard && db.rankCard.useImageCard) {
+        $('.customRankCardSettings').show();
+    }
+    
+    $('#rcBarPicker').val($('#rcBar').val() || '#FFA500');
+    $('#rcTextPicker').val($('#rcText').val() || '#ffffff');
+    
+    $('#rcBar').on('input blur', function() {
+        if (/^#[0-9A-F]{6}$/i.test($(this).val())) $('#rcBarPicker').val($(this).val());
+    });
+    $('#rcText').on('input blur', function() {
+        if (/^#[0-9A-F]{6}$/i.test($(this).val())) $('#rcTextPicker').val($(this).val());
+    });
 
+    $('#previewRankCardBtn').click(function() {
+        if (requestInProgress) return;
+        
+        let btn = $(this);
+        let originalText = btn.text();
+        
+        if (hasUnsavedChanges()) {
+            return alert("Por favor, guarda tus cambios en el botón verde de arriba antes de previsualizar la tarjeta.");
+        }
+
+        btn.text("Generando...").prop('disabled', true);
+        
+        $.ajax({
+            url: "/api/previewRankCard",
+            type: "post",
+            data: JSON.stringify({ guildID: guildID }),
+            headers: { 'Content-Type': 'application/json' },
+            xhrFields: { responseType: 'blob' }
+        })
+        .done(function(blob) {
+            let url = URL.createObjectURL(blob);
+            $('#previewCardImage').attr('src', url);
+            $('#previewCardContainer').show();
+            btn.text(originalText).prop('disabled', false);
+        })
+        .fail(function(e) {
+            alert("Error al previsualizar la tarjeta. Revisa la URL del fondo o intenta de nuevo.");
+            btn.text(originalText).prop('disabled', false);
+            console.error(e);
+        });
+    });
     }).catch((e) => {
         console.error(e)
         $('#errorheader').css('margin-top', '70px')

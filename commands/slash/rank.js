@@ -2,6 +2,7 @@
 const { t } = require('../../utils/i18n.js');
 const config = require('../../config.json');
 const multiplierModes = require("../../json/multiplier_modes.json")
+const RankCard = require('../../classes/RankCard.js');
 
 module.exports = {
 metadata: {
@@ -104,7 +105,57 @@ async run(client, int, tools) {
         if (syncCheck.incorrect.length || syncCheck.missing.length) embed.addFields([{ name: t('commands.rank.fieldNote', {}, serverLang), value: t('commands.rank.syncWarning', { command: tools.commandTag("sync") }, serverLang) }])
     }
 
-    let isHidden = db.settings.rankCard.ephemeral || !!int.options.get("hidden")?.value
-    return int.reply({embeds: [embed], ephemeral: isHidden})
+    let isHidden = db.settings.rankCard.ephemeral || !!int.options.get("hidden")?.value;
+
+    // --- NUEVA LÓGICA: RESPETAMOS EL SWITCH EXPLICITO ---
+    if (db.settings.rankCard.useImageCard) {
+        await int.deferReply({ ephemeral: isHidden });
+
+        // 1. Calcular el puesto (Rank) ordenando los usuarios
+        let xpArray = Object.entries(db.users || {})
+            .filter(x => x[1].xp > 0 && !x[1].hidden)
+            .sort((a, b) => b[1].xp - a[1].xp);
+        let userRankIndex = xpArray.findIndex(x => x[0] == member.id);
+        let userRank = userRankIndex !== -1 ? userRankIndex + 1 : "?";
+
+        // 2. Extraer el texto de cooldown (si aplica)
+        let cooldownText = null;
+        if (!db.settings.rankCard.hideCooldown) {
+            let foundCooldown = currentXP.cooldown || 0;
+            if (foundCooldown > Date.now()) cooldownText = tools.timestamp(foundCooldown - Date.now());
+        }
+
+        // 3. Extraer el multiplicador principal
+        let multiplierText = multiplierInfo.length > 0 ? multiplierInfo[0] : null;
+
+        let userDataForImage = {
+            username: member.user.username,
+            displayName: member.user.displayName,
+            avatarURL: memberAvatar,
+            currentXP: xp,
+            requiredXP: levelData.xpRequired,
+            previousLevelXP: levelData.previousLevel,
+            level: levelData.level,
+            isMaxLevel: maxLevel,
+            // NUEVOS DATOS:
+            rank: userRank,
+            messagesText: estimatedRange, // "Faltan 5-10 mensajes"
+            cooldownText: cooldownText,
+            multiplierText: multiplierText
+        };
+
+        try {
+            const rankCardGenerator = new RankCard(userDataForImage, db.settings.rankCard);
+            const imageBuffer = await rankCardGenerator.build();
+            return int.editReply({ files: [{ attachment: imageBuffer, name: 'rank.png' }] });
+        } catch (error) {
+            console.error("Error generando RankCard:", error);
+            return int.editReply({ content: "Error al generar la imagen.", embeds: [embed] });
+        }
+    } 
+    else {
+        // MODO CLÁSICO (Texto/Embed original)
+        return int.reply({embeds: [embed], ephemeral: isHidden});
+    }
 
 }}

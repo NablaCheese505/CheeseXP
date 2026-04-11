@@ -532,7 +532,9 @@
                     <span class="sliderspan"></span>
                 </label>
             </div>
+            
             <div class="settingBreak"></div>
+
             <div class="settingBox box ifrankenabled">
                 <h2><%= t('dashboard.Hidecooldown', {}, lang) %></h2>
                 <p class="details"><%= t('dashboard.PreventsmembersfromviewingtheamountoftimeuntiltheycangainXPagain', {}, lang) %></p>
@@ -541,6 +543,7 @@
                     <span class="sliderspan"></span>
                 </label>
             </div>
+
             <div class="settingBox box">
                 <h2><%= t('dashboard.Hidemultipliers', {}, lang) %></h2>
                 <p class="details"><%= t('dashboard.Preventsmembersfromviewingwhichroleshavemultipliersexcept0x', {}, lang) %></p>
@@ -549,6 +552,7 @@
                     <span class="sliderspan"></span>
                 </label>
             </div>
+
             <div class="settingBox box ifrankenabled" style="height: 171px">
                 <h2><%= t('dashboard.Forcehidden', {}, lang) %></h2>
                 <p class="details"><%= t('dashboard.Forcesusagesofranktoalwaysbehiddenephemeralmeaningthatonlythememberwhotypedthecommandcanseethemessage', {}, lang) %><br/></p>
@@ -557,6 +561,7 @@
                     <span class="sliderspan"></span>
                 </label>
             </div>
+
             <div class="settingBox box ifrankenabled" style="height: 171px">
                 <h2><%= t('dashboard.RelativeXP', {}, lang) %></h2>
                 <p class="details"><%= t('dashboard.Changesthenextlevelsectionofranktostartat0andonlyincludeXPfromthatlevelegIflevel10requires2000XPandlevel11requires3000itwilldisplay5001000XPuntillevel11foramemberwith2500XP', {}, lang) %></p>
@@ -565,9 +570,62 @@
                     <span class="sliderspan"></span>
                 </label>
             </div>
-            <div class="settingBox box ifrankenabled">
-                <h2><%= t('dashboard.Rankcardcustomization', {}, lang) %></h2>
-                <p class="details"><%= t('dashboard.Notmyproblemanymorelol', {}, lang) %></p>
+
+            <div class="settingBreak"></div>
+
+            <div class="settingBox box fulllength ifrankenabled">
+                <h2>Usar Tarjetas de Imagen (Rank Card)</h2>
+                <p class="details">Si se activa, el comando /rank enviará una tarjeta gráfica generada en lugar del mensaje de texto tradicional.</p>
+                <label class="slider" style="margin-top: 5px; margin-bottom: 20px;">
+                    <input db="rankCard.useImageCard" id="toggleImageCard" onchange="$('.customRankCardSettings').toggle($(this).prop('checked'));" savename="db" tabindex="0" type="checkbox"/>
+                    <span class="sliderspan"></span>
+                </label>
+
+                <div class="customRankCardSettings" style="display: none; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <h2>Personalización Visual</h2>
+                    <p class="details">Cambia el aspecto de las tarjetas para todos los miembros de este servidor.</p>
+                    
+                    <div class="simpleflex" style="margin-top: 15px">
+                        <div class="sideoption">
+                            <h2>Imagen de Fondo (URL)</h2>
+                            <p class="details">Enlace directo a una imagen (.png o .jpg). Déjalo en blanco para el fondo oscuro.</p>
+                            <input db="rankCard.backgroundURL" id="rcBg" savename="db" type="text" placeholder="https://imgur.com/tu-imagen.png" style="width: 100%; margin-top: 5px;"/>
+                        </div>
+                        <div class="sideoptions" style="width: 250px">
+                            <h2>Opacidad del Fondo</h2>
+                            <p class="details">Visibilidad del panel detrás del texto (0.1 a 1.0).</p>
+                            <input db="rankCard.opacity" id="rcOp" savename="db" type="number" min="0.1" max="1.0" step="0.1" decimals="2" default="0.8" style="width: 80px; margin-top: 5px;"/>
+                        </div>
+                    </div>
+
+                    <div class="simpleflex" style="margin-top: 25px">
+                        <div class="sideoption">
+                            <h2>Color de la Barra (HEX)</h2>
+                            <p class="details">Código hexadecimal para la barra de progreso.</p>
+                            <div class="centerflex">
+                                <input db="rankCard.barColor" id="rcBar" savename="db" type="text" maxlength="7" default="#FFA500" placeholder="#FFA500" style="width: 100px;"/>
+                                <input type="color" id="rcBarPicker" value="#FFA500" style="margin-left: 10px; width: 40px; height: 35px; cursor: pointer; border: none; background: none; padding: 0;" oninput="document.getElementById('rcBar').value = this.value; $('#rcBar').trigger('change');" />
+                            </div>
+                        </div>
+                        <div class="sideoptions" style="width: 250px">
+                            <h2>Color del Texto (HEX)</h2>
+                            <p class="details">Código hexadecimal para las letras.</p>
+                            <div class="centerflex">
+                                <input db="rankCard.textColor" id="rcText" savename="db" type="text" maxlength="7" default="#FFFFFF" placeholder="#FFFFFF" style="width: 100px;"/>
+                                <input type="color" id="rcTextPicker" value="#ffffff" style="margin-left: 10px; width: 40px; height: 35px; cursor: pointer; border: none; background: none; padding: 0;" oninput="document.getElementById('rcText').value = this.value; $('#rcText').trigger('change');" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 30px; text-align: center;">
+                        <button id="previewRankCardBtn" style="background-color: var(--emojiblue); margin-bottom: 15px;">Previsualizar Tarjeta</button>
+                        <br>
+                        <div id="previewCardContainer" style="display: none;">
+                            <img id="previewCardImage" src="" alt="Previsualización de Tarjeta" style="max-width: 100%; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.5);"/>
+                            <p class="details" style="margin-top: 10px;"><i>Nota: Guarda los cambios antes de previsualizar para ver el resultado real.</i></p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

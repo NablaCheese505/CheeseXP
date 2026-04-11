@@ -79,14 +79,15 @@ const settings = {
 
     rankCard: {
         disabled: { type: "bool", default: false },
+        useImageCard: { type: "bool", default: false },
         relativeLevel: { type: "bool", default: false },
         hideCooldown: { type: "bool", default: false },
         ephemeral: { type: "bool", default: false },
         embedColor: { type: "int", default: -1, min: -1, max: 0xffffff },
-        backgroundURL: { type: "string", maxlength: 500, default: "" },
-        barColor: { type: "string", maxlength: 7, default: "#FFA500" },
-        textColor: { type: "string", maxlength: 7, default: "#FFFFFF" },
-        opacity: { type: "float", precision: 2, default: 0.8, min: 0.1, max: 1.0 }
+        backgroundURL: { type: "string", maxlength: 500, default: "" }, 
+        barColor: { type: "string", maxlength: 7, default: "#FFA500" }, 
+        textColor: { type: "string", maxlength: 7, default: "#FFFFFF" }, 
+        opacity: { type: "float", precision: 2, default: 0.8, min: 0.1, max: 1.0 } 
     },
 
     hideMultipliers: { type: "bool", default: false },

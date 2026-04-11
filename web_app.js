@@ -733,6 +733,46 @@ app.post("/api/editXP", async function(req, res) {
     .catch(() => res.apiError("Unknown error!"));
 })
 
+app.post("/api/previewRankCard", async function(req, res) {
+    if (typeof req.body != "object") return res.apiError("Invalid data!");
+    let guildID = req.body.guildID;
+    if (!guildID) return res.apiError("No guild ID!");
+
+    let [user, guilds] = await getDiscordInfo(req);
+    if (!user || !guilds) return res.apiError("Not logged in!");
+
+    let data = await client.db.fetch(guildID, ["settings"]);
+    if (!data || !data.settings) return res.apiError("No data!");
+
+    const RankCard = require('./classes/RankCard.js');
+
+    let mockUserData = {
+        username: user.username,
+        displayName: user.global_name || user.username,
+        avatarURL: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`,
+        currentXP: 1450,
+        requiredXP: 2000,
+        previousLevelXP: 0,
+        level: 10,
+        isMaxLevel: false,
+        rank: 1,
+        messagesText: "Faltan 5-10 mensajes",
+        cooldownText: "00:45",
+        multiplierText: "🚀 Rol - 1.5x XP"
+    };
+
+    try {
+        const rankCardGenerator = new RankCard(mockUserData, data.settings.rankCard);
+        const imageBuffer = await rankCardGenerator.build();
+        
+        res.set('Content-Type', 'image/png');
+        res.send(imageBuffer);
+    } catch (e) {
+        console.error("Error previsualizando:", e);
+        return res.apiError("Error al generar la imagen.");
+    }
+});
+
 app.post("/api/leaderboardHide", async function(req, res) {
     if (typeof req.body != "object") return res.apiError("Invalid  data!");
 

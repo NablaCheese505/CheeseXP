@@ -128,7 +128,26 @@ app.get("/servers", (req, res) => sendPage(req, res, "servers"))
 app.get("/settings/:id", (req, res) => sendPage(req, res, "config"))
 app.get("/leaderboard/:id", (req, res) => sendPage(req, res, "leaderboard"))
 app.get("/", (req, res) => sendPage(req, res, "home"))
-app.get("/profile", (req, res) => sendPage(req, res, "profile"))
+app.get("/servers", (req, res) => sendPage(req, res, "servers"))
+app.get("/settings/:id", (req, res) => sendPage(req, res, "config"))
+app.get("/leaderboard/:id", (req, res) => sendPage(req, res, "leaderboard"))
+app.get("/", (req, res) => sendPage(req, res, "home"))
+app.get("/profile", async function(req, res) {
+    let user = await getDiscordInfo(req, true);
+    if (!user) return sendRedirect(res, "/"); 
+
+    let userData = await client.userDB.fetch(user.id) || { rankCard: {} };
+
+    sendPage(req, res, "profile", { 
+        user: { 
+            id: user.id, 
+            username: user.username, 
+            displayName: user.global_name || user.username, 
+            avatar: user.avatar 
+        }, 
+        rankCard: userData.rankCard || {} 
+    });
+});
 
 app.get(["/settings", "/leaderboard", "/servers"], (req, res) => sendRedirect(res, "/servers"))
 
@@ -186,13 +205,11 @@ app.get("/api/guilds", async function(req, res) {
 })
 
 // API PARA EL PERFIL GLOBAL DEL USUARIO
-
 // Obtener la configuración de la tarjeta del usuario
 app.get("/api/profile", async function(req, res) {
     let user = await getDiscordInfo(req, true);
     if (!user) return res.apiError("No has iniciado sesión!", "login");
 
-    // Buscamos en la nueva colección (o devolvemos vacío si no existe)
     let userData = await client.userDB.fetch(user.id) || { rankCard: {} };
     
     return res.send({ 
@@ -211,6 +228,7 @@ app.post("/api/profile", async function(req, res) {
     let data = req.body.rankCard || {};
     
     let dbObj = {
+        "_id": user.id,
         "rankCard.backgroundURL": String(data.backgroundURL || "").slice(0, 500).trim(),
         "rankCard.backgroundFit": ["cover", "contain", "stretch"].includes(data.backgroundFit) ? data.backgroundFit : "cover",
         "rankCard.backgroundColor": String(data.backgroundColor || "#1e1f22").slice(0, 7),
@@ -223,13 +241,11 @@ app.post("/api/profile", async function(req, res) {
         "info.lastUpdate": Date.now()
     };
 
-    // Verificamos si el usuario ya existe en la DB. Si no, lo creamos primero.
-    let existingUser = await client.userDB.fetch(user.id);
-    if (!existingUser) {
-        await client.userDB.create({ _id: user.id, rankCard: {}, info: { lastUpdate: 0 } });
-    }
-
-    client.userDB.update(user.id, { $set: dbObj }).exec()
+    client.userDB.model.findOneAndUpdate(
+        { _id: user.id },
+        { $set: dbObj },
+        { upsert: true, new: true, setDefaultsOnInsert: true }
+    )
     .then(() => res.end("¡Perfil guardado con éxito!"))
     .catch(e => { console.error(e); res.apiError("Error en la base de datos."); });
 });

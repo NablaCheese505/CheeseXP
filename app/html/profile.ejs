@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    
+    <title><%= t('config_page.global.page_title', {}, lang) %> - Perfil Global</title>
+    <meta name="robots" content="noindex"> 
+    <meta name="theme-color" content="#00ff80">
+    
+    <link href="/css/polaris.css?v=3" rel="stylesheet" type="text/css"/>
+    <link href="/assets/polaris.svg" rel="icon"/>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        .colorPickerBtn { margin-left: 5px; width: 30px; height: 30px; cursor: pointer; border: none; background: none; padding: 0; }
+        .swatch-container { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+        .color-swatch { width: 22px; height: 22px; border-radius: 50%; cursor: pointer; transition: transform 0.1s; border: 1px solid transparent; }
+        .color-swatch:hover { transform: scale(1.15); }
+        .color-swatch.none-swatch { background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>') center/cover; border: 1px solid #444; }
+        .shape-btn { width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; background-color: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .shape-btn:hover { background-color: rgba(255,255,255,0.1); }
+        .shape-btn.active { background-color: var(--polarisgreen); color: black; box-shadow: 0 0 8px var(--polarisgreen); }
+
+        @media screen and (max-width: 950px) {
+            .rankcard-split-container { flex-direction: column-reverse !important; }
+            .rankcard-split-container > div { min-width: 100% !important; width: 100% !important; }
+            .rankcard-grid-controls { grid-template-columns: 1fr !important; }
+            .rankcard-preview-container { position: relative !important; top: 0 !important; margin-bottom: 20px; }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header">
+        <a href="/servers" tabindex="-1" style="width: auto;">
+            <div>
+                <img src="/assets/cheese.png"/>
+                <h2>Tu Perfil Global</h2>
+            </div>
+        </a>
+    </div>
+
+    <div id="unsavedWarning">
+        <div class="unsavedBox">
+            <p><%= t('config_page.global.unsaved_text', {}, lang) %></p>
+            <button id="saveChanges" style="background-color: var(--emojigreen)" onclick="saveProfile()"><%= t('config_page.global.btn_save', {}, lang) %></button>
+        </div>
+    </div>
+
+    <div class="configboxes" style="margin-left: auto; margin-right: auto; padding-top: 30px;">
+        
+        <div class="settingBox box fulllength">
+            <h1>Personaliza tu Tarjeta de Rango</h1>
+            <p class="details">Estos colores y fondos se usarán en todos los servidores que permitan tarjetas personalizadas de usuario.</p>
+            <p class="details" style="margin-bottom: 20px;">Sesión iniciada como: <b><%= user.displayName %></b></p>
+            
+            <div class="customRankCardSettings" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+                <div class="rankcard-split-container" style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap;">
+                    
+                    <div class="rankcard-grid-controls" style="flex: 1; min-width: 400px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        
+                        <div style="grid-column: 1 / -1;">
+                            <h2><%= t('dashboard.RankcardBgImage', {}, lang) %></h2>
+                            <input db="rankCard.backgroundURL" id="rcBg" savename="db" type="text" placeholder="https://i.imgur.com/imagen.png" style="width: 100%; margin-top: 5px;" value="<%= rankCard.backgroundURL || '' %>"/>
+                        </div>
+
+                        <div>
+                            <h2><%= t('dashboard.RankcardBgFit', {}, lang) %></h2>
+                            <select db="rankCard.backgroundFit" id="rcFit" savename="db" style="width: 100%; margin-top: 5px;">
+                                <option value="cover" <%= rankCard.backgroundFit == 'cover' ? 'selected' : '' %>><%= t('dashboard.RankcardFitCover', {}, lang) %></option>
+                                <option value="contain" <%= rankCard.backgroundFit == 'contain' ? 'selected' : '' %>><%= t('dashboard.RankcardFitContain', {}, lang) %></option>
+                                <option value="stretch" <%= rankCard.backgroundFit == 'stretch' ? 'selected' : '' %>><%= t('dashboard.RankcardFitStretch', {}, lang) %></option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <h2><%= t('dashboard.RankcardBgColor', {}, lang) %></h2>
+                            <div class="centerflex" style="margin-top: 5px;">
+                                <input db="rankCard.backgroundColor" id="rcBgCol" savename="db" type="text" maxlength="7" default="#1e1f22" style="width: 80px;" value="<%= rankCard.backgroundColor || '#1e1f22' %>"/>
+                                <input type="color" id="rcBgColPicker" value="<%= rankCard.backgroundColor || '#1e1f22' %>" class="colorPickerBtn"/>
+                            </div>
+                            <div class="swatch-container" data-target="rcBgCol"></div>
+                        </div>
+
+                        <div>
+                            <h2><%= t('dashboard.RankcardOverlayColor', {}, lang) %></h2>
+                            <div class="centerflex" style="margin-top: 5px;">
+                                <input db="rankCard.overlayColor" id="rcOverlayCol" savename="db" type="text" maxlength="7" default="#000000" style="width: 80px;" value="<%= rankCard.overlayColor || '#000000' %>"/>
+                                <input type="color" id="rcOverlayColPicker" value="<%= rankCard.overlayColor || '#000000' %>" class="colorPickerBtn"/>
+                            </div>
+                            <div class="swatch-container" data-target="rcOverlayCol"></div>
+                        </div>
+
+                        <div>
+                            <h2><%= t('dashboard.RankcardOverlayOpacity', {}, lang) %></h2>
+                            <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
+                                <input db="rankCard.opacity" id="rcOp" savename="db" type="range" min="0" max="1" step="0.05" default="0.8" style="width: 100%; cursor: pointer;" value="<%= rankCard.opacity !== undefined ? rankCard.opacity : 0.8 %>"/>
+                                <span id="rcOpVal" style="width: 30px; font-weight: bold;"><%= rankCard.opacity !== undefined ? rankCard.opacity : 0.8 %></span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h2><%= t('dashboard.RankcardAvatarShape', {}, lang) %></h2>
+                            <div class="centerflex" style="gap: 15px; margin-top: 5px;">
+                                <input type="hidden" db="rankCard.avatarShape" id="rcAvatarShape" savename="db" value="<%= rankCard.avatarShape || 'circle' %>"/>
+                                <div class="shape-btn <%= (!rankCard.avatarShape || rankCard.avatarShape == 'circle') ? 'active' : '' %>" data-shape="circle" title="<%= t('dashboard.RankcardShapeCircle', {}, lang) %>"><i data-lucide="circle"></i></div>
+                                <div class="shape-btn <%= rankCard.avatarShape == 'square' ? 'active' : '' %>" data-shape="square" title="<%= t('dashboard.RankcardShapeSquare', {}, lang) %>"><i data-lucide="square"></i></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h2><%= t('dashboard.RankcardAvatarBorder', {}, lang) %></h2>
+                            <div class="centerflex" style="margin-top: 5px;">
+                                <input db="rankCard.avatarBorderColor" id="rcAvatarCol" savename="db" type="text" maxlength="7" default="none" style="width: 80px;" value="<%= rankCard.avatarBorderColor || 'none' %>"/>
+                                <input type="color" id="rcAvatarColPicker" value="<%= rankCard.avatarBorderColor !== 'none' ? rankCard.avatarBorderColor : '#FFFFFF' %>" class="colorPickerBtn"/>
+                            </div>
+                            <div class="swatch-container with-none" data-target="rcAvatarCol"></div>
+                        </div>
+
+                        <div>
+                            <h2><%= t('dashboard.RankcardBarColor', {}, lang) %></h2>
+                            <div class="centerflex" style="margin-top: 5px;">
+                                <input db="rankCard.barColor" id="rcBar" savename="db" type="text" maxlength="7" default="#FFA500" style="width: 80px;" value="<%= rankCard.barColor || '#FFA500' %>"/>
+                                <input type="color" id="rcBarPicker" value="<%= rankCard.barColor || '#FFA500' %>" class="colorPickerBtn"/>
+                            </div>
+                            <div class="swatch-container" data-target="rcBar"></div>
+                        </div>
+
+                        <div>
+                            <h2><%= t('dashboard.RankcardTextColor', {}, lang) %></h2>
+                            <div class="centerflex" style="margin-top: 5px;">
+                                <input db="rankCard.textColor" id="rcText" savename="db" type="text" maxlength="7" default="#FFFFFF" style="width: 80px;" value="<%= rankCard.textColor || '#FFFFFF' %>"/>
+                                <input type="color" id="rcTextPicker" value="<%= rankCard.textColor || '#FFFFFF' %>" class="colorPickerBtn"/>
+                            </div>
+                            <div class="swatch-container" data-target="rcText"></div>
+                        </div>
+                    </div>
+
+                    <div class="rankcard-preview-container" style="flex: 1; min-width: 450px; position: sticky; top: 20px;">
+                        <h2><%= t('dashboard.RankcardLivePreview', {}, lang) %></h2>
+                        <div style="position: relative; margin-top: 10px; width: 100%;">
+                            <img id="livePreviewImage" src="" style="width: 100%; max-width: 100%; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.6); display: none; transition: opacity 0.2s;"/>
+                            <div id="previewLoading" style="width: 100%; aspect-ratio: 930/340; background-color: #1e1f22; border-radius: 12px; display: flex; justify-content: center; align-items: center; border: 1px dashed rgba(255,255,255,0.2);">
+                                <p style="color: #888;"><%= t('dashboard.RankcardLoadingPreview', {}, lang) %></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.i18nConfig = { btn_saving: "Guardando...", btn_save: "Guardar Cambios" };
+        window.i18nGlobal = {};
+    </script>
+    <script src="/js/settings.js" type="text/javascript"></script>
+
+    <script>
+        lucide.createIcons();
+
+        $('[db^="rankCard."]').on('input change', function() {
+            $('#unsavedWarning').addClass('activeWarning');
+        });
+        $('.shape-btn').click(function() {
+            $('#unsavedWarning').addClass('activeWarning');
+        });
+
+        $('input[type="color"]').on('input', function() {
+            let textInput = $(this).siblings('input[type="text"]');
+            textInput.val($(this).val());
+            updatePreview();
+        });
+
+        $('input[type="text"]').on('input', function() {
+            let colorInput = $(this).siblings('input[type="color"]');
+            if (/^#[0-9A-F]{6}$/i.test($(this).val())) {
+                colorInput.val($(this).val());
+            }
+            updatePreview();
+        });
+
+        $('#rcOp').on('input', function() {
+            $('#rcOpVal').text($(this).val());
+            updatePreview();
+        });
+
+        $('.shape-btn').click(function() {
+            $('.shape-btn').removeClass('active');
+            $(this).addClass('active');
+            $('#rcAvatarShape').val($(this).data('shape'));
+            updatePreview();
+        });
+
+        async function saveProfile() {
+            let $btn = $('#saveChanges');
+            let originalText = $btn.text();
+            $btn.text('Guardando...').prop('disabled', true);
+            
+            let profileData = { rankCard: {} };
+            
+            $('[db^="rankCard."]').each(function() {
+                let key = $(this).attr('db').split('.')[1];
+                profileData.rankCard[key] = $(this).val();
+            });
+
+            try {
+                let req = await fetch('/api/profile', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(profileData)
+                });
+                
+                if (req.ok) {
+                    $btn.text('¡Guardado!');
+                    setTimeout(() => {
+                        $btn.text(originalText).prop('disabled', false);
+                        $('#unsavedWarning').removeClass('activeWarning');
+                    }, 1500);
+                } else {
+                    let err = await req.json();
+                    alert(err.message || "Error al guardar");
+                    $btn.text(originalText).prop('disabled', false);
+                }
+            } catch (e) {
+                alert("Error de conexión");
+                $btn.text(originalText).prop('disabled', false);
+            }
+        }
+
+        let previewTimeout;
+        function updatePreview() {
+            clearTimeout(previewTimeout);
+            $('#livePreviewImage').css('opacity', '0.5');
+            
+            previewTimeout = setTimeout(async () => {
+                let previewSettings = {};
+                $('[db^="rankCard."]').each(function() {
+                    let key = $(this).attr('db').split('.')[1];
+                    let val = $(this).val();
+                    
+                    if (key === 'opacity') {
+                        previewSettings[key] = parseFloat(val);
+                    } else {
+                        previewSettings[key] = val;
+                    }
+                });
+
+                try {
+                    let req = await fetch('/api/previewRankCard', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ previewSettings })
+                    });
+                    
+                    if (req.ok) {
+                        let blob = await req.blob();
+                        $('#livePreviewImage').attr('src', URL.createObjectURL(blob)).show().css('opacity', '1');
+                        $('#previewLoading').hide();
+                    }
+                } catch (e) {
+                    console.error("Error cargando preview", e);
+                }
+            }, 800);
+        }
+
+        $(document).ready(updatePreview);
+    </script>
+</body>
+</html>

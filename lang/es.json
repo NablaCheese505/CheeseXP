@@ -520,7 +520,14 @@
         "VoiceXPMultiplierDesc": "Multiplicador aplicado a la XP de mensajes normal por cada minuto en voz.",
         "HoursLimit": "Límite de Horas",
         "HoursLimitDesc": "Máximo de horas continuas que otorgan XP. 0 = Sin límite.",
-        "hours": "horas"
+        "hours": "horas",
+        "AllowUserCards": "Permitir Tarjetas de Usuario",
+        "AllowUserCardsDesc": "Permite a los miembros usar las tarjetas de rango que hayan personalizado en su Perfil Global.",
+        "RequiredRole": "Rol Requerido",
+        "RequiredRoleDesc": "Los usuarios deben tener este rol para usar su tarjeta personalizada.",
+        "RequiredLevel": "Nivel Requerido",
+        "RequiredLevelDesc": "Nivel mínimo para usar tarjetas personalizadas (0 para desactivar).",
+        "RoleNone": "Ninguno (Cualquier rol)"
     },
   "config_page": {
       "global": {

@@ -520,7 +520,14 @@
         "VoiceXPMultiplierDesc": "Multiplier applied to normal message XP per minute in VC.",
         "HoursLimit": "Hours limit",
         "HoursLimitDesc": "Max continuous hours that grant XP. 0 = No limit.",
-        "hours": "hours"
+        "hours": "hours",
+        "AllowUserCards": "Allow User Rank Cards",
+        "AllowUserCardsDesc": "Allows members to use their custom rank cards saved in their Global Profile.",
+        "RequiredRole": "Required Role",
+        "RequiredRoleDesc": "Users must have this role to use their custom rank card.",
+        "RequiredLevel": "Required Level",
+        "RequiredLevelDesc": "Minimum level required to use custom rank cards (0 to disable).",
+        "RoleNone": "None (Any role)"
     },
   "config_page": {
       "js": {

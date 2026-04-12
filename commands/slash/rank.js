@@ -114,24 +114,18 @@ async run(client, int, tools) {
         // 1. Calcular el puesto (Rank) usando las herramientas estándar (como en top.js)
         let minLeaderboardXP = db.settings.leaderboard.minLevel > 1 ? tools.xpForLevel(db.settings.leaderboard.minLevel, db.settings) : 0;
         
-        // ¡CRÍTICO! Necesitamos aplanar el objeto users de la DB en un arreglo
         let rankings = tools.xpObjToArray(db.users || {});
-        
-        // Filtramos y ordenamos
         rankings = rankings.filter(x => x.xp > minLeaderboardXP && !x.hidden).sort((a, b) => b.xp - a.xp);
         
-        // Encontramos el índice real
         let userRankIndex = rankings.findIndex(x => x.id == member.id);
         let userRank = userRankIndex !== -1 ? userRankIndex + 1 : "?";
 
-        // 2. Extraer el texto de cooldown (si aplica)
+        // 2. Extraer textos adicionales
         let cooldownText = null;
         if (!db.settings.rankCard.hideCooldown) {
             let foundCooldown = currentXP.cooldown || 0;
             if (foundCooldown > Date.now()) cooldownText = tools.timestamp(foundCooldown - Date.now());
         }
-
-        // 3. Extraer el multiplicador principal
         let multiplierText = multiplierInfo.length > 0 ? multiplierInfo[0] : null;
 
         let userDataForImage = {
@@ -143,15 +137,34 @@ async run(client, int, tools) {
             previousLevelXP: levelData.previousLevel,
             level: levelData.level,
             isMaxLevel: maxLevel,
-            // NUEVOS DATOS:
             rank: userRank,
-            messagesText: estimatedRange, // "Faltan 5-10 mensajes"
+            messagesText: estimatedRange,
             cooldownText: cooldownText,
             multiplierText: multiplierText
         };
+        
+        let cardSettingsToUse = db.settings.rankCard; 
+        
+        if (db.settings.rankCard.allowUserCards) {
+            // 1. Verificación de Rol
+            let reqRole = db.settings.rankCard.requiredRole;
+            let hasRequiredRole = (!reqRole || reqRole === "none") ? true : member.roles.cache.has(reqRole);
+            
+            // 2. Verificación de Nivel (NUEVA)
+            let reqLevel = db.settings.rankCard.requiredLevel || 0;
+            let hasRequiredLevel = levelData.level >= reqLevel;
 
+            // Solo si cumple ambos requisitos, buscamos su perfil global
+            if (hasRequiredRole && hasRequiredLevel) {
+                let userGlobalProfile = await tools.fetchUser(member.id);
+                if (userGlobalProfile && userGlobalProfile.rankCard && userGlobalProfile.rankCard.backgroundColor) {
+                    cardSettingsToUse = userGlobalProfile.rankCard;
+                }
+            }
+        }
         try {
-            const rankCardGenerator = new RankCard(userDataForImage, db.settings.rankCard);
+            // Le pasamos a la clase RankCard la configuración ganadora
+            const rankCardGenerator = new RankCard(userDataForImage, cardSettingsToUse);
             const imageBuffer = await rankCardGenerator.build();
             return int.editReply({ files: [{ attachment: imageBuffer, name: 'rank.png' }] });
         } catch (error) {

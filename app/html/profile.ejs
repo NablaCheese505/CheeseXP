@@ -160,18 +160,60 @@
     <script src="/js/settings.js" type="text/javascript"></script>
 
     <script>
+        // 1. Inicializar iconos
         lucide.createIcons();
 
-        $('[db^="rankCard."]').on('input change', function() {
-            $('#unsavedWarning').addClass('activeWarning');
-        });
-        $('.shape-btn').click(function() {
-            $('#unsavedWarning').addClass('activeWarning');
+        // 2. Generar la paleta de colores (Swatches) manualmente
+        const standardPalette = ["#FFA500", "#FF5252", "#4CAF50", "#2196F3", "#9C27B0", "#FFFFFF", "#000000"];
+        
+        $('.swatch-container').each(function() {
+            let container = $(this);
+            if (container.hasClass('with-none')) {
+                container.append(`<div class="color-swatch none-swatch" data-color="none" title="Sin color (Transparente)"></div>`);
+            }
+            standardPalette.forEach(hex => {
+                let border = (hex === "#000000") ? "1px solid #444" : "1px solid transparent";
+                container.append(`<div class="color-swatch" data-color="${hex}" style="background-color: ${hex}; border: ${border};" title="${hex}"></div>`);
+            });
         });
 
+        // 3. Función centralizada para activar la alerta de guardado
+        function markUnsaved() {
+            $('#unsavedWarning').addClass('activeWarning');
+        }
+
+        // Activamos la alerta al escribir en los inputs con 'db'
+        $('[db^="rankCard."]').on('input change', markUnsaved);
+
+        // 4. Lógica al hacer clic en los circulitos de colores (Swatches)
+        $(document).on('click', '.color-swatch', function() {
+            let targetId = $(this).parent().attr('data-target');
+            let selectedColor = $(this).attr('data-color');
+            
+            // Actualizamos los inputs invisibles
+            $('#' + targetId).val(selectedColor);
+            if (selectedColor !== 'none') {
+                $('#' + targetId + 'Picker').val(selectedColor);
+            }
+            
+            // Efecto visual de selección
+            $(this).parent().find('.color-swatch').css('box-shadow', 'none');
+            $(this).css('box-shadow', '0 0 0 2px white');
+            
+            markUnsaved();
+            updatePreview();
+        });
+
+        // 5. Sincronizar el Color Picker nativo con los campos de texto
         $('input[type="color"]').on('input', function() {
             let textInput = $(this).siblings('input[type="text"]');
             textInput.val($(this).val());
+            
+            // Quitamos la sombra de los swatches si eligen un color manual
+            let container = $(this).parent().siblings('.swatch-container');
+            container.find('.color-swatch').css('box-shadow', 'none');
+            
+            markUnsaved(); // ¡Arreglado el bug del color de borde!
             updatePreview();
         });
 
@@ -180,6 +222,7 @@
             if (/^#[0-9A-F]{6}$/i.test($(this).val())) {
                 colorInput.val($(this).val());
             }
+            markUnsaved();
             updatePreview();
         });
 
@@ -188,13 +231,17 @@
             updatePreview();
         });
 
+        // 6. Lógica de los botones Cuadrado/Círculo
         $('.shape-btn').click(function() {
             $('.shape-btn').removeClass('active');
             $(this).addClass('active');
             $('#rcAvatarShape').val($(this).data('shape'));
+            
+            markUnsaved();
             updatePreview();
         });
 
+        // 7. Sistema de Guardado API
         async function saveProfile() {
             let $btn = $('#saveChanges');
             let originalText = $btn.text();
@@ -231,6 +278,7 @@
             }
         }
 
+        // 8. Previsualización en Vivo con Debounce
         let previewTimeout;
         function updatePreview() {
             clearTimeout(previewTimeout);
@@ -267,7 +315,18 @@
             }, 800);
         }
 
-        $(document).ready(updatePreview);
+        // 9. Carga inicial
+        $(document).ready(function() {
+            updatePreview();
+            
+            // Iluminar el swatch si el usuario ya tenía un color guardado
+            ['rcBgCol', 'rcOverlayCol', 'rcAvatarCol', 'rcBar', 'rcText'].forEach(id => {
+                let val = $(`#${id}`).val();
+                let container = $(`.swatch-container[data-target="${id}"]`);
+                let matchedSwatch = container.find(`.color-swatch[data-color="${val}"]`);
+                if (matchedSwatch.length) matchedSwatch.css('box-shadow', '0 0 0 2px white');
+            });
+        });
     </script>
 </body>
 </html>

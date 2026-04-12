@@ -344,9 +344,18 @@ addUhOh()
             let roleOption = $(`<option value="${x.id}">${escapeHTML(x.name)}</option>`)
             roleOption.css("color", x.color == "#000000" ? "var(--defaultrolecol)" : x.color)
 
-            if (!x.managed) appendRoleSelect('#rewardRoleSelect', roleOption, x, true, rewards.some(r => r.id == x.id))
+            if (!x.managed) {
+                appendRoleSelect('#rewardRoleSelect', roleOption, x, true, rewards.some(r => r.id == x.id));
+                $('#userCardRoleSelect').append(roleOption.clone()); 
+            }
             appendRoleSelect('#roleMultiplierSelect', roleOption, x, false, roleMultipliers.some(r => r.id == x.id))
         })
+        
+        if (db.rankCard && db.rankCard.requiredRole) {
+            $('#userCardRoleSelect').val(db.rankCard.requiredRole);
+        } else {
+            $('#userCardRoleSelect').val("none");
+        }
 
         let channelPrefixes = { channel: "# ", category: "📂 ", vc: "🔊 ", thread: "🧵 ", forum: "💬 "}
         let chMultiplierChannels = data.channels.map(x => `<option ${x.type == "category" ? `style="font-weight: bold"` : ""} value="${x.id}">${channelPrefixes[x.type] || "* "}${escapeHTML(x.name)}</option>`)
@@ -768,6 +777,10 @@ addUhOh()
             $('.customRankCardSettings').show();
         }
 
+        if (db.rankCard.allowUserCards) {
+            $('.userCardSettings').show();
+        }
+        
         let currentShape = db.rankCard.avatarShape || 'circle';
         $('.shape-btn').removeClass('active');
         $(`.shape-btn[data-shape="${currentShape}"]`).addClass('active');

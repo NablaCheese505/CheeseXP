@@ -680,6 +680,35 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="settingBreak ifrankenabled"></div>
+
+            <div class="settingBox box fulllength ifrankenabled">
+                <h2><%= t('dashboard.AllowUserCards', {}, lang) %></h2>
+                <p class="details"><%= t('dashboard.AllowUserCardsDesc', {}, lang) %></p>
+                <label class="slider" style="margin-top: 5px">
+                    <input db="rankCard.allowUserCards" id="toggleAllowUserCards" onchange="$('.userCardSettings').toggle($(this).prop('checked'))" savename="db" tabindex="0" type="checkbox"/>
+                    <span class="sliderspan"></span>
+                </label>
+
+                <div class="userCardSettings simpleflex" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <div class="sideoption">
+                        <h2><%= t('dashboard.RequiredRole', {}, lang) %></h2>
+                        <p class="details"><%= t('dashboard.RequiredRoleDesc', {}, lang) %></p>
+                        <select id="userCardRoleSelect" db="rankCard.requiredRole" savename="db" style="width: 100%; margin-top: 5px;">
+                            <option value="none"><%= t('dashboard.RoleNone', {}, lang) %></option>
+                        </select>
+                    </div>
+                    <div class="sideoptions">
+                        <h2><%= t('dashboard.RequiredLevel', {}, lang) %></h2>
+                        <p class="details"><%= t('dashboard.RequiredLevelDesc', {}, lang) %></p>
+                        <div class="centerflex spacedflex" style="margin-top: 5px;">
+                            <input db="rankCard.requiredLevel" default="0" max="1000" min="0" placeholder="0" savename="db" style="width: 100px" type="number"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         </div>
 
         <div class="configboxes" style="display: none" tab="leaderboard">

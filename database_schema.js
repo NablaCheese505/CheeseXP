@@ -96,7 +96,8 @@ const settings = {
         avatarShape: { type: "string", default: "circle", accept: ["circle", "square"] },
         avatarBorderColor: { type: "string", maxlength: 7, default: "none" },
         allowUserCards: { type: "bool", default: false },
-        requiredRole: { type: "string", default: "none", accept: ["none", "discord:role"] }
+        requiredRole: { type: "string", default: "none", accept: ["none", "discord:role"] },
+        requiredLevel: { type: "int", default: 0, min: 0, max: 1000 }
     },
 
     hideMultipliers: { type: "bool", default: false },

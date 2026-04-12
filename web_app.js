@@ -128,6 +128,7 @@ app.get("/servers", (req, res) => sendPage(req, res, "servers"))
 app.get("/settings/:id", (req, res) => sendPage(req, res, "config"))
 app.get("/leaderboard/:id", (req, res) => sendPage(req, res, "leaderboard"))
 app.get("/", (req, res) => sendPage(req, res, "home"))
+app.get("/profile", (req, res) => sendPage(req, res, "profile"))
 
 app.get(["/settings", "/leaderboard", "/servers"], (req, res) => sendRedirect(res, "/servers"))
 
@@ -183,6 +184,55 @@ app.get("/api/guilds", async function(req, res) {
 
     return res.send({ user: userData, guilds: validServers, botPublic })
 })
+
+// API PARA EL PERFIL GLOBAL DEL USUARIO
+
+// Obtener la configuración de la tarjeta del usuario
+app.get("/api/profile", async function(req, res) {
+    let user = await getDiscordInfo(req, true);
+    if (!user) return res.apiError("No has iniciado sesión!", "login");
+
+    // Buscamos en la nueva colección (o devolvemos vacío si no existe)
+    let userData = await client.userDB.fetch(user.id) || { rankCard: {} };
+    
+    return res.send({ 
+        user: { id: user.id, username: user.username, displayName: user.global_name, avatar: user.avatar }, 
+        rankCard: userData.rankCard || {} 
+    });
+});
+
+// Guardar la configuración de la tarjeta del usuario
+app.post("/api/profile", async function(req, res) {
+    if (typeof req.body != "object") return res.apiError("Datos inválidos!");
+    
+    let user = await getDiscordInfo(req, true);
+    if (!user) return res.apiError("No has iniciado sesión!", "login");
+
+    let data = req.body.rankCard || {};
+    
+    let dbObj = {
+        "rankCard.backgroundURL": String(data.backgroundURL || "").slice(0, 500).trim(),
+        "rankCard.backgroundFit": ["cover", "contain", "stretch"].includes(data.backgroundFit) ? data.backgroundFit : "cover",
+        "rankCard.backgroundColor": String(data.backgroundColor || "#1e1f22").slice(0, 7),
+        "rankCard.overlayColor": String(data.overlayColor || "#000000").slice(0, 7),
+        "rankCard.opacity": tools.clamp(Number(data.opacity), 0.0, 1.0) || 0.8,
+        "rankCard.barColor": String(data.barColor || "#FFA500").slice(0, 7),
+        "rankCard.textColor": String(data.textColor || "#FFFFFF").slice(0, 7),
+        "rankCard.avatarShape": ["circle", "square"].includes(data.avatarShape) ? data.avatarShape : "circle",
+        "rankCard.avatarBorderColor": String(data.avatarBorderColor || "none").slice(0, 7),
+        "info.lastUpdate": Date.now()
+    };
+
+    // Verificamos si el usuario ya existe en la DB. Si no, lo creamos primero.
+    let existingUser = await client.userDB.fetch(user.id);
+    if (!existingUser) {
+        await client.userDB.create({ _id: user.id, rankCard: {}, info: { lastUpdate: 0 } });
+    }
+
+    client.userDB.update(user.id, { $set: dbObj }).exec()
+    .then(() => res.end("¡Perfil guardado con éxito!"))
+    .catch(e => { console.error(e); res.apiError("Error en la base de datos."); });
+});
 
 app.get("/api/settings/:id", async function(req, res) {
     let [user, guilds] = await getDiscordInfo(req)

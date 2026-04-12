@@ -527,7 +527,16 @@
         "RequiredRoleDesc": "Los usuarios deben tener este rol para usar su tarjeta personalizada.",
         "RequiredLevel": "Nivel Requerido",
         "RequiredLevelDesc": "Nivel mínimo para usar tarjetas personalizadas (0 para desactivar).",
-        "RoleNone": "Ninguno (Cualquier rol)"
+        "RoleNone": "Ninguno (Cualquier rol)",
+        "GlobalProfileTitle": "Perfil Global",
+        "YourGlobalProfile": "Tu Perfil Global",
+        "CustomizeRankCard": "Personaliza tu Tarjeta de Rango",
+        "GlobalRankCardDesc": "Estos colores y fondos se usarán en todos los servidores que permitan tarjetas personalizadas de usuario.",
+        "LoggedInAs": "Sesión iniciada como:",
+        "NoColorTransparent": "Sin color (Transparente)",
+        "Saved": "¡Guardado!",
+        "ErrorSaving": "Error al guardar",
+        "ConnectionError": "Error de conexión"
     },
   "config_page": {
       "global": {

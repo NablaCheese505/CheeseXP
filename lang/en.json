@@ -527,7 +527,16 @@
         "RequiredRoleDesc": "Users must have this role to use their custom rank card.",
         "RequiredLevel": "Required Level",
         "RequiredLevelDesc": "Minimum level required to use custom rank cards (0 to disable).",
-        "RoleNone": "None (Any role)"
+        "RoleNone": "None (Any role)",
+        "GlobalProfileTitle": "Global Profile",
+        "YourGlobalProfile": "Your Global Profile",
+        "CustomizeRankCard": "Customize your Rank Card",
+        "GlobalRankCardDesc": "These colors and backgrounds will be used across all servers that allow custom user rank cards.",
+        "LoggedInAs": "Logged in as:",
+        "NoColorTransparent": "No color (Transparent)",
+        "Saved": "Saved!",
+        "ErrorSaving": "Error saving",
+        "ConnectionError": "Connection error"
     },
   "config_page": {
       "js": {

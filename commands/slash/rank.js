@@ -20,7 +20,7 @@ async run(client, int, tools) {
     let foundUser = int.options.get("user") || int.options.get("member") 
     if (foundUser) member = foundUser.member
 
-    let db = await tools.fetchSettings(member?.id || int.user.id, int.guild.id)
+    let db = await tools.fetchAll(int.guild.id)
     let serverLang = db?.settings?.lang || config.defaultLanguage || 'en';
 
     if (!member) return tools.warn(t('commands.rank.notFound', {}, serverLang))
@@ -107,15 +107,21 @@ async run(client, int, tools) {
 
     let isHidden = db.settings.rankCard.ephemeral || !!int.options.get("hidden")?.value;
 
-    // --- NUEVA LÓGICA: RESPETAMOS EL SWITCH EXPLICITO ---
+    // --- NUEVA LÓGICA: SWITCH EXPLICITO ---
     if (db.settings.rankCard.useImageCard) {
         await int.deferReply({ ephemeral: isHidden });
 
-        // 1. Calcular el puesto (Rank) ordenando los usuarios
-        let xpArray = Object.entries(db.users || {})
-            .filter(x => x[1].xp > 0 && !x[1].hidden)
-            .sort((a, b) => b[1].xp - a[1].xp);
-        let userRankIndex = xpArray.findIndex(x => x[0] == member.id);
+        // 1. Calcular el puesto (Rank) usando las herramientas estándar (como en top.js)
+        let minLeaderboardXP = db.settings.leaderboard.minLevel > 1 ? tools.xpForLevel(db.settings.leaderboard.minLevel, db.settings) : 0;
+        
+        // ¡CRÍTICO! Necesitamos aplanar el objeto users de la DB en un arreglo
+        let rankings = tools.xpObjToArray(db.users || {});
+        
+        // Filtramos y ordenamos
+        rankings = rankings.filter(x => x.xp > minLeaderboardXP && !x.hidden).sort((a, b) => b.xp - a.xp);
+        
+        // Encontramos el índice real
+        let userRankIndex = rankings.findIndex(x => x.id == member.id);
         let userRank = userRankIndex !== -1 ? userRankIndex + 1 : "?";
 
         // 2. Extraer el texto de cooldown (si aplica)

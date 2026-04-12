@@ -94,7 +94,9 @@ const settings = {
         barColor: { type: "string", maxlength: 7, default: "#FFA500" }, 
         textColor: { type: "string", maxlength: 7, default: "#FFFFFF" },
         avatarShape: { type: "string", default: "circle", accept: ["circle", "square"] },
-        avatarBorderColor: { type: "string", maxlength: 7, default: "none" }
+        avatarBorderColor: { type: "string", maxlength: 7, default: "none" },
+        allowUserCards: { type: "bool", default: false },
+        requiredRole: { type: "string", default: "none", accept: ["none", "discord:role"] }
     },
 
     hideMultipliers: { type: "bool", default: false },
@@ -156,6 +158,28 @@ const schema = {
 
 const finalSchema = new mongoose.Schema(schema)
 
+const userProfileSchema = new mongoose.Schema({
+    _id: String, // ID de Discord del usuario
+    rankCard: {
+        backgroundURL: { type: String, maxlength: 500, default: "" },
+        backgroundFit: { type: String, default: "cover" },
+        backgroundColor: { type: String, maxlength: 7, default: "#1e1f22" },
+        overlayColor: { type: String, maxlength: 7, default: "#000000" },
+        opacity: { type: Number, default: 0.8, min: 0.0, max: 1.0 },
+        barColor: { type: String, maxlength: 7, default: "#FFA500" },
+        textColor: { type: String, maxlength: 7, default: "#FFFFFF" },
+        avatarShape: { type: String, default: "circle" },
+        avatarBorderColor: { type: String, maxlength: 7, default: "none" }
+    },
+    info: {
+        lastUpdate: { type: Number, default: 0 }
+    }
+})
+
 module.exports = {
-    settings, settingsArray, settingsIDs, schema: finalSchema
+    settings, 
+    settingsArray, 
+    settingsIDs, 
+    schema: finalSchema,
+    userProfileSchema: userProfileSchema
 }

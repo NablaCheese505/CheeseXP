@@ -49,6 +49,7 @@ client.globalTools = new Tools(client);
 
 // connect to db
 client.db = new Model("servers", require("./database_schema.js").schema)
+client.userDB = new Model("user_profiles", require("./database_schema.js").userProfileSchema)
 
 // command files
 const dir = "./commands/"

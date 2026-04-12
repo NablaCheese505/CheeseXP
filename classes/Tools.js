@@ -60,6 +60,16 @@ class Tools {
             })
         }
 
+        // fetch global user profile
+        this.fetchUser = async function(userID) {
+            let data = await client.userDB.fetch(userID)
+            if (!data) {
+                // Si el usuario nunca ha guardado una tarjeta, devolvemos un cascarón vacío
+                return { rankCard: {} } 
+            }
+            return data
+        }
+
         // calculates current level from xp
         this.getLevel = function(xp, settings, returnRequirement) {
             let lvl = 0

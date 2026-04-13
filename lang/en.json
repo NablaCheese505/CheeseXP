@@ -157,7 +157,8 @@
       "totalMult": "**Total multiplier: {multiplier}x XP** ({stacking})",
       "fieldMult": "{mult} Multiplier",
       "fieldNote": "{warning} Note",
-      "syncWarning": "Your level roles are not properly synced! Type {command} to fix this."
+      "syncWarning": "Your level roles are not properly synced! Type {command} to fix this.",
+      "btnEditCard": "Customize Card"
     },
     "rewardrole": {
       "metadata_description": "Add or remove a reward role. (requires manage server permission)",

@@ -157,7 +157,8 @@
       "totalMult": "**Multiplicador total: {multiplier}x XP** ({stacking})",
       "fieldMult": "{mult} Multiplicador",
       "fieldNote": "{warning} Nota",
-      "syncWarning": "¡Tus roles de nivel no están sincronizados! Usa {command} para arreglarlo."
+      "syncWarning": "¡Tus roles de nivel no están sincronizados! Usa {command} para arreglarlo.",
+      "btnEditCard": "Personalizar Tarjeta"
     },
     "rewardrole": {
       "metadata_description": "Añade o quita un rol de recompensa. (requiere gestionar servidor)",

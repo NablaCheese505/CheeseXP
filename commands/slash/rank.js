@@ -107,6 +107,15 @@ async run(client, int, tools) {
 
     let isHidden = db.settings.rankCard.ephemeral || !!int.options.get("hidden")?.value;
 
+    // === CREAR EL BOTÓN DE EDITAR PERFIL ===
+    let profileLink = `${tools.WEBSITE}/profile`;
+    let editBtn = tools.button({ 
+        style: "Link", 
+        label: t('commands.rank.btnEditCard', { defaultValue: "🎨 Editar Tarjeta" }, serverLang), 
+        url: profileLink 
+    });
+    let actionRow = tools.row([editBtn]);
+
     // --- NUEVA LÓGICA: SWITCH EXPLICITO ---
     if (db.settings.rankCard.useImageCard) {
         await int.deferReply({ ephemeral: isHidden });
@@ -167,15 +176,15 @@ async run(client, int, tools) {
             // Le pasamos a la clase RankCard la configuración ganadora
             const rankCardGenerator = new RankCard(userDataForImage, cardSettingsToUse);
             const imageBuffer = await rankCardGenerator.build();
-            return int.editReply({ files: [{ attachment: imageBuffer, name: 'rank.png' }] });
+            return int.editReply({ files: [{ attachment: imageBuffer, name: 'rank.png' }], components: actionRow });
         } catch (error) {
             console.error("Error generando RankCard:", error);
-            return int.editReply({ content: "Error al generar la imagen.", embeds: [embed] });
+            return int.editReply({ content: "Error al generar la imagen.", embeds: [embed], components: actionRow });
         }
     } 
     else {
         // MODO CLÁSICO (Texto/Embed original)
-        return int.reply({embeds: [embed], ephemeral: isHidden});
+        return int.reply({embeds: [embed], ephemeral: isHidden, components: actionRow});
     }
 
 }}

@@ -4,7 +4,7 @@ const PageEmbed = require("../../classes/PageEmbed.js")
 
 module.exports = {
 metadata: {
-    name: "top",
+    name: "leaderboard",
     description: t('commands.top.metadata_description'),
     args: [
         { type: "integer", name: "page", description: t('commands.top.args_page_desc'), required: false },

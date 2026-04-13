@@ -23,6 +23,69 @@
     <meta name="twitter:title" content="<%= t('servers_page.title', {}, lang) %>">
     <meta name="twitter:description" content="<%= t('servers_page.description', {}, lang) %>">
     <meta name="twitter:image" content="<%= siteURL %>/assets/cheese.png">
+
+    <style>
+        /* Estilos específicos para el botón del perfil global, independientes de las clases del bot */
+        .global-profile-btn {
+            height: 90px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            width: 80%;
+            max-width: 850px;
+            min-width: 500px;
+            background-color: var(--lighterfg);
+            background-image: linear-gradient(135deg, rgba(67, 218, 218, 0.1), rgba(48, 165, 150, 0.1));
+            border: 1px solid var(--polarisgreen);
+            border-radius: 8px;
+            margin: 0px auto 30px auto;
+            padding: 0px 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition-duration: 0.1s;
+        }
+
+        .global-profile-btn:hover, .global-profile-btn:focus-visible {
+            background-color: var(--lightererfg);
+        }
+
+        .global-profile-btn img {
+            height: 65px;
+            border-radius: 420px;
+            margin-left: 10px;
+            margin-right: 20px;
+        }
+        
+        .global-edit-btn {
+            display: inline-block;
+            background-color: var(--polarisgreen);
+            color: black !important;
+            border-radius: 8px;
+            padding: 8px 20px;
+            margin-right: 10px;
+            font-weight: bold;
+            text-decoration: none !important;
+            transition: transform 0.1s;
+        }
+        
+        .global-edit-btn:hover {
+            filter: brightness(1.1);
+        }
+
+        @media screen and (max-width: 900px) {
+            .global-profile-btn {
+                min-width: 0 !important;
+                width: calc(100% - 40px) !important;
+                height: auto !important;
+                padding: 15px !important;
+            }
+            .global-profile-btn img {
+                height: 50px !important;
+                margin-right: 15px !important;
+            }
+        }
+    </style>
 </head>
 <body>
     <h2 class="middleflex" id="loading"><%= t('servers_page.loading', {}, lang) %></h2>
@@ -33,6 +96,27 @@
             <p style="font-size: 20px; margin-top: 4px; margin-bottom: 25px"><%= t('servers_page.select_server', {}, lang) %></p>
         </div>
 
+        <div style="width: 100%; display: flex; justify-content: center;">
+            <div class="global-profile-btn canfocus" tabindex="0" onclick="window.location.href='/profile'">
+                
+                <div class="middleflex" style="flex-grow: 1; min-width: 0; justify-content: flex-start">
+                    <img id="userGlobalAvatar" src="/assets/cheese.png" alt="Profile Icon">
+                    <div style="min-width: 0; overflow: hidden; padding-right: 10px;">
+                        <p style="font-size: 22px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; margin: 4px 0px;">
+                            <b style="color: var(--polarisgreen);"><%= t('dashboard.GlobalProfileTitle', {}, lang) %></b>
+                        </p>
+                        <p style="margin: 0px; font-size: 15px; opacity: 0.8; line-height: 1.2;"><%= t('dashboard.CustomizeRankCard', {}, lang) %></p>
+                    </div>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: flex-end;">
+                    <a href="/profile" class="global-edit-btn canfocus">
+                        <%= t('dashboard.Edit', {defaultValue: "Editar"}, lang) %>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
         <div id="serverList" style="padding-bottom: 20px"></div>
 
         <div class="middleflex" style="padding-bottom: 30px">

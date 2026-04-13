@@ -7,6 +7,12 @@ $('.serverOption').remove()
 Fetch(`/api/guilds`).then(data => {
     $('#username').text(data.user.displayName).css("color", data.user.color)
 
+    if (data.user.avatar) {
+        $('#userGlobalAvatar').attr("src", `https://cdn.discordapp.com/avatars/${data.user.id}/${data.user.avatar}.png`);
+    } else {
+        $('#userGlobalAvatar').attr("src", "https://cdn.discordapp.com/embed/avatars/0.png"); 
+    }
+
     let sortedGuilds = data.guilds.sort((a, b) => {
         return (!!b.inServer - !!a.inServer)
         || (!!b.permissions.owner - !!a.permissions.owner)

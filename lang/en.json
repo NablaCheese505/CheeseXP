@@ -536,7 +536,8 @@
         "NoColorTransparent": "No color (Transparent)",
         "Saved": "Saved!",
         "ErrorSaving": "Error saving",
-        "ConnectionError": "Connection error"
+        "ConnectionError": "Connection error",
+        "Edit": "Edit"
     },
   "config_page": {
       "js": {

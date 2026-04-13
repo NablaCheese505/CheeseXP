@@ -536,7 +536,8 @@
         "NoColorTransparent": "Sin color (Transparente)",
         "Saved": "¡Guardado!",
         "ErrorSaving": "Error al guardar",
-        "ConnectionError": "Error de conexión"
+        "ConnectionError": "Error de conexión",
+        "Edit": "Editar"
     },
   "config_page": {
       "global": {

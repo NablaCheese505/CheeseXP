@@ -156,7 +156,8 @@ async run(client, int, tools) {
 
             // Solo si cumple ambos requisitos, buscamos su perfil global
             if (hasRequiredRole && hasRequiredLevel) {
-                let userGlobalProfile = await tools.fetchUser(member.id);
+                let userGlobalProfile = await client.userDB.fetch(member.id);
+                
                 if (userGlobalProfile && userGlobalProfile.rankCard && userGlobalProfile.rankCard.backgroundColor) {
                     cardSettingsToUse = userGlobalProfile.rankCard;
                 }

@@ -272,7 +272,7 @@
             }
         }
 
-        // 8. Previsualización en Vivo con Debounce
+        // 8. Previsualización en Vivo con Debounce Reforzado
         let previewTimeout;
         function updatePreview() {
             clearTimeout(previewTimeout);
@@ -280,16 +280,20 @@
             
             previewTimeout = setTimeout(async () => {
                 let previewSettings = {};
-                $('[db^="rankCard."]').each(function() {
-                    let key = $(this).attr('db').split('.')[1];
-                    let val = $(this).val();
-                    
-                    if (key === 'opacity') {
-                        previewSettings[key] = parseFloat(val);
-                    } else {
-                        previewSettings[key] = val;
-                    }
-                });
+                
+                // Recolectamos forzando la lectura directa del DOM
+                previewSettings.backgroundURL = $('#rcBg').val();
+                previewSettings.backgroundFit = $('#rcFit').val() || 'cover';
+                previewSettings.backgroundColor = $('#rcBgCol').val() || '#1e1f22';
+                previewSettings.overlayColor = $('#rcOverlayCol').val() || '#000000';
+                
+                let parsedOp = parseFloat($('#rcOp').val());
+                previewSettings.opacity = isNaN(parsedOp) ? 0.8 : parsedOp;
+                
+                previewSettings.avatarShape = $('#rcAvatarShape').val() || 'circle';
+                previewSettings.avatarBorderColor = $('#rcAvatarCol').val() || 'none';
+                previewSettings.barColor = $('#rcBar').val() || '#FFA500';
+                previewSettings.textColor = $('#rcText').val() || '#FFFFFF';
 
                 try {
                     let req = await fetch('/api/previewRankCard', {
@@ -306,7 +310,7 @@
                 } catch (e) {
                     console.error("Error cargando preview", e);
                 }
-            }, 800);
+            }, 1000);
         }
 
         // 9. Carga inicial

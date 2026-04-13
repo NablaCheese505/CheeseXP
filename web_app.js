@@ -223,12 +223,11 @@ app.post("/api/profile", async function(req, res) {
     if (typeof req.body != "object") return res.apiError("Datos inválidos!");
     
     let user = await getDiscordInfo(req, true);
-    if (!user) return res.apiError("No has iniciado sesión!", "login");
+    if (!user || !user.id) return res.apiError("No has iniciado sesión!", "login");
 
     let data = req.body.rankCard || {};
     
     let dbObj = {
-        "_id": user.id,
         "rankCard.backgroundURL": String(data.backgroundURL || "").slice(0, 500).trim(),
         "rankCard.backgroundFit": ["cover", "contain", "stretch"].includes(data.backgroundFit) ? data.backgroundFit : "cover",
         "rankCard.backgroundColor": String(data.backgroundColor || "#1e1f22").slice(0, 7),
@@ -241,13 +240,17 @@ app.post("/api/profile", async function(req, res) {
         "info.lastUpdate": Date.now()
     };
 
-    client.userDB.model.findOneAndUpdate(
-        { _id: user.id },
-        { $set: dbObj },
-        { upsert: true, new: true, setDefaultsOnInsert: true }
-    )
-    .then(() => res.end("¡Perfil guardado con éxito!"))
-    .catch(e => { console.error(e); res.apiError("Error en la base de datos."); });
+    try {
+        await client.userDB.update(
+            user.id, 
+            { $set: dbObj }, 
+            { upsert: true, new: true, setDefaultsOnInsert: true }
+        );
+        res.end("¡Perfil guardado con éxito!");
+    } catch (e) {
+        console.error("Error guardando perfil global:", e);
+        res.status(500).send({ apiError: true, message: "Error en la base de datos." });
+    }
 });
 
 app.get("/api/settings/:id", async function(req, res) {
@@ -824,18 +827,18 @@ app.post("/api/previewRankCard", async function(req, res) {
         rank: 1,
         messagesText: "Previsualización en vivo",
         cooldownText: "00:45",
-        multiplierText: "🚀 Rol - 1.5x XP"
+        multiplierText: " Rol - 1.5x XP"
     };
 
     try {
         const rankCardGenerator = new RankCard(mockUserData, tempSettings);
         const imageBuffer = await rankCardGenerator.build();
         
-        res.set('Content-Type', 'image/png');
-        res.send(imageBuffer);
+        res.setHeader('Content-Type', 'image/png');
+        return res.send(imageBuffer);
     } catch (e) {
-        console.error("Error previsualizando:", e);
-        return res.apiError("Error al generar la imagen.");
+        console.error("Error crítico previsualizando:", e);
+        return res.status(500).send({ apiError: true, message: "Error al generar la imagen." });
     }
 });
 
@@ -962,27 +965,45 @@ async function getDiscordToken(token) {
 
 let discordCache = {} 
 async function getDiscordInfo(req, userOnly) {
-    let token = await getDiscordToken(req.cookies.polaris) 
-    if (!token) return userOnly ? null : [null, null]
+    let rawCookie = req.cookies.polaris;
+    if (!rawCookie) return userOnly ? null : [null, null];
 
-    let foundData = discordCache[token] 
-    if (foundData && Date.now() <= foundData.expires) return foundData.data 
+    let tokenObj = await getDiscordToken(rawCookie); 
+    if (!tokenObj) return userOnly ? null : [null, null];
 
-    let options = { auth: false, headers: { authorization: `Bearer ${token.access_token}` } };
-    let userData = await rest.get("/users/@me", options).catch(e => null)
-    if (userOnly) return userData || null
+    let foundData = discordCache[rawCookie]; 
+    if (foundData && Date.now() <= foundData.expires) {
+        return userOnly ? foundData.data[0] : foundData.data; 
+    }
 
-    let guilds = await rest.get("/users/@me/guilds", options).catch(e => null)
+    let options = { auth: false, headers: { authorization: `Bearer ${tokenObj.access_token}` } };
+    let userData = await rest.get("/users/@me", options).catch(e => null);
+    let guilds = await rest.get("/users/@me/guilds", options).catch(e => null);
 
-    if (!userData || !guilds || userData.message || guilds.message || !userData.id) return [null, null] 
-    let discordRes = [userData, guilds] 
-    discordCache[token] = {data: discordRes, expires: Date.now() + 15000} 
-    return discordRes
+    if (!userData || !guilds || userData.message || guilds.message || !userData.id) {
+        return userOnly ? null : [null, null]; 
+    }
+    
+    let discordRes = [userData, guilds]; 
+    discordCache[rawCookie] = { data: discordRes, expires: Date.now() + 15000 }; 
+    
+    return userOnly ? userData : discordRes;
 }
 
 app.get("/logout", async function(req, res) {
-    let token = await getDiscordToken(req.cookies.polaris)
-    if (!token) return sendRedirect(res, "/")
+    let rawCookie = req.cookies.polaris;
+    let tokenObj = await getDiscordToken(rawCookie);
+
+    if (rawCookie) {
+        delete tokenCache[rawCookie];
+        delete discordCache[rawCookie];
+        await authDB.delete({ _id: rawCookie }).catch(() => {});
+    }
+
+    if (!tokenObj) {
+        res.clearCookie("polaris");
+        return sendRedirect(res, "/");
+    }
 
     fetch(discordAPI + "oauth2/token/revoke", {
         method: "POST",
@@ -990,13 +1011,16 @@ app.get("/logout", async function(req, res) {
         body: new URLSearchParams({
             client_id: auth.id,
             client_secret: auth.secret,
-            token
+            token: tokenObj.access_token
         })
     }).then(() => { 
         res.clearCookie("polaris"); 
         sendRedirect(res, "/"); 
-    }).catch(e => sendRedirect(res, "/"))
-})
+    }).catch(e => {
+        res.clearCookie("polaris"); 
+        sendRedirect(res, "/");
+    });
+});
 
 // Limpiador automático de cachés caducadas (Libera RAM)
 setInterval(() => {

@@ -3,3 +3,4 @@ json/auto
 .env
 .vscode
 Importacion_Lista.json
+*.psd

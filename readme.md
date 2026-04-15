@@ -1,125 +1,177 @@
-# Polaris!
-...is a super customizable XP bot for Discord with all sorts of neat features!
-Unfortunately, it's become increasingly annoying to host, so I'm passing the torch by open-sourcing all the messy code and allowing anyone to host this thing!
+# 🧀 CheeseXP Bot
 
-If you're an experienced software dev i am so sorry for what comes next
+<div align="center">
+  <img src="https://komarev.com/ghpvc/?username=NablaCheese505-CheeseXP&label=Profile%20Views&color=00ff80&style=for-the-badge" alt="View Counter" />
+  <img src="https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/Discord.js-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord.js" />
+  <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" />
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
+</div>
 
-## How do I host it?
-It's ""easy!""
+<br>
 
-### Step 0: Node.js
-1. If you don't have node.js, [go get it](https://nodejs.org/en)
-2. Once you've set up node, run `npm i` in the bot's root directory
-	- If you're new around here, and you're on Windows, you can open up the terminal in a specific directory by shift+rightclicking a blank spot in the folder and pressing Open in Terminal/Powershell/cmd/etc. 
+## 📖 Description
+A fully customizable, bullshit-free, and open-source levelling bot for Discord. 
 
-### Step 1: Setting up the bot
-Fortunately Discord makes this super easy, thanks Discord
-1. Create a Discord Application via the [developer portal](https://discord.com/developers/applications)
-	- Name it, decorate it, etc
-2. Copy the file named `.env.example`, rename it to `.env`, and open it in a text editor
-3. Remove the placeholder values and paste in the application's actual ID, token, and secret.
-	- ID can be found in the general tab on the dev portal. It's literally just the bot's account ID
-	- A token can be generated from the bot tab. Keep it top secret, you should know this
-	- A secret can be generated from the OAuth2 tab
-3. On the OAuth2 tab, add `http://localhost:6880/auth` as a redirect URI. You can change the port as long as you do so in config.json as well.
-4. Invite the bot to a server by going to [this link](https://discord.com/oauth2/authorize?client_id=123456789&permissions=429765545024&scope=bot%20applications.commands) and replacing "123456789" in the URL with your bot's ID
+**CheeseXP** is a modernized, heavily upgraded fork based on the original architecture of [Polaris by GD Colon](https://github.com/GDColon/Polaris). As the original project became increasingly difficult to host and maintain, this repository steps in to pass the torch. 
 
-### Step 2: Set up the config file
-1. Open the `config.json` file in the codebase
-	- Add a server ID to `test_server_ids`, this is where dev commands will be deployed when you run the bot for the first time
-	- Add your own user ID to `developer_ids` so you can run dev commands
-	-  `lockBotToDevOnly` makes it so only you can use the bot, for local testing and such
-	- There's a couple settings for the web server, you probably don't really need to touch them
-	- `siteURL` does **NOT** control the actual URL for your server - it just changes where the bot links users to
-	- If you provide a `changelogURL` or `supportURL` they'll appear in /botstatus
-2. Test out the bot by opening up your terminal in the root directory and typing `node polaris.js`
-	- Most commands won't work due to the lack of a database, but if the bot appears online it means you're good
-	- Only dev commands will be present by default, the rest will be deployed in step 4. Dev commands are only visible to server admins and only work if you're specified as a dev in the config file
+Maintained and expanded for the modern Discord ecosystem, CheeseXP provides server administrators with a powerful web dashboard and users with deep personalization tools, all while remaining 100% open-source so anyone can easily host their own instance.
 
-### Step 3: Setting up the database
-Personally I know very little about this topic so if it sounds like I have no idea what I'm saying, it's because I don't. This is just what I do for my own projects.
-This step is like the equivalent of learning about port forwarding for your Minecraft server, so don't feel bad if this is the point where you give up
+<div align="center">
+  <img src="./docs/images/hero.png" alt="CheeseXP Dashboard and Rankcard Preview" width="700">
+</div>
 
-There's many different ways to set up MongoDB, but I recommend one of these methods:
+## ✨ What makes CheeseXP different?
 
-**Option 1: [MongoDB Atlas](https://cloud.mongodb.com/)**
-- This is MongoDB's cloud service. It's by far the easiest to set up, but all the data is stored on their cloud, not yours. The free tier has a storage limit, but you won't go anywhere close to exceeding it.
+While keeping the core philosophy of the original Polaris, CheeseXP introduces several major architectural upgrades and community-requested features:
 
-**Option 2: Host it on a server**
-- My personal choice, because I have one. If you have an Ubuntu server, [this tutorial](https://www.digitalocean.com/community/tutorials/how-to-install-mongodb-on-ubuntu-20-04) followed by [this one](https://www.digitalocean.com/community/tutorials/how-to-secure-mongodb-on-ubuntu-20-04) should be good. (if the `mongo` command doesn't work, use `mongosh`) 
-- If you don't have an Ubuntu server, just google around and there will probably be a guide for your platform
-- If you created a DB along with a username and password, you did it correctly
-- I also recommend setting up [MongoDB compass](https://www.mongodb.com/products/tools/compass) so you have a GUI!
+1. **🌍 Internationalization (i18n & l10n)**
+   * **Native Multi-language:** Full support for English and Spanish across all Discord slash commands, bot responses, and the interactive web dashboard.
+   * **Custom Emojis:** Replaced static bot emojis with a configurable system, allowing you to use your own server's custom emojis for bot UI elements.
 
-**Option 3: Host it on your computer**
-- Probably not the wisest idea since it needs to be running 24/7. I would only do this if you're hosting the entire bot on it for some reason, or just want to test things out. But if that sounds like a plan to you, go follow this [absurdly long tutorial](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-windows/).
+2. **🎨 Global Custom Rankcards**
+   * **User-Driven Design:** Members get access to a dedicated `/profile` web dashboard to design their own Rank Cards.
+   * **Live Preview:** Real-time visual editor for custom background images, colors, overlay opacity, and avatar shapes. These settings sync globally across any server hosting the bot that permits custom cards.
 
-All set? Awesome. Polaris uses two collections: `servers` for server data, and `auth` for website logins. I'm pretty sure the bot automatically creates these for you.
+3. **🎙️ Voice XP Integration**
+   * **Beyond Text:** Members can now earn XP natively by participating in Voice Channels.
+   * **Configurable:** Server admins can set specific Voice Multipliers (e.g., granting 1.5x the text XP per minute) and implement continuous hour limits to prevent AFK farming.
 
-1. Find your **connection string**. The way you obtain it depends on how you set up MongoDB, but there will definitely be one. It should start with `mongodb://` or `mongodb+srv://` or something similar. **If you're self-hosting and can't find the string, you can skip this and just use the username + password you set up.**
+4. **🐳 Docker Ready**
+   * **Painless Deployment:** Say goodbye to dependency hell. CheeseXP is fully Dockerized, meaning you can spin up the bot, the web server, and the database environment with a single `docker-compose` command.
 
-2. Open up `.env` and paste in your database name as well as the connection string (MONGO_DB_URI in the file). If you don't want to use a connection string you can leave the value blank and provide the IP, username, and password instead.
+5. **🛡️ Security & QoL Patches**
+   * **Session Isolation & XSS Protection:** Fixed critical cache-leaking bugs from the original web server to ensure robust, isolated user sessions, alongside rigorous input sanitization to prevent Cross-Site Scripting (XSS) vulnerabilities.
+   * **Responsive Dashboard UI:** Overhauled the web interface's CSS to ensure full mobile compatibility and a seamless, responsive experience across all devices.
+   * **Database Optimization:** Implemented Mongoose `.lean()` queries and atomic updates to prevent memory leaks and ensure instant synchronization between the web dashboard and Discord commands.
 
-3. Fire up the bot and check the console to see if it connected!
-	- To double check, you can run /db with no arguments - if the bot responds (likely "No data!") it means you actually did it correctly!!! If not, cry
+***
+## 🚀 Quick Start: Use the Official Instance!
 
-If it's not connecting, try checking:
-- Is the database actually running?
-- Did you paste the connection string incorrectly?
-- Did you enter the correct database name into .env?
-- Did you enter the right username and password?
-  
+If you just want to use CheeseXP without the hassle of setting up a server, database, and managing updates, you can invite the official, 24/7 hosted version of the bot to your server right now:
 
-### Step 4: Final steps
-1. Deploy the bot's commands by running /deploy with the global argument set to true
-2. If you have the web server enabled, it should be running on localhost. From there you can authorize your Discord account and change server settings
-	- The web server uses a lot of resources but is also needed to modify advanced settings for the bot. It also contains the leaderboard page
-	- If you're happy with your settings and only plan on using the bot for one server, you can disable the server in `config.json` and only enable it when you need to tweak things
-		- Note that most simple settings (booleans and numbers) can be tweaked from /config
-		- Reward roles and multipliers can be configured via /rewardrole and /multiplier
-	- If you're running Polaris from a hosted server, make sure the port you chose is open. Then you should be able to visit `http://<server ip>:<port>`, e.g. http://7.7.7.7:6880. Make sure to also add it as an OAuth2 redirect in the Discord dev portal, ending in /auth. (e.g. http://7.7.7.7:6880/auth)
-	- If you don't want the URL to be a shady looking IP, you're going to need to buy a domain then reverse proxy your localhost into an actual public URL. I wish you luck. (add that one as an OAuth2 redirect as well)
-		- Just google "localhost to public URL" and you should get some info on how to do this
-		- Alternatively, you can try [Cloudflare Tunnel](https://developers.cloudflare.com/pages/how-to/preview-with-cloudflare-tunnel/) or [ngrok](https://ngrok.com/) - though these are usually more temporary solutions
+**🔗 [Visit the Official CheeseXP Dashboard & Invite](https://cheesexp.duckdns.org/)**
 
-3. If you want the bot to be public, set that up in the Discord dev portal. But make sure you can handle it.
-	- The bot should work fine until sharding kicks in (at ~2500 servers), then it might start to break down a little
-	- Really, it comes down to your server specs and the number of members in a server
- 
 ---
 
-## Some other tips
-### Transferring data from the original Polaris
-**NOTE**: If you are listed as a bot developer, you can access the dashboard for any server your bot is in. The JSON import feature is heavily limited for non-devs (security reasons), so feel free to use this power in order to import .json files for others. 
-1. On the [original Polaris dashboard](https://gdcolon.com/polaris), go to the Data tab of your server settings and press **Download all data**. This will download a .json file
-2. On your own hosted dashboard, go to the Data tab of your server settings, scroll down, and scroll down to the import settings section
-3. Upload the .json file and press import
-4. All data from Polaris should be transferred!
+## 🛠️ Hosting Your Own Instance (Docker / Recommended)
 
-### Using dev commands
-`/db` allows you to view a server's raw data, or modify it
-- e.g. `/db property:settings.multipliers` returns the data in `settings.multipliers`
-- e.g. `/db property:users.123456.xp new_value:10` sets the user with ID 123456's XP to 10
+CheeseXP is fully containerized. The included Dockerfile automatically handles tricky dependencies like Node.js v20, Python/C++ build tools (required for `canvas`), and all necessary fonts for generating beautiful custom Rankcards.
 
-`/setactivity`lets you change the bot's custom status, the args should walk you through it
+### Step 1: Prerequisites
+1. **Discord Application:** Go to the [Discord Developer Portal](https://discord.com/developers/applications) and create a new app.
+   - Go to the **Bot** tab, generate a **Token**, and enable the required intents.
+   - Go to the **OAuth2** tab and generate a **Client Secret**.
+   - In the OAuth2 tab, add your redirect URI (e.g., `http://your-ip:6880/auth` or `https://yourdomain.com/auth`).
+2. **MongoDB Database:** You need a MongoDB instance. You can use a free cloud cluster from [MongoDB Atlas](https://cloud.mongodb.com/) or host it locally. 
+   > **Note:** CheeseXP includes a DNS workaround (`dns.setServers(['8.8.8.8', '1.1.1.1']);`) by default to prevent connection timeouts with newer Node.js + Mongoose versions.
+3. **Docker & Git:** Ensure you have Docker, Docker Compose, and Git installed on your VPS or local machine.
 
-`/setversion` updates the version number in /botstatus
+### Step 2: Clone and Configure
+Before booting up the bot, you must set up your environment variables and configuration files.
 
-`/deploy` deploys dev commands to the server, or the global commands everyone uses.
-- There's also an option to undeploy the dev commands, but make sure at least one server has them or you'll need to dive into the code to get them back
-- If this happens, open `index.js` and change `if (cmds.size < 1)` to `if (true)` in order to force-deploy the commands on the next startup
+```bash
+git clone [https://github.com/NablaCheese505/CheeseXP.git](https://github.com/NablaCheese505/CheeseXP.git)
+cd CheeseXP
+```
 
-`/run` simply lets you evaluate js code, not much need for this unless you're adding new stuff and are familiar with discord.js
+**1. Environment Variables (`.env`)**
+Copy the `.env.example` file and rename it to `.env`. Fill in your specific details:
 
-Devs can also view and modify any server from the web dashboard. The main use for this is importing from .json files, since only bot devs can do that (security reasons)
+```env
+DISCORD_ID=your_bot_client_id
+DISCORD_TOKEN=your_bot_token
+DISCORD_SECRET=your_oauth2_secret
 
-## Want to modify the bot?
-Do whatever you want as long as you credit me and use your own fork for it.
+# MongoDB connection
+MONGO_DB_NAME=cheesexp
+MONGO_DB_URI=mongodb+srv://user:pass@cluster.mongodb.net/
+```
 
-* If you're hosting this publicly, credit me extra hard
-* Do not add any paid or monetized features
-* Issues and PRs on this repo are only for things that improve the open-source code, it's not a place for feature requests and new stuff as I'm no longer maintaining this bot
+**2. Bot Configuration (`config.json`)**
+Open `config.json` and adjust the crucial settings:
+- `developer_ids`: Add your personal Discord User ID (this grants you access to dev commands like `/deploy`).
+- `siteURL`: Set this to your public URL (e.g., `https://cheesexp.duckdns.org` or `http://localhost:6880`).
+- `emojis`: Replace the default Discord emoji IDs with your own server's custom emojis.
+- `defaultLanguage`: Set to `"en"` or `"es"`.
 
-If you ever have any questions feel free to reach out to me, the Polaris support server is a good place for it
+### Step 3: Lift Off! 🐳
+Once your `.env` and `config.json` are ready, simply build and start the container:
 
-And if the code is bad, forgive me
+```bash
+docker compose up -d --build
+```
+This will build the image, install all dependencies, and start the bot in the background. Check the logs with `docker compose logs -f` to ensure it connected to Discord and MongoDB successfully.
+
+**Final Step:** In your Discord server, run the `/deploy global:True` command (available only to the IDs listed in `developer_ids`) to register all slash commands.
+
+### 🔄 How to Update
+Updating your instance is as simple as pulling the latest changes and rebuilding the container:
+
+```bash
+git pull origin main
+# Modify config.json or .env here if there are new required fields
+docker compose up -d --build
+```
+
+---
+
+## 💻 Development & Modifying (The Manual Way)
+
+If you want to modify the code, test new features, or run it "bare metal" without Docker, you'll need to set up the environment manually. 
+
+**Requirements:**
+- **Node.js 20+**
+- **Python 3 & C++ Build Tools** (Strictly required to compile the `canvas` package).
+- **System Fonts** (Ensure your OS has standard fonts and emoji fonts installed, otherwise the Rankcards will fail to render text/emojis).
+
+**Setup:**
+1. Clone the repo and configure your `.env` and `config.json` exactly as shown in Step 2 above.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the bot:
+   ```bash
+   node polaris.js
+   ```
+---
+
+## 🗃️ Transferring Data (From Original Polaris)
+
+If you are migrating from the original Polaris bot to your own CheeseXP instance, you can easily transfer your server's XP and settings. 
+
+**NOTE**: You must be listed in `developer_ids` to use the JSON import feature (for security reasons).
+1. On the original Polaris dashboard, go to the **Data** tab of your server settings and press **Download all data** to get a `.json` file.
+2. On your hosted CheeseXP dashboard, navigate to the same **Data** tab and scroll down to the import section.
+3. Upload the `.json` file and click import.
+4. All your previous data is now safely stored in CheeseXP!
+
+---
+
+## 🛠️ Developer Commands
+
+If your ID is listed in the `developer_ids` array inside `config.json`, you gain access to exclusive slash commands to manage the bot:
+
+- `/deploy` - Deploys or updates the slash commands. Run this with `global:True` when you first start the bot or after adding new commands.
+- `/db` - Allows you to view or modify a server's raw data directly.
+  - *Example:* `/db property:settings.multipliers` returns the multiplier data.
+  - *Example:* `/db property:users.123456.xp new_value:10` manually sets a user's XP.
+- `/setactivity` - Changes the bot's custom status (Playing, Watching, etc.).
+- `/setversion` - Updates the version number displayed in `/botstatus`.
+- `/run` - Evaluates raw JavaScript code (use with extreme caution).
+
+---
+
+## 📜 Credits & Modifying the Bot
+
+**CheeseXP** is a fork of the original **[Polaris](https://github.com/GDColon/Polaris)** bot. 
+
+A massive thank you to the original creator, **[GD Colon](https://github.com/GDColon)**, for building the incredible foundation, the web dashboard architecture, and the core leveling logic that made this project possible.
+
+If you want to modify this bot, fork the repo and do whatever you want, provided you follow the original author's rules:
+* **Credit the original creator (GD Colon) and this fork (CheeseXP / NablaCheese505) clearly.**
+* **Do NOT add any paid or monetized features.** This project must remain free and open-source.
+* Issues and PRs on this repo are welcome if they fix bugs, update dependencies, or improve the open-source code.
+
+*If the code is bad, forgive us.*

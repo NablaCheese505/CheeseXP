@@ -54,13 +54,13 @@ async run(client, int, tools) {
     const getComponents = (currentPage) => {
         let prevBtn = new Discord.ButtonBuilder()
             .setCustomId('lb_prev')
-            .setLabel('◀ Anterior')
+            .setLabel(t('commands.top.btnPrev', {}, serverLang))
             .setStyle(Discord.ButtonStyle.Primary)
             .setDisabled(currentPage <= 1);
 
         let nextBtn = new Discord.ButtonBuilder()
             .setCustomId('lb_next')
-            .setLabel('Siguiente ▶')
+            .setLabel(t('commands.top.btnNext', {}, serverLang))
             .setStyle(Discord.ButtonStyle.Primary)
             .setDisabled(currentPage >= totalPages);
 
@@ -132,7 +132,7 @@ const preloadCache = new Map();
 
         collector.on('collect', async (i) => {
             if (i.user.id !== int.user.id) {
-                return i.reply({ content: "Solo quien usó el comando puede cambiar de página.", ephemeral: true });
+                return i.reply({ content: t('commands.top.onlyUser', {}, serverLang), ephemeral: true });
             }
 
             let targetPage = pageNumber;
@@ -155,7 +155,7 @@ const preloadCache = new Map();
                 loadingRow.components.forEach(c => c.setDisabled(true)); 
 
                 await i.update({ 
-                    content: `⏳ Dibujando página ${targetPage} de ${totalPages}...`, 
+                    content: t('commands.top.loadingImage', { target: targetPage, total: totalPages }, serverLang),
                     components: [loadingRow] 
                 });
 
@@ -185,6 +185,6 @@ const preloadCache = new Map();
     } catch (error) {
         console.error("Error generando Leaderboard interactivo:", error);
         preloadCache.clear();
-        return int.editReply({ content: "Hubo un error al generar la imagen de la tabla de clasificación." });
+        return int.editReply({ content: t('commands.top.errorGenerating', {}, serverLang) });
     }
 }}

@@ -202,7 +202,12 @@
       "embedTitle": "Leaderboard for {guild}",
       "listItem": "**{p})** {highlight1}Lv. {level} - <@{id}> ({xp} XP){highlight2}",
       "btnOnline": "Online Leaderboard",
-      "noMembersPage": "There are no members on this page!"
+      "noMembersPage": "There are no members on this page!",
+      "btnPrev": "◀ Previous",
+      "btnNext": "Next ▶",
+      "loadingImage": "⏳ Drawing page {target} of {total}...",
+      "onlyUser": "Only the person who ran the command can change pages.",
+      "errorGenerating": "There was an error generating the leaderboard image."
     },
     "list_rewards": {
       "noRewardRoles": "This server doesn't have any reward roles!",

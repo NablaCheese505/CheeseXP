@@ -202,7 +202,12 @@
       "embedTitle": "Tabla de clasificación de {guild}",
       "listItem": "**{p})** {highlight1}Nvl. {level} - <@{id}> ({xp} XP){highlight2}",
       "btnOnline": "Tabla Online",
-      "noMembersPage": "¡No hay miembros en esta página!"
+      "noMembersPage": "¡No hay miembros en esta página!",
+      "btnPrev": "◀ Anterior",
+      "btnNext": "Siguiente ▶",
+      "loadingImage": "⏳ Dibujando página {target} de {total}...",
+      "onlyUser": "Solo quien usó el comando puede cambiar de página.",
+      "errorGenerating": "Hubo un error al generar la imagen de la tabla de clasificación."
     },
     "list_rewards": {
       "noRewardRoles": "¡Este servidor no tiene roles de recompensa!",

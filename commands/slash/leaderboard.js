@@ -92,7 +92,13 @@ async run(client, int, tools) {
             };
         }));
 
-        const lbGenerator = new LeaderboardCard(enrichedRankings, db.settings, { page: page, totalPages });
+        const canvasTexts = {
+            title: serverLang === 'es' ? "Leaderboard - Página" : `Leaderboard - ${t('pagination.page', {}, serverLang)}`,
+            unknown: serverLang === 'es' ? "Usuario Desconocido" : "Unknown User",
+            level: serverLang === 'es' ? "Nivel" : "Level"
+        };
+
+        const lbGenerator = new LeaderboardCard(enrichedRankings, db.settings, { page: page, totalPages }, canvasTexts);
         return await lbGenerator.build();
     };
 const preloadCache = new Map();

@@ -18,10 +18,16 @@ try {
 let renderQueue = Promise.resolve();
 
 class LeaderboardCard {
-    constructor(rankingsData, serverSettings, pageInfo) {
+    constructor(rankingsData, serverSettings, pageInfo, i18nTexts) {
         this.rankings = rankingsData; 
         this.settings = serverSettings;
-        this.pageInfo = pageInfo; 
+        this.pageInfo = pageInfo;
+        
+        this.texts = i18nTexts || {
+            title: "Leaderboard - Page",
+            unknown: "Unknown User",
+            level: "Level"
+        };
     }
 
     async build() {
@@ -39,7 +45,8 @@ class LeaderboardCard {
         ctx.fillStyle = '#FFFFFF';
         ctx.font = '32px "RobotoBold", "Segoe UI Emoji", "SegoeUISymbol", "NotoEmoji", "MS Gothic", sans-serif';
         ctx.textAlign = 'left';
-        ctx.fillText(`Leaderboard - Página ${this.pageInfo.page}/${this.pageInfo.totalPages}`, 30, 50);
+        
+        ctx.fillText(`${this.texts.title} ${this.pageInfo.page}/${this.pageInfo.totalPages}`, 30, 50);
 
         const startY = 80;
         const rowHeight = 100;
@@ -83,13 +90,15 @@ class LeaderboardCard {
             ctx.fillStyle = '#FFFFFF';
             ctx.textAlign = 'left';
             ctx.font = '28px "RobotoBold", "Segoe UI Emoji", "SegoeUISymbol", "NotoEmoji", "MS Gothic", sans-serif';
-            let name = user.displayName || user.username || "Usuario Desconocido";
+            
+            let name = user.displayName || user.username || this.texts.unknown;
             if (name.length > 20) name = name.substring(0, 18) + "...";
             ctx.fillText(name, 210, currentY + 45);
 
             ctx.fillStyle = '#AAAAAA';
             ctx.font = '22px "RobotoRegular", "Segoe UI Emoji", "SegoeUISymbol", "NotoEmoji", "MS Gothic", sans-serif';
-            ctx.fillText(`Nivel ${user.level}  |  ${user.xpFormatted} XP`, 210, currentY + 80);
+            
+            ctx.fillText(`${this.texts.level} ${user.level}  |  ${user.xpFormatted} XP`, 210, currentY + 80);
         }
 
         return canvas.toBuffer('image/png');

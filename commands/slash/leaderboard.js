@@ -1,6 +1,7 @@
 const { t } = require('../../utils/i18n.js');
 const config = require('../../config.json');
 const PageEmbed = require("../../classes/PageEmbed.js")
+const LeaderboardCard = require('../../classes/LeaderboardCard.js');
 
 module.exports = {
 metadata: {
@@ -29,38 +30,56 @@ async run(client, int, tools) {
 
     let minLeaderboardXP = db.settings.leaderboard.minLevel > 1 ? tools.xpForLevel(db.settings.leaderboard.minLevel, db.settings) : 0
     let rankings = tools.xpObjToArray(db.users)
-    rankings = rankings.filter(x => x.xp > minLeaderboardXP && !x.hidden).sort(function(a, b) {return b.xp - a.xp})
+    rankings = rankings.filter(x => x.xp > minLeaderboardXP && !x.hidden).sort((a, b) => b.xp - a.xp);
+    if (!rankings.length) return tools.warn(t('commands.top.nobodyOnLB', {}, serverLang));
 
-    if (db.settings.leaderboard.maxEntries > 0) rankings = rankings.slice(0, db.settings.leaderboard.maxEntries)
+    let highlight = null;
+    let userSearch = int.options.get("user") || int.options.get("member");
+    
+    pageSize = 5; 
 
-    if (!rankings.length) return tools.warn(t('commands.top.nobodyOnLB', {}, serverLang))
-
-    let highlight = null
-    let userSearch = int.options.get("user") || int.options.get("member") 
     if (userSearch) {
-        let foundRanking = rankings.findIndex(x => x.id == userSearch.user.id)
-        if (isNaN(foundRanking) || foundRanking < 0) return tools.warn(int.user.id == userSearch.user.id ? t('commands.top.youNotOnLB', {}, serverLang) : t('commands.top.memberNotOnLB', {}, serverLang))
-        else pageNumber = Math.floor(foundRanking / pageSize) + 1
-        highlight = userSearch.user.id
+        let foundRanking = rankings.findIndex(x => x.id == userSearch.user.id);
+        if (isNaN(foundRanking) || foundRanking < 0) return tools.warn(int.user.id == userSearch.user.id ? t('commands.top.youNotOnLB', {}, serverLang) : t('commands.top.memberNotOnLB', {}, serverLang));
+        else pageNumber = Math.floor(foundRanking / pageSize) + 1;
+        highlight = userSearch.user.id;
     }
 
-    let listCol = db.settings.leaderboard.embedColor
-    if (listCol == -1) listCol = null
+    let isHidden = db.settings.leaderboard.ephemeral || !!int.options.get("hidden")?.value;
+    await int.deferReply({ ephemeral: isHidden });
 
-    let embed = tools.createEmbed({
-        color: listCol || tools.COLOR,
-        author: {name: t('commands.top.embedTitle', { guild: int.guild.name }, serverLang), iconURL: int.guild.iconURL()}
-    })
+    const totalPages = Math.ceil(rankings.length / pageSize);
+    if (pageNumber > totalPages) pageNumber = totalPages;
+    if (pageNumber < 1) pageNumber = 1;
 
-    let isHidden = db.settings.leaderboard.ephemeral || !!int.options.get("hidden")?.value
+    const startIndex = (pageNumber - 1) * pageSize;
+    const pageRankings = rankings.slice(startIndex, startIndex + pageSize);
 
-    let xpEmbed = new PageEmbed(embed, rankings, {
-        page: pageNumber, size: pageSize, owner: int.user.id,  ephemeral: isHidden,
-        mapFunction: (x, y, p) => t('commands.top.listItem', { p: p, highlight1: x.id == highlight ? "**" : "", level: tools.getLevel(x.xp, db.settings), id: x.id, xp: tools.commafy(x.xp), highlight2: x.id == highlight ? "**" : "" }, serverLang),
-        extraButtons: [ tools.button({style: "Link", label: t('commands.top.btnOnline', {}, serverLang), url: lbLink}) ]
-    })
-    if (!xpEmbed.data.length) return tools.warn(t('commands.top.noMembersPage', {}, serverLang))
+    const enrichedRankings = await Promise.all(pageRankings.map(async (x, index) => {
+        let userObj = client.users.cache.get(x.id) || await client.users.fetch(x.id).catch(() => null);
+        let avatarURL = userObj ? userObj.displayAvatarURL({ extension: 'png', size: 128 }) : 'https://cdn.discordapp.com/embed/avatars/0.png';
+        
+        return {
+            id: x.id,
+            rank: startIndex + index + 1,
+            xp: x.xp,
+            xpFormatted: tools.commafy(x.xp),
+            level: tools.getLevel(x.xp, db.settings),
+            displayName: userObj ? (userObj.globalName || userObj.username) : "Unknown User",
+            username: userObj ? userObj.username : "Unknown",
+            avatarURL: avatarURL
+        };
+    }));
 
-    xpEmbed.post(int)
+    try {
+        const lbGenerator = new LeaderboardCard(enrichedRankings, db.settings, { page: pageNumber, totalPages });
+        const imageBuffer = await lbGenerator.build();
 
+        let actionRow = tools.row([tools.button({style: "Link", label: t('commands.top.btnOnline', {}, serverLang), url: lbLink})]);
+
+        return int.editReply({ files: [{ attachment: imageBuffer, name: 'leaderboard.png' }], components: actionRow });
+    } catch (error) {
+        console.error("Error generando Leaderboard de Imagen:", error);
+        return int.editReply({ content: "Hubo un error al generar la imagen de la tabla de clasificación." });
+    }
 }}

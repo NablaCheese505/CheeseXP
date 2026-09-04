@@ -2,6 +2,7 @@ const { createCanvas, loadImage, GlobalFonts } = require('@napi-rs/canvas');
 const path = require('path');
 
 try {
+    // Fuentes Base Originales
     GlobalFonts.registerFromPath(path.join(__dirname, '../app/assets/Roboto-Bold.ttf'), 'RobotoBold');
     GlobalFonts.registerFromPath(path.join(__dirname, '../app/assets/Roboto-Regular.ttf'), 'RobotoRegular');
     
@@ -10,6 +11,15 @@ try {
     GlobalFonts.registerFromPath(path.join(__dirname, '../app/assets/msgothic.ttc'), 'MS Gothic');
     
     GlobalFonts.registerFromPath(path.join(__dirname, '../app/assets/NotoColorEmoji.ttf'), 'NotoEmoji');
+
+    // Nuevas Fuentes Noto Anti-Tofus
+    GlobalFonts.registerFromPath(path.join(__dirname, '../app/assets/NotoSansSymbols-Regular.ttf'), 'NotoSymbols');
+    GlobalFonts.registerFromPath(path.join(__dirname, '../app/assets/NotoSansMath-Regular.ttf'), 'NotoMath');
+    GlobalFonts.registerFromPath(path.join(__dirname, '../app/assets/NotoSansKannada-Regular.ttf'), 'NotoKannada');
+    GlobalFonts.registerFromPath(path.join(__dirname, '../app/assets/NotoSansSyriac-Regular.ttf'), 'NotoSyriac');
+    
+    // Comodín Nuclear Unifont
+    GlobalFonts.registerFromPath(path.join(__dirname, '../app/assets/unifont-17.0.05.otf'), 'Unifont');
 } catch (e) {
     console.log("Aviso: Fallo menor al cargar fuentes:", e.message);
 }
@@ -110,8 +120,8 @@ class RankCard {
         // 7. TEXTOS BASE
         ctx.fillStyle = this.settings.textColor || '#FFFFFF';
         
-        // NOMBRE: Agregada la cadena completa
-        ctx.font = '42px "RobotoBold", "Segoe UI Emoji", "SegoeUISymbol", "NotoEmoji", "MS Gothic", sans-serif';
+        // NOMBRE: Cadena de fuentes actualizada
+        ctx.font = '42px "RobotoBold", "Segoe UI Emoji", "NotoEmoji", "MS Gothic", "SegoeUISymbol", "NotoSymbols", "NotoMath", "NotoKannada", "NotoSyriac", "Unifont", sans-serif';
         let displayName = this.userData.displayName || this.userData.username;
         if (displayName.length > 25) displayName = displayName.substring(0, 25) + "...";
         ctx.fillText(displayName, 250, 90);
@@ -126,10 +136,10 @@ class RankCard {
         ctx.font = '32px "RobotoBold", sans-serif';
         ctx.fillText(`NIVEL ${this.userData.level}`, canvas.width - 40, 135);
 
-        // INFORMACIÓN EXTRA: Agregada la cadena completa
+        // INFORMACIÓN EXTRA: Cadena de fuentes actualizada
         ctx.textAlign = 'left';
         ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-        ctx.font = '22px "RobotoRegular", "Segoe UI Emoji", "SegoeUISymbol", "NotoEmoji", "MS Gothic", sans-serif';
+        ctx.font = '22px "RobotoRegular", "Segoe UI Emoji", "NotoEmoji", "MS Gothic", "SegoeUISymbol", "NotoSymbols", "NotoMath", "NotoKannada", "NotoSyriac", "Unifont", sans-serif';
         let infoY = 135;
 
         // Multiplicador
@@ -147,7 +157,7 @@ class RankCard {
         // Progreso de XP
         ctx.textAlign = 'right';
         ctx.fillStyle = this.settings.textColor || '#FFFFFF';
-        ctx.font = '22px "RobotoRegular", "Segoe UI Emoji", "SegoeUISymbol", "NotoEmoji", "MS Gothic", sans-serif';
+        ctx.font = '22px "RobotoRegular", "Segoe UI Emoji", "NotoEmoji", "MS Gothic", "SegoeUISymbol", "NotoSymbols", "NotoMath", "NotoKannada", "NotoSyriac", "Unifont", sans-serif';
         let currentLevelXP = this.userData.previousLevelXP || 0;
         let displayCurrentXP = this.settings.relativeLevel ? (this.userData.currentXP - currentLevelXP) : this.userData.currentXP;
         let displayRequiredXP = this.settings.relativeLevel ? (this.userData.requiredXP - currentLevelXP) : this.userData.requiredXP;
@@ -183,7 +193,7 @@ class RankCard {
         if (!this.userData.isMaxLevel && this.userData.messagesText) {
             ctx.textAlign = 'center';
             ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-            ctx.font = 'italic 18px "Segoe UI Emoji", sans-serif'; // Por si la variable messagesText llega a tener emojis
+            ctx.font = 'italic 18px "Segoe UI Emoji", sans-serif';
             ctx.fillText(`¡Faltan ${this.userData.messagesText}!`, barX + (barWidth / 2), 300);
         }
 

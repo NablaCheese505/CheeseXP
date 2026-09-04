@@ -3,6 +3,7 @@ const { createCanvas, loadImage, GlobalFonts } = require('@napi-rs/canvas');
 const path = require('path');
 
 try {
+    // Fuentes Base
     GlobalFonts.registerFromPath(path.join(__dirname, '../app/assets/Roboto-Bold.ttf'), 'RobotoBold');
     GlobalFonts.registerFromPath(path.join(__dirname, '../app/assets/Roboto-Regular.ttf'), 'RobotoRegular');
     
@@ -11,6 +12,15 @@ try {
     GlobalFonts.registerFromPath(path.join(__dirname, '../app/assets/msgothic.ttc'), 'MS Gothic');
     
     GlobalFonts.registerFromPath(path.join(__dirname, '../app/assets/NotoColorEmoji.ttf'), 'NotoEmoji');
+
+    // Nuevas Fuentes Noto Anti-Tofus
+    GlobalFonts.registerFromPath(path.join(__dirname, '../app/assets/NotoSansSymbols-Regular.ttf'), 'NotoSymbols');
+    GlobalFonts.registerFromPath(path.join(__dirname, '../app/assets/NotoSansMath-Regular.ttf'), 'NotoMath');
+    GlobalFonts.registerFromPath(path.join(__dirname, '../app/assets/NotoSansKannada-Regular.ttf'), 'NotoKannada');
+    GlobalFonts.registerFromPath(path.join(__dirname, '../app/assets/NotoSansSyriac-Regular.ttf'), 'NotoSyriac');
+    
+    // Comodín Nuclear Unifont
+    GlobalFonts.registerFromPath(path.join(__dirname, '../app/assets/unifont-17.0.05.otf'), 'Unifont');
 } catch (e) {
     console.log("Aviso: Fallo menor al cargar fuentes en Leaderboard:", e.message);
 }
@@ -43,7 +53,7 @@ class LeaderboardCard {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         ctx.fillStyle = '#FFFFFF';
-        ctx.font = '32px "RobotoBold", "Segoe UI Emoji", "SegoeUISymbol", "NotoEmoji", "MS Gothic", sans-serif';
+        ctx.font = '32px "RobotoBold", "Segoe UI Emoji", "NotoEmoji", "MS Gothic", "SegoeUISymbol", "NotoSymbols", "NotoMath", "NotoKannada", "NotoSyriac", "Unifont", sans-serif';
         ctx.textAlign = 'left';
         
         ctx.fillText(`${this.texts.title} ${this.pageInfo.page}/${this.pageInfo.totalPages}`, 30, 50);
@@ -64,7 +74,7 @@ class LeaderboardCard {
             ctx.fillStyle = i === 0 && this.pageInfo.page === 1 ? '#FFD700' : 
                             i === 1 && this.pageInfo.page === 1 ? '#C0C0C0' : 
                             i === 2 && this.pageInfo.page === 1 ? '#CD7F32' : '#FFFFFF';
-            ctx.font = '36px "RobotoBold", "Segoe UI Emoji", "SegoeUISymbol", "NotoEmoji", "MS Gothic", sans-serif';
+            ctx.font = '36px "RobotoBold", "Segoe UI Emoji", "NotoEmoji", "MS Gothic", "SegoeUISymbol", "NotoSymbols", "NotoMath", "NotoKannada", "NotoSyriac", "Unifont", sans-serif';
             ctx.textAlign = 'center';
             ctx.fillText(`#${user.rank}`, 70, currentY + 65);
 
@@ -89,14 +99,14 @@ class LeaderboardCard {
 
             ctx.fillStyle = '#FFFFFF';
             ctx.textAlign = 'left';
-            ctx.font = '28px "RobotoBold", "Segoe UI Emoji", "SegoeUISymbol", "NotoEmoji", "MS Gothic", sans-serif';
+            ctx.font = '28px "RobotoBold", "Segoe UI Emoji", "NotoEmoji", "MS Gothic", "SegoeUISymbol", "NotoSymbols", "NotoMath", "NotoKannada", "NotoSyriac", "Unifont", sans-serif';
             
             let name = user.displayName || user.username || this.texts.unknown;
             if (name.length > 20) name = name.substring(0, 18) + "...";
             ctx.fillText(name, 210, currentY + 45);
 
             ctx.fillStyle = '#AAAAAA';
-            ctx.font = '22px "RobotoRegular", "Segoe UI Emoji", "SegoeUISymbol", "NotoEmoji", "MS Gothic", sans-serif';
+            ctx.font = '22px "RobotoRegular", "Segoe UI Emoji", "NotoEmoji", "MS Gothic", "SegoeUISymbol", "NotoSymbols", "NotoMath", "NotoKannada", "NotoSyriac", "Unifont", sans-serif';
             
             ctx.fillText(`${this.texts.level} ${user.level}  |  ${user.xpFormatted} XP`, 210, currentY + 80);
         }

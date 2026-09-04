@@ -47,6 +47,36 @@ client.shard.id = client.shard.ids[0]
 
 client.globalTools = new Tools(client);
 
+client.activeVoiceUsers = new Map(); // Guardará { userId, guildId, joinTime }
+client.voiceHeartbeat = null;
+client.idleHeartbeats = 0;
+
+// Heartbeat for voice activity
+client.startVoiceHeartbeat = function() {
+    if (client.voiceHeartbeat) return; // If already running, don't start another
+    
+    console.log("Iniciando Heartbeat dinámico de Voice XP...");
+    client.idleHeartbeats = 0;
+    
+    // Run every minute
+    client.voiceHeartbeat = setInterval(async () => {
+        if (client.activeVoiceUsers.size === 0) {
+            client.idleHeartbeats++;
+            // If there have been 3 consecutive idle heartbeats, stop the interval to save RAM
+            if (client.idleHeartbeats >= 3) {
+                console.log("Heartbeat inactivo. Apagando intervalo para ahorrar RAM...");
+                clearInterval(client.voiceHeartbeat);
+                client.voiceHeartbeat = null;
+            }
+            return;
+        }
+        
+        client.idleHeartbeats = 0; // Reset idle counter since we have active users
+        await client.globalTools.processVoiceHeartbeat(client.activeVoiceUsers);
+        
+    }, 60000); 
+}
+
 // connect to db
 client.db = new Model("servers", require("./database_schema.js").schema)
 client.userDB = new Model("user_profiles", require("./database_schema.js").userProfileSchema)

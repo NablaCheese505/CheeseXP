@@ -444,6 +444,90 @@ class Tools {
             }).catch(e => { int.channel.send({ content: "Failed! " + e.message }) })
         }
 
+        // Procesa el XP por voz en lote (Heartbeat) - 1 vez por minuto
+        this.processVoiceHeartbeat = async function(activeUsersMap) {
+            // 1. Agrupamos usuarios por servidor
+            const guildsMap = new Map();
+            for (const [userId, data] of activeUsersMap.entries()) {
+                if (!guildsMap.has(data.guildId)) {
+                    guildsMap.set(data.guildId, []);
+                }
+                guildsMap.get(data.guildId).push({ userId, channelId: data.channelId, joinTime: data.joinTime });
+            }
+
+            // 2. Iteramos sobre cada servidor con usuarios activos
+            for (const [guildId, users] of guildsMap.entries()) {
+                
+                let projection = ["settings"];
+                users.forEach(u => projection.push(`users.${u.userId}`));
+                
+                let db = await client.db.fetch(guildId, projection);
+                if (!db) {
+                    await client.db.create({ _id: guildId });
+                    db = await client.db.fetch(guildId, projection);
+                }
+                if (!db.users) db.users = {}; 
+                
+                if (!db.settings?.enabled || !db.settings.enabledVoiceXp) continue;
+                
+                const settings = db.settings;
+                const xpIncrements = {}; // Para guardar cuánto hay que sumar con $inc
+                
+                const guild = client.guilds.cache.get(guildId) || await client.guilds.fetch(guildId).catch(() => null);
+                if (!guild) continue;
+
+                const now = Date.now();
+                const maxMsAllowed = settings.voice.hoursLimit > 0 ? settings.voice.hoursLimit * 3600000 : Infinity;
+
+                for (const userObj of users) {
+                    const userId = userObj.userId;
+                    const member = guild.members.cache.get(userId) || await guild.members.fetch(userId).catch(() => null);
+                    const channel = guild.channels.cache.get(userObj.channelId);
+                    
+                    if (!member || !channel) {
+                        activeUsersMap.delete(userId);
+                        continue;
+                    }
+
+                    const timeSpentMs = now - userObj.joinTime;
+                    if (timeSpentMs > maxMsAllowed) continue;
+
+                    const userData = db.users[userId] || { xp: 0 };
+                    const multiplierData = this.getMultiplier(member, settings, channel);
+
+                    if (multiplierData.multiplier > 0 && settings.voice.multiplier > 0) {
+                        const oldXP = userData.xp;
+                        
+                        const minXP = Math.round(settings.gain.min * multiplierData.multiplier);
+                        const maxXP = Math.round(settings.gain.max * multiplierData.multiplier);
+                        const baseXP = this.rng(minXP, maxXP); 
+                        
+                        const xpGained = Math.round(baseXP * settings.voice.multiplier); 
+                        
+                        if (xpGained > 0) {
+                            userData.xp += xpGained; // Sumamos localmente para calcular si subió de nivel
+                            xpIncrements[`users.${userId}.xp`] = xpGained; // Preparamos el incremento matemático
+
+                            const oldLevel = this.getLevel(oldXP, settings, false);
+                            const newLevel = this.getLevel(userData.xp, settings, false);
+
+                            if (newLevel > oldLevel && (settings.rewardSyncing.sync === "xp" || settings.rewardSyncing.sync === "level")) {
+                                const roleCheck = this.checkLevelRoles(guild.roles.cache, member.roles.cache, newLevel, settings.rewards, null, oldLevel);
+                                this.syncLevelRoles(member, roleCheck).catch(() => {});
+                            }
+                        }
+                    }
+                }
+
+                const updatesKeys = Object.keys(xpIncrements);
+                if (updatesKeys.length > 0) {
+                    client.db.update(guildId, { $inc: xpIncrements }).catch(err => {
+                        console.error(`Error guardando lote de Voice XP para el server ${guildId}:`, err);
+                    });
+                }
+            }
+        }
+
     }
 }
 

@@ -468,23 +468,42 @@ class Tools {
                 }
                 if (!db.users) db.users = {}; 
                 
-                if (!db.settings?.enabled || !db.settings.enabledVoiceXp) continue;
+                // Si apagaron el módulo desde el panel, limpiamos a todos los usuarios de RAM.
+                if (!db.settings?.enabled || !db.settings.enabledVoiceXp) {
+                    users.forEach(u => activeUsersMap.delete(u.userId));
+                    continue;
+                }
                 
                 const settings = db.settings;
-                const xpIncrements = {}; // Para guardar cuánto hay que sumar con $inc
+                const xpIncrements = {}; 
                 
                 const guild = client.guilds.cache.get(guildId) || await client.guilds.fetch(guildId).catch(() => null);
-                if (!guild) continue;
+                if (!guild) {
+                    // Si el bot fue expulsado del servidor, limpiamos su RAM
+                    users.forEach(u => activeUsersMap.delete(u.userId));
+                    continue; 
+                }
 
                 const now = Date.now();
                 const maxMsAllowed = settings.voice.hoursLimit > 0 ? settings.voice.hoursLimit * 3600000 : Infinity;
 
                 for (const userObj of users) {
                     const userId = userObj.userId;
+                    
+                    // Obtenemos el estado ACTUAL de la RAM justo después de los await
+                    const currentMapState = activeUsersMap.get(userId);
+                    
+                    // Si el usuario ya no está en RAM o si su canal cambió mientras hacíamos el 'await',
+                    // significa que voice.js ya lo manejó. Ignoramos este ciclo para no sobreescribir.
+                    if (!currentMapState || currentMapState.channelId !== userObj.channelId) {
+                        continue; 
+                    }
+
                     const member = guild.members.cache.get(userId) || await guild.members.fetch(userId).catch(() => null);
                     const channel = guild.channels.cache.get(userObj.channelId);
                     
-                    if (!member || !channel) {
+                    // Verificamos presencia estricta en Discord.
+                    if (!member || !channel || member.voice.channelId !== userObj.channelId) {
                         activeUsersMap.delete(userId);
                         continue;
                     }
@@ -505,8 +524,8 @@ class Tools {
                         const xpGained = Math.round(baseXP * settings.voice.multiplier); 
                         
                         if (xpGained > 0) {
-                            userData.xp += xpGained; // Sumamos localmente para calcular si subió de nivel
-                            xpIncrements[`users.${userId}.xp`] = xpGained; // Preparamos el incremento matemático
+                            userData.xp += xpGained; 
+                            xpIncrements[`users.${userId}.xp`] = xpGained; 
 
                             const oldLevel = this.getLevel(oldXP, settings, false);
                             const newLevel = this.getLevel(userData.xp, settings, false);

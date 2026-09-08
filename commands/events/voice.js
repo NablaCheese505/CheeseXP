@@ -6,24 +6,33 @@ module.exports = {
         if (oldState.member.user.bot) return;
         if (config.lockBotToDevOnly && !tools.isDev(oldState.member.user)) return;
 
+        // If the user left the voice channel, remove them from the activeVoiceUsers map
+        if (!newState.channelId) {
+            client.activeVoiceUsers.delete(oldState.member.user.id);
+        }
+
         const guildId = oldState.guild.id;
 
-        // Validar si el server tiene Voice XP activado
+        // Validate if the voice XP module is enabled for this guild and user
         let db = await tools.fetchSettings(oldState.member.user.id, guildId);
-        if (!db || !db.settings?.enabled || !db.settings.enabledVoiceXp) return;
+        if (!db || !db.settings?.enabled || !db.settings.enabledVoiceXp) {
+            // If the module is disabled, ensure the user is removed from the activeVoiceUsers map
+            client.activeVoiceUsers.delete(oldState.member.user.id);
+            return;
+        }
 
-        // Usamos un Set para no evaluar el mismo canal dos veces si solo se muteó/desmuteó
+        // We use a Set to avoid processing the same channel multiple times
         const channelsToEvaluate = new Set();
         if (oldState.channelId) channelsToEvaluate.add(oldState.channel);
         if (newState.channelId) channelsToEvaluate.add(newState.channel);
 
-        // Iterador optimizado (for...of) sin callbacks
+        // oPtimized evaluation of each channel
         for (const channel of channelsToEvaluate) {
             if (!channel) continue;
             
             const isAFKChannel = channel.guild.afkChannelId && channel.id === channel.guild.afkChannelId;
             
-            // Contamos humanos en el canal optimizadamente
+            // Count the number of human users in the channel
             let humanCount = 0;
             for (const [id, member] of channel.members) {
                 if (!member.user.bot) humanCount++;
@@ -31,11 +40,11 @@ module.exports = {
             
             const isLurking = humanCount < 2;
 
-            // Evaluamos a cada humano en el canal
+            // Evaluate each member in the channel for XP eligibility
             for (const [memberId, member] of channel.members) {
                 if (member.user.bot) continue;
 
-                // Verificamos tanto muteo personal como muteo por servidor
+                // Verifiy if the member is in the AFK channel, is deafened, or is muted
                 const voiceState = member.voice;
                 const isDeafOrMute = voiceState.selfDeaf || voiceState.selfMute || voiceState.serverDeaf || voiceState.serverMute;
                 
@@ -46,7 +55,7 @@ module.exports = {
                         client.activeVoiceUsers.set(memberId, { 
                             guildId: guildId, 
                             channelId: channel.id,
-                            joinTime: Date.now() // Guardamos el timestamp para que Tools.js evalúe el hoursLimit
+                            joinTime: Date.now() 
                         });
                     }
                     client.startVoiceHeartbeat();
